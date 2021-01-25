@@ -1,18 +1,35 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+<!--{{visitedViews}}  &#45;&#45; 'sd-->
+
+    <button @click="shuaxin">刷新</button>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import {mapState, mapActions, mapGetters} from 'vuex'
 export default {
   name: 'Home',
+  inject:['reLoad'],
+  computed: {
+    ...mapGetters({
+      getVisitedViews: "tagsView2/getVisitedViews",
+    })
+
+    // ...mapGetters('app2', ['collapsed']),
+    // ...mapGetters(['visitedViews']),
+    // ...mapGetters({
+    //   getVisitedViews: 'tagsView/getVisitedViews',
+    // })
+
+  },
+  methods:{
+    shuaxin(){
+      this.reLoad();
+    }
+  },
   components: {
-    HelloWorld
+
   }
 }
 </script>

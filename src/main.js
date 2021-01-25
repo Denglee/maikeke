@@ -1,8 +1,13 @@
 import Vue from 'vue'
+
+import './plugins/plugins' //插件保存处
+
+
 import App from './App.vue'
 import './registerServiceWorker'
-import router from './router'
-import store from './store'
+import router from './router/index'
+import store from './store/index'
+
 
 Vue.config.productionTip = false
 
