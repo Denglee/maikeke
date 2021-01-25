@@ -1,5 +1,6 @@
 <template>
   <div class="full-screen-wrapper" @click="handleFullscreen">
+    全屏
     <el-tooltip effect="dark" :content="isFullscreen ? '退出全屏' : '全屏'" placement="bottom">
       <i :class="['icon', !isFullscreen ? 'vue-dsn-icon-fullscreen' : 'vue-dsn-icon-tuichuquanping']" />
     </el-tooltip>

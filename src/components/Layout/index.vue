@@ -1,24 +1,28 @@
 <template>
   <div class="app-wrapper">
-    <div class="side-container" :class="collapsed ? 'folded' : 'unfolded'">
+
+    <header class="side-container" :class="collapsed ? 'folded' : 'unfolded'">
       <div class="logo">
         <a href="/">
           <img :src="imgSrc" alt="logo">
         </a>
       </div>
       <SideMenu />
-    </div>
-    <div class="main-container" :class="collapsed ? 'wider' : 'normal'">
+    </header>
+
+    <main class="main-container" :class="collapsed ? 'wider' : 'normal'">
       <div class="main-header">
         <HeaderBar />
         <TagsNav />
       </div>
       <div class="main-content">
-        <MainView />
-<!--        <el-scrollbar wrap-class="scrollbar">-->
-<!--        </el-scrollbar>-->
+
+        <el-scrollbar wrap-class="scrollbar">
+          <MainView />
+        </el-scrollbar>
       </div>
-    </div>
+    </main>
+
   </div>
 </template>
 
@@ -31,7 +35,7 @@ import MainView from './MainView/index'
 import Logo from '@/assets/img/logo.png'
 import LogoIcon from '@/assets/img/logo-icon.png'
 
-const RESIZE_WIDTH = 1440
+const RESIZE_WIDTH = 1080
 
 export default {
   name: 'Layout',
@@ -112,6 +116,8 @@ export default {
       width: calc(100% - 64px);
     }
     .main-content{
+      background: #f4f4f4;
+      padding: 20px;
       .el-scrollbar{
         height: calc(100vh - 104px);
         .scroll-bar,

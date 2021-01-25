@@ -2,7 +2,6 @@
   <div class="header-bar clear-fix">
     <div class="header-right clear-fix">
       <FullScreen />
-
     </div>
   </div>
 </template>

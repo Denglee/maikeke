@@ -54,7 +54,7 @@ export default {
     }),
     routes() {
 
-      // return menuNav.data
+      // return menuNav
       return this.$router.options.routes
     }
   },
@@ -197,6 +197,7 @@ export default {
 .tags-nav-wrapper {
   width: 100%;
   height: 40px;
+  overflow: hidden;
   .icon {
     font-size: 18px;
   }

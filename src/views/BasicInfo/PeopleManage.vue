@@ -1,5 +1,5 @@
 <template>
-  <div class="public-main organize-box">
+  <div class="">
     <div class="organizeL-box">
 
       <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>

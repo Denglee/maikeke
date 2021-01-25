@@ -1,5 +1,3 @@
-import Layout from "@/components/Layout/index";
-
 let menu = {
     status: 1,
     info: "获取成功",
@@ -7,12 +5,15 @@ let menu = {
 
       /*基本信息*/
       {
-        title: "基本信息",
         path:'BasicInfo',
-        fonts:'el-icon-s-marketing',
+        meta:{
+          title: "基本信息",
+          icon:'el-icon-s-marketing',
+        },
         children: [
           {
             path: "CompanyInfo",
+            name:'CompanyInfo',
             meta:{
               title: "企业信息"
             },
@@ -33,6 +34,518 @@ let menu = {
             path: "ApplyAuthorize",
             meta:{
               title: "应用授权"
+            },
+          },
+        ]
+      },
+
+      /*基本信息*/
+      {
+        path:'BasicInfo1',
+        meta:{
+          title: "基本信息1",
+          icon:'el-icon-s-marketing',
+        },
+        children: [
+          {
+            path: "CompanyInfo1",
+            name:'CompanyInfo',
+            meta:{
+              title: "企业信息1"
+            },
+          },
+          {
+            path: "OrganManage1",
+            meta:{
+              title: "组织机构管理1"
+            },
+          },
+          {
+            path: "PeopleManage1",
+            meta:{
+              title: "人员管理1"
+            },
+          },
+          {
+            path: "ApplyAuthorize1",
+            meta:{
+              title: "应用授权1"
+            },
+          },
+        ]
+      },
+      {
+        path:'BasicInfo1',
+        meta:{
+          title: "基本信息1",
+          icon:'el-icon-s-marketing',
+        },
+        children: [
+          {
+            path: "CompanyInfo1",
+            name:'CompanyInfo',
+            meta:{
+              title: "企业信息1"
+            },
+          },
+          {
+            path: "OrganManage1",
+            meta:{
+              title: "组织机构管理1"
+            },
+          },
+          {
+            path: "PeopleManage1",
+            meta:{
+              title: "人员管理1"
+            },
+          },
+          {
+            path: "ApplyAuthorize1",
+            meta:{
+              title: "应用授权1"
+            },
+          },
+        ]
+      },
+      {
+        path:'BasicInfo1',
+        meta:{
+          title: "基本信息1",
+          icon:'el-icon-s-marketing',
+        },
+        children: [
+          {
+            path: "CompanyInfo1",
+            name:'CompanyInfo',
+            meta:{
+              title: "企业信息1"
+            },
+          },
+          {
+            path: "OrganManage1",
+            meta:{
+              title: "组织机构管理1"
+            },
+          },
+          {
+            path: "PeopleManage1",
+            meta:{
+              title: "人员管理1"
+            },
+          },
+          {
+            path: "ApplyAuthorize1",
+            meta:{
+              title: "应用授权1"
+            },
+          },
+        ]
+      },
+      {
+        path:'BasicInfo1',
+        meta:{
+          title: "基本信息1",
+          icon:'el-icon-s-marketing',
+        },
+        children: [
+          {
+            path: "CompanyInfo1",
+            name:'CompanyInfo',
+            meta:{
+              title: "企业信息1"
+            },
+          },
+          {
+            path: "OrganManage1",
+            meta:{
+              title: "组织机构管理1"
+            },
+          },
+          {
+            path: "PeopleManage1",
+            meta:{
+              title: "人员管理1"
+            },
+          },
+          {
+            path: "ApplyAuthorize1",
+            meta:{
+              title: "应用授权1"
+            },
+          },
+        ]
+      },
+      {
+        path:'BasicInfo1',
+        meta:{
+          title: "基本信息1",
+          icon:'el-icon-s-marketing',
+        },
+        children: [
+          {
+            path: "CompanyInfo1",
+            name:'CompanyInfo',
+            meta:{
+              title: "企业信息1"
+            },
+          },
+          {
+            path: "OrganManage1",
+            meta:{
+              title: "组织机构管理1"
+            },
+          },
+          {
+            path: "PeopleManage1",
+            meta:{
+              title: "人员管理1"
+            },
+          },
+          {
+            path: "ApplyAuthorize1",
+            meta:{
+              title: "应用授权1"
+            },
+          },
+        ]
+      },
+      {
+        path:'BasicInfo1',
+        meta:{
+          title: "基本信息1",
+          icon:'el-icon-s-marketing',
+        },
+        children: [
+          {
+            path: "CompanyInfo1",
+            name:'CompanyInfo',
+            meta:{
+              title: "企业信息1"
+            },
+          },
+          {
+            path: "OrganManage1",
+            meta:{
+              title: "组织机构管理1"
+            },
+          },
+          {
+            path: "PeopleManage1",
+            meta:{
+              title: "人员管理1"
+            },
+          },
+          {
+            path: "ApplyAuthorize1",
+            meta:{
+              title: "应用授权1"
+            },
+          },
+        ]
+      },
+      {
+        path:'BasicInfo1',
+        meta:{
+          title: "基本信息1",
+          icon:'el-icon-s-marketing',
+        },
+        children: [
+          {
+            path: "CompanyInfo1",
+            name:'CompanyInfo',
+            meta:{
+              title: "企业信息1"
+            },
+          },
+          {
+            path: "OrganManage1",
+            meta:{
+              title: "组织机构管理1"
+            },
+          },
+          {
+            path: "PeopleManage1",
+            meta:{
+              title: "人员管理1"
+            },
+          },
+          {
+            path: "ApplyAuthorize1",
+            meta:{
+              title: "应用授权1"
+            },
+          },
+        ]
+      },
+      {
+        path:'BasicInfo1',
+        meta:{
+          title: "基本信息1",
+          icon:'el-icon-s-marketing',
+        },
+        children: [
+          {
+            path: "CompanyInfo1",
+            name:'CompanyInfo',
+            meta:{
+              title: "企业信息1"
+            },
+          },
+          {
+            path: "OrganManage1",
+            meta:{
+              title: "组织机构管理1"
+            },
+          },
+          {
+            path: "PeopleManage1",
+            meta:{
+              title: "人员管理1"
+            },
+          },
+          {
+            path: "ApplyAuthorize1",
+            meta:{
+              title: "应用授权1"
+            },
+          },
+        ]
+      },
+      {
+        path:'BasicInfo1',
+        meta:{
+          title: "基本信息1",
+          icon:'el-icon-s-marketing',
+        },
+        children: [
+          {
+            path: "CompanyInfo1",
+            name:'CompanyInfo',
+            meta:{
+              title: "企业信息1"
+            },
+          },
+          {
+            path: "OrganManage1",
+            meta:{
+              title: "组织机构管理1"
+            },
+          },
+          {
+            path: "PeopleManage1",
+            meta:{
+              title: "人员管理1"
+            },
+          },
+          {
+            path: "ApplyAuthorize1",
+            meta:{
+              title: "应用授权1"
+            },
+          },
+        ]
+      },
+      {
+        path:'BasicInfo1',
+        meta:{
+          title: "基本信息1",
+          icon:'el-icon-s-marketing',
+        },
+        children: [
+          {
+            path: "CompanyInfo1",
+            name:'CompanyInfo',
+            meta:{
+              title: "企业信息1"
+            },
+          },
+          {
+            path: "OrganManage1",
+            meta:{
+              title: "组织机构管理1"
+            },
+          },
+          {
+            path: "PeopleManage1",
+            meta:{
+              title: "人员管理1"
+            },
+          },
+          {
+            path: "ApplyAuthorize1",
+            meta:{
+              title: "应用授权1"
+            },
+          },
+        ]
+      },
+      {
+        path:'BasicInfo1',
+        meta:{
+          title: "基本信息1",
+          icon:'el-icon-s-marketing',
+        },
+        children: [
+          {
+            path: "CompanyInfo1",
+            name:'CompanyInfo',
+            meta:{
+              title: "企业信息1"
+            },
+          },
+          {
+            path: "OrganManage1",
+            meta:{
+              title: "组织机构管理1"
+            },
+          },
+          {
+            path: "PeopleManage1",
+            meta:{
+              title: "人员管理1"
+            },
+          },
+          {
+            path: "ApplyAuthorize1",
+            meta:{
+              title: "应用授权1"
+            },
+          },
+        ]
+      },
+      {
+        path:'BasicInfo1',
+        meta:{
+          title: "基本信息1",
+          icon:'el-icon-s-marketing',
+        },
+        children: [
+          {
+            path: "CompanyInfo1",
+            name:'CompanyInfo',
+            meta:{
+              title: "企业信息1"
+            },
+          },
+          {
+            path: "OrganManage1",
+            meta:{
+              title: "组织机构管理1"
+            },
+          },
+          {
+            path: "PeopleManage1",
+            meta:{
+              title: "人员管理1"
+            },
+          },
+          {
+            path: "ApplyAuthorize1",
+            meta:{
+              title: "应用授权1"
+            },
+          },
+        ]
+      },
+      {
+        path:'BasicInfo1',
+        meta:{
+          title: "基本信息1",
+          icon:'el-icon-s-marketing',
+        },
+        children: [
+          {
+            path: "CompanyInfo1",
+            name:'CompanyInfo',
+            meta:{
+              title: "企业信息1"
+            },
+          },
+          {
+            path: "OrganManage1",
+            meta:{
+              title: "组织机构管理1"
+            },
+          },
+          {
+            path: "PeopleManage1",
+            meta:{
+              title: "人员管理1"
+            },
+          },
+          {
+            path: "ApplyAuthorize1",
+            meta:{
+              title: "应用授权1"
+            },
+          },
+        ]
+      },
+      {
+        path:'BasicInfo1',
+        meta:{
+          title: "基本信息1",
+          icon:'el-icon-s-marketing',
+        },
+        children: [
+          {
+            path: "CompanyInfo1",
+            name:'CompanyInfo',
+            meta:{
+              title: "企业信息1"
+            },
+          },
+          {
+            path: "OrganManage1",
+            meta:{
+              title: "组织机构管理1"
+            },
+          },
+          {
+            path: "PeopleManage1",
+            meta:{
+              title: "人员管理1"
+            },
+          },
+          {
+            path: "ApplyAuthorize1",
+            meta:{
+              title: "应用授权1"
+            },
+          },
+        ]
+      },
+      {
+        path:'BasicInfo1',
+        meta:{
+          title: "基本信息1",
+          icon:'el-icon-s-marketing',
+        },
+        children: [
+          {
+            path: "CompanyInfo1",
+            name:'CompanyInfo',
+            meta:{
+              title: "企业信息1"
+            },
+          },
+          {
+            path: "OrganManage1",
+            meta:{
+              title: "组织机构管理1"
+            },
+          },
+          {
+            path: "PeopleManage1",
+            meta:{
+              title: "人员管理1"
+            },
+          },
+          {
+            path: "ApplyAuthorize1",
+            meta:{
+              title: "应用授权1"
             },
           },
         ]
@@ -279,4 +792,4 @@ let menu = {
     ]*/
 };
 
-export {menu};
+export default menu;

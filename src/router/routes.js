@@ -46,6 +46,8 @@ export const asyncRoutes = [
       }
     ]
   },
+
+
   // {
   //   path: '/image',
   //   name: 'Image',

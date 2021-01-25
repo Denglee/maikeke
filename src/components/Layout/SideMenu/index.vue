@@ -4,13 +4,13 @@
       <el-menu
         :default-active="activeMenu"
         :collapse="collapsed"
-        :unique-opened="true"
         background-color="#263238"
         text-color="#fff"
         active-text-color="#409eff"
       >
+
         <SideMenuItem
-          v-for="route in routes"
+          v-for="route in routes.data"
           :key="route.path"
           :item="route"
           :base-path="route.path"
@@ -28,24 +28,40 @@ import menuNav from '@/assets/js/menu'
 export default {
   name: 'SideMenu',
   components: { SideMenuItem },
+  data() {
+    return {
+      routes: menuNav,
+    }
+  },
+
   computed: {
     ...mapGetters('app2', ['collapsed']),
-    routes() {
-      console.log(this.$router.options.routes);
-      // console.log(menuNav.data);
-      return this.$router.options.routes
-
-      // return menuNav.data
-    },
+    // routes() {
+    //   console.log(this.$router.options.routes);
+    //   console.log(menuNav);
+    //   return this.$router.options.routes
+    //
+    //   // return menuNav
+    // },
     activeMenu() {
-      const route = this.$route
-      const { meta, path } = route
+      const route = this.$route;
+      const { meta, path } = route;
+      console.log(meta)
       if (meta.activeMenu) {
         return meta.activeMenu
       }
       return path
     }
-  }
+  },
+  methods:{
+    get(){
+      console.log(menuNav.data)
+    }
+  },
+  created(){
+    this.get();
+  },
+
 }
 </script>
 
