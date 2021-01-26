@@ -4,6 +4,7 @@ import router from './index'
 // 白名单列表
 const whiteList = ['/login']
 
+
 router.beforeEach((to, from, next) => {
 
   let getToken;

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Layout from '@/components/Layout/index'
-import { asyncRoutes } from './routes'
+import Layout from '@/components/Layout/Layout'
+import { asyncRoutes } from './AsyncRoutes'
 
 Vue.use(Router)
 
@@ -14,6 +14,7 @@ Vue.use(Router)
   }
  * */
 
+/*constantRoutes 常驻 默认有 首页、login、404等*/
 export const constantRoutes = [
   {
     path: '/login',
@@ -47,7 +48,7 @@ export const constantRoutes = [
       component: () => import('../views/Home'),
       meta: {
         title: '首页',
-        icon: 'vue-dsn-icon-index',
+        icon: 'el-icon-s-home',
         fixed: true
       }
     }]

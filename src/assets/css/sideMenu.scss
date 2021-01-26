@@ -1,0 +1,320 @@
+/* 引入自定义滑动条样式 */
+@import "./scrollBar";
+
+.side-menu-wrapper {
+   /* el-scrollbar引用自定义滑动 父类必设高度 */
+   .el-scrollbar {
+      //height: 100vh;
+      /* 自定义滑条 类位置 */
+      //.scroll-bar,
+
+      /* el-scrollbar的wrap-class类 */
+      .scrollbar {
+         //height: 100%;
+         height: calc(100vh - 85px);
+         overflow-x: hidden;
+         margin-bottom: 0 !important;
+         /* 一级菜单样式 */
+         .el-menu {
+            border-right: none;
+
+            .side-menu-item {
+               .el-submenu__title {
+                  height: 52px;
+                  line-height: 52px;
+
+                  * {
+                     //vertical-align: top;
+                  }
+               }
+
+               /* 菜单项高度重置 */
+               .el-menu-item {
+                  height: 52px;
+                  line-height: 52px;
+               }
+
+               /* 图标样式 */
+               i {
+                  font-size: 14px;
+                  color: #fff;
+               }
+
+               .icon {
+                  margin-right: 8px;
+               }
+
+               /* 二级菜单颜色 */
+               .el-submenu {
+                  .side-menu-item .el-submenu__title,
+                  .el-menu-item {
+                     background: #202b30 !important;
+                  }
+
+                  /* 三级菜单颜色 */
+                  .el-submenu {
+                     .el-menu-item {
+                        background: #1d272b !important;
+                     }
+                  }
+
+                  /* 三级菜单hover样式-较特殊 */
+                  .el-menu-item,
+                  .el-submenu__title {
+                     &:hover {
+                        background: #2f3e45 !important;
+                     }
+                  }
+               }
+
+               /* 菜单项hover样式 */
+               .el-menu-item,
+               .el-submenu__title {
+                  &:hover,
+                  &.is-active {
+                     .icon, span {
+                        color: #409eff;
+                     }
+                  }
+
+                  &:hover {
+                     background: #2f3e45 !important;
+                  }
+               }
+
+               /* 菜单项active样式 */
+               .is-active {
+                  .icon,
+                  > .el-submenu__title {
+                     color: #409eff !important;
+                  }
+               }
+            }
+         }
+
+         /* 折叠菜单样式 */
+         .el-menu--collapse {
+            .side-menu-item {
+               transition: font-size 0.5s;
+
+               i {
+                  font-size: 20px;
+               }
+
+               span,
+               .el-menu--inline,
+               .el-submenu__icon-arrow {
+                  display: none;
+               }
+            }
+         }
+      }
+   }
+}
+
+
+/*index*/
+.app-wrapper {
+   width: 100%;
+   height: 100%;
+   overflow: hidden;
+}
+/*左边导航*/
+.side-container {
+   float: left;
+   height: 100vh;
+   transition: width 0.5s;
+   background-color: #263238;
+
+   &.unfolded {
+      width: 260px;
+
+      .logo {
+         width: 260px;
+         height: 84px;
+      }
+   }
+
+   &.folded {
+      width: 64px;
+
+      .logo {
+         width: 64px;
+         height: 64px;
+         padding: 10px;
+         box-sizing: border-box;
+      }
+   }
+
+   img {
+      display: block;
+      width: 100%;
+      height: 100%;
+   }
+}
+
+/*右边主题内容*/
+.main-container {
+   float: left;
+   //height: 100vh;
+   transition: width 0.5s;
+   &.normal {
+      width: calc(100% - 260px);
+   }
+   &.wider {
+      width: calc(100% - 64px);
+   }
+   .main-content {
+      background: #f4f4f4;
+      padding: 20px;
+      height: calc(100vh - 110px);
+      .el-scrollbar {
+         .scrollbar {
+            height: 100%;
+            overflow-x: hidden;
+            margin-bottom: 0 !important;
+         }
+      }
+   }
+}
+
+.headerTop-box{
+   padding:0 20px;
+}
+.header-bar {
+   height: 70px;
+   line-height: 70px;
+   display: flex;
+   align-items: center;
+}
+.header-topLeft{
+   height: 70px;
+   line-height: 70px;
+   [class^=el-icon-]{
+      font-size: 30px;
+   }
+}
+
+.headerTop-userInfo {
+   text-align: right;
+   display: flex;
+   margin-left: 20px;
+   .icon-bell{
+      font-size: 24px;
+      cursor: pointer;
+      display: block;
+   }
+   .el-dropdown-link {
+      display: flex;
+      height: 70px;
+      align-items: center;
+      & :hover {
+         //color: $color-DarkBlue;
+         cursor: pointer;
+      }
+   }
+}
+.full-screen-wrapper {
+   display: inline-block;
+   padding: 4px;
+   .icon {
+      font-size: 24px;
+      cursor: pointer;
+      display: block;
+   }
+   &:hover {
+      color: #409eff;
+   }
+}
+
+.main-view {
+   box-sizing: border-box;
+   background: #fff;
+   height: calc(100vh - 150px);
+}
+
+/*左侧导航 sideMenu*/
+.navLeft-box {
+   //border: solid 1px red;
+   height: calc(100vh - 85px);
+}
+
+.navSubMenu {
+   height: 80vh;
+   border: solid 1px red;
+}
+
+
+/*tagView*/
+.tags-nav-wrapper {
+   width: 100%;
+   height: 40px;
+   overflow: hidden;
+   .icon {
+      font-size: 18px;
+   }
+   .btn-con {
+      float: left;
+      width: 28px;
+      height: 40px;
+      padding: 8px 7px 8px 3px;
+      border-top: solid 1px #f0f0f0;
+      border-bottom: solid 1px #f0f0f0;
+      box-sizing: border-box;
+   }
+   .btn-close {
+      width: 40px;
+      padding-top: 10px;
+      padding-left: 11px;
+      border-left: solid 1px #f0f0f0;
+      cursor: pointer;
+   }
+
+   .tags-views {
+      position: relative;
+      float: left;
+      width: calc(100% - 96px);
+      height: 40px;
+      background: #f0f0f0;
+      box-shadow: inset 0 0 3px 2px #6464641a;
+      overflow: hidden;
+
+      .tags-cont {
+         position: absolute;
+         padding: 0 4px;
+         overflow: visible;
+         white-space: nowrap;
+         transition: left .5s ease;
+      }
+   }
+}
+
+.tag-item-wrapper {
+   display: inline-block;
+   vertical-align: middle;
+   height: 32px !important;
+   margin: 4px 2px !important;
+   padding: 0 10px !important;
+   border-radius: 3px !important;
+   line-height: 32px !important;
+   border: 1px solid #e8eaec !important;
+   color: #555 !important;
+   background: #fff !important;
+   overflow: hidden;
+   cursor: pointer;
+
+   .tag-item-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 6px;
+      border-radius: 50%;
+      background: #e8eaec;
+   }
+
+   &.active {
+      .tag-item-dot {
+         background: #409eff;
+      }
+   }
+}

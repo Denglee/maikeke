@@ -5,7 +5,6 @@
 4、plugins目录中的index.js中引入element.js
 5、main.js中引入plugins中的index.js
 这样main.js看起来就清爽很多了，后面有新增的插件，只需要再plugins目录下新建相应的插件名称，然后在index.js中引入即可，再多的插件也可以很方便的进行维护。
-
 */
 
 import Vue from 'vue'
@@ -34,7 +33,6 @@ Vue.prototype.$axios = Axios;
 /*  A、 引入 element*/
 import ElementUI from 'element-ui';
 import '@/assets/theme/index.css'
-
 Vue.use(ElementUI, {
     size: 'small'
 });
@@ -61,25 +59,25 @@ import '@/assets/css/public.scss'
 // Vue.use(VueCropper);
 
 
-/* 6、 引入 moment 时间转换 */
+ /*6、 引入 moment 时间转换*/
 /*凡是用的prototype 使用都要this.继承 console.log(this.$moment().format("YYYY-MM"));*/
-// import moment from 'moment'  //引用moment js
-// Vue.prototype.$moment = moment;//赋值使用
-// moment.locale('zh-cn');//需要汉化
-//
-// // 6 moment 用法将时间戳转日期格式的 全局 过滤器
-// Vue.filter('dateFormat', (dataStr, pattern = 'YYYY-MM-DD') =>{
-//     return moment(dataStr*1000).format(pattern)
-// });
-// Vue.filter('timeFormat', (timeStr, pattern = 'YYYY-MM-DD') =>{
-//     return moment(timeStr).format(pattern)
-// });
-/*Vue.filter('minuteFormat', (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') =>{
+import moment from 'moment'  //引用moment js
+Vue.prototype.$moment = moment;//赋值使用
+moment.locale('zh-cn');//需要汉化
+
+// 6 moment 用法将时间戳转日期格式的 全局 过滤器
+Vue.filter('dateFormat', (dataStr, pattern = 'YYYY-MM-DD') =>{
+    return moment(dataStr*1000).format(pattern)
+});
+Vue.filter('timeFormat', (timeStr, pattern = 'YYYY-MM-DD') =>{
+    return moment(timeStr).format(pattern)
+});
+Vue.filter('minuteFormat', (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') =>{
     return moment(dataStr*1000).format(pattern)
 })
 Vue.filter('tempTme', (dataStr) => {
     return dataStr*1000
-});*/
+});
 
 // Vue.filter('mathFloor', (math) => {
 //     return Math.abs(Number(math))

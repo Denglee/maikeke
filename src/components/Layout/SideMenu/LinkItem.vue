@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { isExternal } from '@/assets/js/utils/validate'
+// import { isExternal } from '@/assets/js/utils/validate'
 export default {
   props: {
     to: {
@@ -15,8 +15,12 @@ export default {
     }
   },
   methods: {
+     isExternal(path) {
+        // console.log(path);
+        return /^(https?:|mailto:|tel:)/.test(path)
+     },
     renderTag(url) {
-      if (isExternal(url)) {
+      if (this.isExternal(url)) {
         return {
           is: 'a',
           href: url,

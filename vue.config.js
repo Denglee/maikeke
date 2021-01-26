@@ -47,13 +47,15 @@ module.exports = {
     * */
    productionSourceMap: false,
 
-   // css: {
-   //    extract: {
-   //       filename: 'dist/css/[name].1609317655144.css',
-   //       chunkFilename: 'dist/css/[name].1609317655144.css'
-   //    },
-   //
-   // },
+   css: {
+      extract: false,
+
+      // extract: {
+      //    filename: 'dist/css/[name].1609317655144.css',
+      //    chunkFilename: 'dist/css/[name].1609317655144.css'
+      // },
+
+   },
 
    configureWebpack: (config) => {
       // if (process.env.NODE_ENV === "production") {

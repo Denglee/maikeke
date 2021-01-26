@@ -35,7 +35,6 @@
 import path from 'path'
 import { mapGetters, mapMutations } from 'vuex'
 import TagItem from './TagItem'
-import menuNav from '@/assets/js/menu'
 
 export default {
   name: 'TagsView',
@@ -50,11 +49,10 @@ export default {
   computed: {
     // ...mapGetters(['visitedViews']),
     ...mapGetters({
-      visitedViews: "tagsView2/visitedViews",
+      visitedViews: "StoreNavTags/visitedViews",
     }),
     routes() {
 
-      // return menuNav
       return this.$router.options.routes
     }
   },
@@ -70,7 +68,7 @@ export default {
     this.addTags()
   },
   methods: {
-    ...mapMutations('tagsView2',['addVisitedView', 'delVisitedView', 'delAllVisitedView', 'delOthersVisitedView']),
+    ...mapMutations('StoreNavTags',['addVisitedView', 'delVisitedView', 'delAllVisitedView', 'delOthersVisitedView']),
     isActive(tag) {
       return tag.path === this.$route.path
     },
@@ -193,45 +191,3 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.tags-nav-wrapper {
-  width: 100%;
-  height: 40px;
-  overflow: hidden;
-  .icon {
-    font-size: 18px;
-  }
-  .btn-con {
-    float: left;
-    width: 28px;
-    height: 40px;
-    padding: 8px 7px 8px 3px;
-    border-top: solid 1px #f0f0f0;
-    border-bottom: solid 1px #f0f0f0;
-    box-sizing: border-box;
-  }
-  .btn-close {
-    width: 40px;
-    padding-top: 10px;
-    padding-left: 11px;
-    border-left: solid 1px #f0f0f0;
-    cursor: pointer;
-  }
-  .tags-views {
-    position: relative;
-    float: left;
-    width: calc(100% - 96px);
-    height: 40px;
-    background: #f0f0f0;
-    box-shadow: inset 0 0 3px 2px #6464641a;
-    overflow: hidden;
-    .tags-cont {
-      position: absolute;
-      padding: 0 4px;
-      overflow: visible;
-      white-space: nowrap;
-      transition: left .5s ease;
-    }
-  }
-}
-</style>

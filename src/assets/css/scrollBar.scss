@@ -1,5 +1,5 @@
 /* 自定义滑动条样式 */
-.scroll-bar {
+body {
   &::-webkit-scrollbar-track-piece {
     background-color: rgba(0, 0, 0, 0);
     border-left: 1px solid rgba(0, 0, 0, 0);

@@ -120,7 +120,7 @@ input:-webkit-autofill {
 .public-main{
   width: calc( 100% - 40px );
   padding: 20px;
-  margin: 20px auto;
+  margin: 0px auto;
   height: 100%;
   //border: solid 1px #ddd;
   background-color: #fff;
@@ -170,6 +170,22 @@ input:-webkit-autofill {
 }
 .public-input{
   width: 180px !important;
+}
+
+.public-selInp{
+  display: flex;
+  border: solid 1px #ddd;
+  border-radius: 6px;
+  input{
+    border: none;
+  }
+  & >.el-select{
+    width: 30%;
+    border-right: solid 1px #ddd;
+  }
+  & >.el-input{
+    width: 70%;
+  }
 }
 
 .public-table {
@@ -227,7 +243,7 @@ input:-webkit-autofill {
     //width: 100%;
     //height: 2px;
     //background-color: #e4e7ed;
-     z-index: 21;
+    z-index: 21;
   }
   .el-tabs__active-bar{
     left: 0 !important;
@@ -258,8 +274,8 @@ input:-webkit-autofill {
 
 .tabs-main{
   width: calc( 100% - 40px );
-  margin: 20px auto;
-  min-height: 100%;
+  margin: 0px auto;
+  height: 100%;
   //background-color: #fff;
   border-radius: 6px;
 }
@@ -447,11 +463,6 @@ input:-webkit-autofill {
   background-color: #fff;
   width: calc( 100% - 300px );
 }
-
-
-
-
-
 
 
 

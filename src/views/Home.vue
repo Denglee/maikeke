@@ -13,10 +13,10 @@ export default {
   inject:['reLoad'],
   computed: {
     ...mapGetters({
-      getVisitedViews: "tagsView2/getVisitedViews",
+      getVisitedViews: "StoreNavTags/getVisitedViews",
     })
 
-    // ...mapGetters('app2', ['collapsed']),
+    // ...mapGetters('StoreNavSide', ['collapsed']),
     // ...mapGetters(['visitedViews']),
     // ...mapGetters({
     //   getVisitedViews: 'tagsView/getVisitedViews',

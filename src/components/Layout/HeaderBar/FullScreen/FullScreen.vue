@@ -1,8 +1,7 @@
 <template>
   <div class="full-screen-wrapper" @click="handleFullscreen">
-    全屏
     <el-tooltip effect="dark" :content="isFullscreen ? '退出全屏' : '全屏'" placement="bottom">
-      <i :class="['icon', !isFullscreen ? 'vue-dsn-icon-fullscreen' : 'vue-dsn-icon-tuichuquanping']" />
+      <i :class="['icon', !isFullscreen ? 'el-icon-zoom-in' : 'el-icon-zoom-out']" />
     </el-tooltip>
   </div>
 </template>
@@ -50,19 +49,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.full-screen-wrapper {
-  float: left;
-  width: 22px;
-  height: 22px;
-  padding: 4px;
-  cursor: pointer;
-  .icon {
-    font-size: 24px;
-  }
-  &:hover {
-    color: #409eff;
-  }
-}
-</style>
