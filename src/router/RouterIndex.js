@@ -19,24 +19,11 @@ export const constantRoutes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/Login/Login'),
+    component: () => import(/* webpackChunkName: "Login" */ '../views/Login/Login'),
     hidden: true,
     meta: { title: '登录' }
   },
-  // {
-  //   path: '401',
-  //   name: '401',
-  //   component: () => import('../views/error-page/401'),
-  //   hidden: true,
-  //   meta: { title: '401' }
-  // },
-  // {
-  //   path: '404',
-  //   name: '404',
-  //   component: () => import('../views/error-page/404'),
-  //   hidden: true,
-  //   meta: { title: '404' }
-  // },
+
   {
     path: '/',
     name: 'Layout',
@@ -45,7 +32,7 @@ export const constantRoutes = [
     children: [{
       path: 'home',
       name: 'Home',
-      component: () => import('../views/Home'),
+      component: () => import(/* webpackChunkName: "Home" */ '../views/Home/Home'),
       meta: {
         title: '首页',
         icon: 'el-icon-s-home',
@@ -53,30 +40,77 @@ export const constantRoutes = [
       }
     }]
   },
-  // {
-  //   path: 'https://github.com/baimingxuan/vue-admin-design.git',
-  //   name: 'doc',
-  //   component: Layout,
-  //   meta: {
-  //     title: '文档',
-  //     icon: 'vue-dsn-icon-wendang'
-  //   }
-  // },
-  // {
-  //   path: '/',
-  //   name: 'Layout2',
-  //   component: Layout,
-  //   redirect: '/user-center',
-  //   hidden: true,
-  //   children: [{
-  //     path: 'user-center',
-  //     name: 'UserCenter',
-  //     component: () => import('../views/UserCenter'),
-  //     meta: {
-  //       title: '个人中心'
-  //     }
-  //   }]
-  // }
+
+  {
+    path: '*',
+    name: '*',
+    component: Layout,
+    redirect: '/404',
+    meta: {
+      title: '错误页面',
+      icon: 'vue-dsn-icon-bug'
+    },
+    children: [
+      {
+        path: '/404',
+        name: '404',
+        component: () => import(/* webpackChunkName: "404" */ '../views/ErrorPage/404'),
+        hidden: true,
+        meta: { title: '404' }
+      },
+    ]
+  },
+
+
+
+/*  {
+    name: '*',
+    path: '*',
+    redirect: '/404',
+    children: [
+
+    ],
+  },
+  {
+    path: '/401',
+    name: '401',
+    component: () => import(/!* webpackChunkName: "404" *!/ '../views/ErrorPage/401'),
+    hidden: true,
+    meta: { title: '401' }
+  },
+  {
+    path: '/404',
+    name: '404',
+    component: () => import(/!* webpackChunkName: "404" *!/ '../views/ErrorPage/404'),
+    hidden: true,
+    meta: { title: '404' }
+  },*/
+
+
+  /*{
+    path: 'https://github.com/baimingxuan/vue-admin-design.git',
+    name: 'doc',
+    component: Layout,
+    meta: {
+      title: '文档',
+      icon: 'vue-dsn-icon-wendang'
+    }
+  },
+  {
+    path: '/',
+    name: 'Layout2',
+    component: Layout,
+    redirect: '/user-center',
+    hidden: true,
+    children: [{
+      path: 'user-center',
+      name: 'UserCenter',
+      component: () => import(/!* webpackChunkName: "404" *!/ '../views/UserCenter'),
+      meta: {
+        title: '个人中心'
+      }
+    }]
+  }*/
 ]
 
 const routes = [...constantRoutes, ...asyncRoutes]

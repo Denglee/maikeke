@@ -1,5 +1,5 @@
 {
-  "name": "maikeweb",
+  "name": "maike",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -16,6 +16,7 @@
     "nprogress": "^0.2.0",
     "qs": "^6.9.4",
     "register-service-worker": "^1.7.1",
+    "screenfull": "^5.1.0",
     "v-charts": "^1.19.0",
     "vue": "^2.6.11",
     "vue-cropper": "^0.5.6",

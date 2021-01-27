@@ -1,12 +1,12 @@
 <template>
     <div>
-       账户资金
+    
     </div>
 </template>
 
 <script>
 export default {
-    name: "AccountFunds", //账户资金
+    name: "contentHeader",
     data(){
      return{
      
@@ -16,7 +16,11 @@ export default {
     
     },
     created(){
-    
+
     },
 }
 </script>
+
+<style scoped lang="scss">
+
+</style>

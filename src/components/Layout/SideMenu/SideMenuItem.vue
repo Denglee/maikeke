@@ -2,6 +2,7 @@
 <template>
    <li v-if="!item.hidden" class="side-menu-item">
       <template v-if="hasOnlyOneChild(item, item.children) && (onlyOneChild.noChildren || !onlyOneChild.children)">
+
          <LinkItem v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
             <el-menu-item :index="resolvePath(onlyOneChild.path)">
                <Item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title"/>

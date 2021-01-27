@@ -25,7 +25,14 @@
 
          <div class="main-content">
             <el-scrollbar wrap-class="scrollbar">
-               <MainView/>
+
+               <!--中间 主题内容-->
+               <transition name="fade" mode="out-in">
+                  <keep-alive :include="cachedViews">
+                     <router-view :key="key"/>
+                  </keep-alive>
+               </transition>
+
             </el-scrollbar>
          </div>
       </main>
@@ -53,6 +60,12 @@ export default {
             return LogoIcon
          }
          return Logo
+      },
+      cachedViews() {
+         return this.$store.state.StoreNavTags.cachedViews;
+      },
+      key() {
+         return this.$route.path
       }
    },
    created() {
@@ -67,7 +80,7 @@ export default {
    methods: {
       ...mapMutations('StoreNavSide', ['openSideMenu', 'closeSideMenu']),
       handleResize() {
-         console.log(this.collapsed);
+         // console.log(this.collapsed);
          let val = this.collapsed;
          if (val == false || val == 'false' || !val) {
             this.closeSideMenu();

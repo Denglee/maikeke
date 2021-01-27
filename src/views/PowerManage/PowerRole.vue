@@ -91,7 +91,7 @@
   import TabRoleUsers from "@/views/PowerManage/tab/TabRoleUsers";
   import TabRolePermissions from "@/views/PowerManage/tab/TabRolePermissions";
   export default {
-    name: "PowerManage",
+    name: "PowerRole",
     data() {
 
       const generateData = _ => {

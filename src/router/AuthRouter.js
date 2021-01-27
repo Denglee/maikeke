@@ -1,4 +1,4 @@
-import router from './index'
+import router from './RouterIndex'
 // import { getToken } from '../utils/cookie'
 
 // 白名单列表
