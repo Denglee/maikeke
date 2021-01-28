@@ -21,7 +21,7 @@ module.exports = {
    publicPath: './',  //有些地方这里需要 ./
 
    //用于放置生成的静态资源 (js、css、img、fonts) 的；（项目打包之后，静态资源会放在这个文件夹下）
-   assetsDir: 'dist',
+   assetsDir: 'static',
 
    //指定生成的 Index.html 的输出路径  (打包之后，改变系统默认的index.html的文件名)
    // indexPath: "myIndex.html",
@@ -47,15 +47,12 @@ module.exports = {
     * */
    productionSourceMap: false,
 
-
    css: {
-      extract: false,
-
+      extract:false,
       // extract: {
       //    filename: 'dist/css/[name].1609317655144.css',
       //    chunkFilename: 'dist/css/[name].1609317655144.css'
       // },
-
    },
 
    configureWebpack: (config) => {
@@ -88,31 +85,31 @@ module.exports = {
       devtool = 'source-map';
 
       // 警告 webpack 的性能提示
-      performance = {
-         hints: 'warning',
-         // 入口起点的最大体积
-         maxEntrypointSize: 50000000,
-         // 生成文件的最大体积
-         maxAssetSize: 30000000,
-         // 只给出 js 文件的性能提示
-         assetFilter: function (assetFilename) {
-            return assetFilename.endsWith('.js')
-         }
-      };
+      // performance = {
+      //    hints: 'warning',
+      //    // 入口起点的最大体积
+      //    maxEntrypointSize: 50000000,
+      //    // 生成文件的最大体积
+      //    maxAssetSize: 30000000,
+      //    // 只给出 js 文件的性能提示
+      //    assetFilter: function (assetFilename) {
+      //       return assetFilename.endsWith('.js')
+      //    }
+      // };
 
       output = { // 输出重构  打包编译后的 文件名称  【模块名称.版本号.时间戳】
-         filename: `dist/js/[name].${Timestamp}.js`,
-         chunkFilename: `dist/js/[name].${Timestamp}.js`,
+         filename: `static/js/[name].${Timestamp}.js`,
+         chunkFilename: `static/js/[name].${Timestamp}.js`,
       };
 
    },
 
    // 它支持webPack-dev-server的所有选项
    devServer: {
-      host: "localhost",
+      // host: "localhost",
       // host: "192.168.31.252",
-      // host: "192.168.6.189",
-      port: 8084, // 端口号
+      host: "192.168.6.189",
+      port: 8085, // 端口号
       https: false, // https:{type:Boolean}
       open: true, //配置自动启动浏览器
 

@@ -45,8 +45,6 @@ export const authSonList    = params => get('/storeAuth/authSon/list', params); 
 export const authSondelete    = params => axiosDelete('/storeAuth/authSon/'+params);     /* 删除 子账号列表 */
 export const authSonUpdate    = params => put('/storeAuth/authSon/update', params);     /* 更新子账号列表 */
 
-
-
 /*
 staffAdd({
     userimage:userimage,

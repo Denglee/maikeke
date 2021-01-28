@@ -72,7 +72,14 @@
          <el-table-column type="index" label="序号"></el-table-column>
          <el-table-column prop="storeName" label="页面编号"></el-table-column>
          <el-table-column prop="storeNum" label="页面路径"></el-table-column>
-         <el-table-column prop="creat_time" label="页面类型"></el-table-column>
+         <el-table-column prop="creat_time" label="页面类型" sortable>
+           <template slot-scope="{row}" slot="header">
+             <el-tooltip placement="top" >
+               <span class='tr-tooltip'>次品量/不可售量 <i class="el-icon-question"></i></span>
+               <div slot="content">自建仓对应次品量，FBA对应不可售库存。</div>
+             </el-tooltip>
+           </template>
+         </el-table-column>
          <el-table-column prop="state" label="数据权限状态">
             <template slot-scope="scope">
                <el-switch
@@ -90,6 +97,7 @@
                       </span>
                     </template>-->
          </el-table-column>
+
          <el-table-column label="操作">
             <template slot-scope="scope">
                <el-dropdown @command="FnCommand">

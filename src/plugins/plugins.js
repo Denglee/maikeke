@@ -14,21 +14,24 @@ import axios from 'axios';
 import Axios from 'axios'
 Vue.prototype.$axios = Axios;
 /*第一层if判断生产环境和开发环境*/
-// if (process.env.NODE_ENV === 'production') {
-//     /*第二层if，根据.env文件中的VUE_APP_FLAG判断是生产环境还是测试环境*/
-//     if (process.env.VUE_APP_FLAG === 'pro') {
-//         // console.log('production 生产环境发布 地址 线上 pro');
-//         // let localUrl2 = window.location.origin;
-//         Axios.defaults.baseURL = 'http://192.168.1.34:7040';//正式 路径
-//     } else {
-//         // console.log('production 生产环境发布 地址 线上 test');
-//         Axios.defaults.baseURL = 'http://192.168.1.30:9201';//测试环境路径
-//     }
-// } else {
-//     // console.log(' development (默认) dev 开发环境 本地 /api ');
-//     Axios.defaults.baseURL = '/apiTest';
-// }
+if (process.env.NODE_ENV === 'production') {
+    /*第二层if，根据.env文件中的VUE_APP_FLAG判断是生产环境还是测试环境*/
+    if (process.env.VUE_APP_FLAG === 'pro') {
+        // console.log('production 生产环境发布 地址 线上 pro');
+        // let localUrl2 = window.location.origin;
+        Axios.defaults.baseURL = 'http://192.168.1.34:7040';//正式 路径
+    } else {
+        // console.log('production 生产环境发布 地址 线上 test');
+        Axios.defaults.baseURL = 'http://192.168.1.30:9201';//测试环境路径
+    }
+} else {
+    // console.log(' development (默认) dev 开发环境 本地 /api ');
+    Axios.defaults.baseURL = '/apiTest';
+}
 
+/*Chrome51 版本以后，Chrome 增加了新的事件捕获机制－Passive Event Listeners；
+* https://blog.csdn.net/weixin_40716786/article/details/90045802*/
+import 'default-passive-events'
 
 /*  A、 引入 element*/
 import ElementUI from 'element-ui';

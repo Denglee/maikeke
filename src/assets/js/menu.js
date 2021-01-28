@@ -127,7 +127,7 @@ let menu = {
 
       /*文档管理*/
       {
-         path: "PageManage2",
+         path: "PageManage1",
          meta: {
             title: "文档管理",
             icon: 'el-icon-folder',

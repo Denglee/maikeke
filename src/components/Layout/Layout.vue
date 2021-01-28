@@ -94,5 +94,5 @@ export default {
 </script>
 
 <style lang="scss">
-   @import "@/assets/css/sideMenu";
+   @import "~@/assets/css/sideMenu";
 </style>

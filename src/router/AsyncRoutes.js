@@ -14,7 +14,7 @@ export const asyncRoutes = [
 
    /*基本信息*/
    {
-      path: '/BasicInfo',
+      path: "/BasicInfo",
       name: 'BasicInfo',
       component: Layout,
       meta: {
@@ -177,7 +177,7 @@ export const asyncRoutes = [
    /*文档管理*/
    {
       path: "/PageManage1",
-      name: "PageManage",
+      name: "PageManage1",
       component: Layout,
       meta: {
          title: "文档管理",
@@ -433,7 +433,7 @@ export const asyncRoutes = [
    /*报表中心*/
    /*广告报表*/
    {
-      path: '/ReportsCenter',
+      path: "/ReportsCenter",
       name: 'ReportsCenter',
       component: Layout,
       meta: {
@@ -473,7 +473,7 @@ export const asyncRoutes = [
    //   path: 'image',
    //   name: 'Image',
    //   component: Layout,
-   //   redirect: '/image/image-cropper',
+   //   redirect: "/image/image-cropper',
    //   meta: {
    //     title: '图片处理',
    //     icon: 'vue-dsn-icon-picture'
@@ -510,7 +510,7 @@ export const asyncRoutes = [
    //   path: 'error-page',
    //   name: 'ErrorPage',
    //   component: Layout,
-   //   redirect: '/error-page/page-401',
+   //   redirect: "/error-page/page-401',
    //   meta: {
    //     title: '错误页面',
    //     icon: 'vue-dsn-icon-bug'
