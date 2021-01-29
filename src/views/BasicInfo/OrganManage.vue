@@ -55,6 +55,7 @@ export default {
         storeName:'',
         storeState:'',
       },
+
       stateArr:[
         {
           name:'部门1',

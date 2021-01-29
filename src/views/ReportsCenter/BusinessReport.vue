@@ -1,7 +1,7 @@
 <template>
-  <div class="tabs-main" style="background-color: #fff;">
+  <div class="tabs-main">
     <el-tabs :tab-position="tabPosition" id="tabs-message" v-model="tabActiveName" @tab-click="FnChangeTab">
-      <el-tab-pane lazy name="name1" label="SP-广告活动">
+      <el-tab-pane lazy label="按ASIN-详情页面表现" name="name1">
         <!--中间部分-->
         <div class="tab-content">
           <el-form class="public-form">
@@ -86,32 +86,28 @@
           <el-table class="public-table" border
                     :data="tableStaff"
                     ref="multipleTable">
-            <el-table-column prop="store" label="店铺"></el-table-column>
-            <el-table-column prop="country" label="国家"></el-table-column>
-            <el-table-column prop="type" label="类型"></el-table-column>
-            <el-table-column prop="active" label="广告活动" sortable></el-table-column>
+            <el-table-column prop="store" label="商品"></el-table-column>
             <el-table-column prop="day" label="日期">
               <template slot-scope="{row}">
                 <div class="status-connect">{{ row.time | dateFormat }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="shopNum" label="展示量" sortable></el-table-column>
-            <el-table-column prop="clickNum" label="点击量"></el-table-column>
-            <el-table-column prop="CTR" label="CTR" sortable>
-              <template slot-scope="{row}" slot="header">
-                <el-tooltip placement="top">
-                  <span class='tr-tooltip'>次品量/不可售量 <i class="el-icon-question"></i></span>
-                  <div slot="content">
-                    <div>点击率=点击量/展示量。</div>
-                    <div>注意：一旦识别出无效点击，系统最多会在 3 天内从您的支出统计数据中删除这些点击记录。
-                      日期范围（含过去 3 天内的支出）可能因点击和支出失效而有所调整。
-                    </div>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column prop="money" label="话费"></el-table-column>
-
+            <el-table-column prop="country" label="ParentASIN"></el-table-column>
+            <el-table-column prop="type" label="ASIN"></el-table-column>
+            <el-table-column prop="active" label="商品名称" sortable></el-table-column>
+            <el-table-column prop="shopNum" label="MKSU" sortable></el-table-column>
+            <el-table-column prop="clickNum" label="本地SKU"></el-table-column>
+            <el-table-column prop="store" label="店铺"></el-table-column>
+            <el-table-column prop="country" label="国家"></el-table-column>
+            <el-table-column prop="lookNum" label="买家访问次数"></el-table-column>
+            <el-table-column prop="lookNumRace" label="买家访问次数百分比"></el-table-column>
+            <el-table-column prop="lookNum" label="页面浏览次数"></el-table-column>
+            <el-table-column prop="lookNumRace" label="页面浏览次数百分比"></el-table-column>
+            <el-table-column prop="lookNumRace" label="购买按钮赢的率"></el-table-column>
+            <el-table-column prop="lookNum" label="已订购商品数量"></el-table-column>
+            <el-table-column prop="lookNum" label="订购数量-B2B"></el-table-column>
+            <el-table-column prop="lookNumRace" label="订单商品数量转化率"></el-table-column>
+            <el-table-column prop="money" label="销售额"></el-table-column>
           </el-table>
 
           <el-pagination
@@ -128,23 +124,7 @@
 
       </el-tab-pane>
 
-      <el-tab-pane label="SP-广告组" lazy name="name2">
-
-      </el-tab-pane>
-
-      <el-tab-pane label="SP-推广的商品" lazy name="name3">
-
-      </el-tab-pane>
-
-      <el-tab-pane label="SP-投放报表" lazy name="name4">
-
-      </el-tab-pane>
-
-      <el-tab-pane label="SP-搜索词" lazy name="name5">
-
-      </el-tab-pane>
-
-      <el-tab-pane label="SP-广告位" lazy name="name6">
+      <el-tab-pane lazy label="按ASIN-子商品详情页面表现" name="name2">
 
       </el-tab-pane>
 
@@ -205,6 +185,8 @@ export default {
           clickNum:139,
           CTR:'7.23%',
           money:'$202.84',
+          lookNum:7565,
+          lookNumRace:'21%',
         },
         {
           store:'店铺2',
@@ -216,6 +198,8 @@ export default {
           clickNum:37,
           CTR:'1.23%',
           money:'$22.84',
+          lookNum:7565,
+          lookNumRace:'21%',
         },
       ],
       projectArr: [

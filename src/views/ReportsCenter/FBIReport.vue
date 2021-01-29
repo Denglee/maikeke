@@ -1,7 +1,7 @@
 <template>
-  <div class="tabs-main" style="background-color: #fff;">
+  <div class="tabs-main">
     <el-tabs :tab-position="tabPosition" id="tabs-message" v-model="tabActiveName" @tab-click="FnChangeTab">
-      <el-tab-pane lazy name="name1" label="SP-广告活动">
+      <el-tab-pane lazy label="赔偿" name="name1">
         <!--中间部分-->
         <div class="tab-content">
           <el-form class="public-form">
@@ -88,30 +88,21 @@
                     ref="multipleTable">
             <el-table-column prop="store" label="店铺"></el-table-column>
             <el-table-column prop="country" label="国家"></el-table-column>
-            <el-table-column prop="type" label="类型"></el-table-column>
-            <el-table-column prop="active" label="广告活动" sortable></el-table-column>
-            <el-table-column prop="day" label="日期">
+            <el-table-column prop="day" label="时间" width="180px">
               <template slot-scope="{row}">
-                <div class="status-connect">{{ row.time | dateFormat }}</div>
+                <div class="status-connect">{{ row.day | dateFormat }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="shopNum" label="展示量" sortable></el-table-column>
-            <el-table-column prop="clickNum" label="点击量"></el-table-column>
-            <el-table-column prop="CTR" label="CTR" sortable>
-              <template slot-scope="{row}" slot="header">
-                <el-tooltip placement="top">
-                  <span class='tr-tooltip'>次品量/不可售量 <i class="el-icon-question"></i></span>
-                  <div slot="content">
-                    <div>点击率=点击量/展示量。</div>
-                    <div>注意：一旦识别出无效点击，系统最多会在 3 天内从您的支出统计数据中删除这些点击记录。
-                      日期范围（含过去 3 天内的支出）可能因点击和支出失效而有所调整。
-                    </div>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column prop="money" label="话费"></el-table-column>
-
+            <el-table-column prop="active" label="赔偿编号"></el-table-column>
+            <el-table-column prop="shopNum" label="订单号"></el-table-column>
+            <el-table-column prop="clickNum" label="原因"></el-table-column>
+            <el-table-column prop="money" label="MSKU"></el-table-column>
+            <el-table-column prop="money" label="FNSKU"></el-table-column>
+            <el-table-column prop="money" label="ASIN"></el-table-column>
+            <el-table-column prop="money" label="标题"></el-table-column>
+            <el-table-column prop="money" label="状况"></el-table-column>
+            <el-table-column prop="money" label="币种"></el-table-column>
+            <el-table-column prop="money" label="每件商品赔偿金额" width="120px"></el-table-column>
           </el-table>
 
           <el-pagination
@@ -128,23 +119,31 @@
 
       </el-tab-pane>
 
-      <el-tab-pane label="SP-广告组" lazy name="name2">
+      <el-tab-pane lazy label="移除货件" name="name2">
 
       </el-tab-pane>
 
-      <el-tab-pane label="SP-推广的商品" lazy name="name3">
+      <el-tab-pane lazy label="月存储费用" name="name3">
 
       </el-tab-pane>
 
-      <el-tab-pane label="SP-投放报表" lazy name="name4">
+      <el-tab-pane lazy label="长期存储费用" name="name4">
 
       </el-tab-pane>
 
-      <el-tab-pane label="SP-搜索词" lazy name="name5">
+      <el-tab-pane lazy label="已接收库存" name="name5">
 
       </el-tab-pane>
 
-      <el-tab-pane label="SP-广告位" lazy name="name6">
+      <el-tab-pane lazy label="每日库存历史" name="name6">
+
+      </el-tab-pane>
+
+      <el-tab-pane lazy label="每月库存历史" name="name7">
+
+      </el-tab-pane>
+
+      <el-tab-pane lazy label="库存动作详情" name="name8">
 
       </el-tab-pane>
 
@@ -165,9 +164,9 @@ export default {
         order_time: '',
       },
       pageArr: {
-        pageNum:1,
-        total:110,
-        pageSize:10,
+        pageNum: 1,
+        total: 110,
+        pageSize: 10,
       },
       setForm: {
         shopType: '',
@@ -196,26 +195,26 @@ export default {
 
       tableStaff: [
         {
-          store:'店铺1',
-          country:0,
-          type:0,
-          active:'JR1 jump rope',
-          day:'1608538812',
-          shopNum:1923,
-          clickNum:139,
-          CTR:'7.23%',
-          money:'$202.84',
+          store: '店铺1',
+          country: 0,
+          type: 0,
+          active: 'JR1 jump rope',
+          day: '1608538812',
+          shopNum: 1923,
+          clickNum: 139,
+          CTR: '7.23%',
+          money: '$202.84',
         },
         {
-          store:'店铺2',
-          country:0,
-          type:0,
-          active:'JR1 jump rope自动',
-          day:'1608538812',
-          shopNum:3074,
-          clickNum:37,
-          CTR:'1.23%',
-          money:'$22.84',
+          store: '店铺2',
+          country: 0,
+          type: 0,
+          active: 'JR1 jump rope自动',
+          day: '1608538812',
+          shopNum: 3074,
+          clickNum: 37,
+          CTR: '1.23%',
+          money: '$22.84',
         },
       ],
       projectArr: [

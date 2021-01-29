@@ -1,5 +1,5 @@
 <template>
-  <div class="tabs-main" style="background-color: #fff;">
+  <div class="tabs-main">
 <!--    <div>消息列表</div>-->
 
     <el-tabs :tab-position="tabPosition" id="tabs-message" v-model="tabActiveName" @tab-click="FnChangeTab">

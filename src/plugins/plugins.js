@@ -44,6 +44,16 @@ Vue.use(ElementUI, {
 import '@/assets/css/public.scss'
 
 
+
+
+// import tinymce from 'tinymce'
+// import VueTinymce from '@packy-tang/vue-tinymce'
+//
+// Vue.prototype.$tinymce = tinymce // 将全局tinymce对象指向给Vue作用域下
+// Vue.use(VueTinymce)              // 安装vue的tinymce组件
+
+
+
 /* 2.1、 全局 通用iframe 组件*/
 // import publicIframe from '@/components/publicIframe/publicIframe'
 // Vue.component(publicIframe.name,publicIframe);

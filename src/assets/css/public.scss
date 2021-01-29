@@ -3,6 +3,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  //touch-action: pan-y;
+  touch-action: none;
 }
 
 html, body {
@@ -267,6 +269,7 @@ input:-webkit-autofill {
     border-color: #1c78f4;
     background-color: #1c78f4;
   }
+
   & span{
     margin-left: 0 !important;
   }
@@ -279,7 +282,7 @@ input:-webkit-autofill {
   //width: calc( 100% - 40px );
   margin: 0px auto;
   height: 100%;
-  //background-color: #fff;
+  background-color: #fff;
   border-radius: 6px;
 }
 
