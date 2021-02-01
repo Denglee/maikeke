@@ -117,6 +117,7 @@
           </el-pagination>
         </div>
 
+         {{ countryArr}}
       </el-tab-pane>
 
       <el-tab-pane lazy label="移除货件" name="name2">
@@ -157,6 +158,7 @@ export default {
   inject: ['reLoad'],
   data() {
     return {
+       countryArr:  this.GLOBAL.countryArr,
       tabPosition: 'left',
       tabActiveName: 'name1',
       formData: {

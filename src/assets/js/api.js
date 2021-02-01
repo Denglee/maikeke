@@ -39,6 +39,8 @@ export const selectStoreAuth    = params => get('/storeAuth/selectStoreAuth', pa
 export const delStoreAuth    = params => axiosDelete('/storeAuth/delStoreAuth/'+params);     /* 单个删除店铺 */
 export const delStoreAuthList    = params => axiosDelete('/storeAuth/delStoreAuthList', params);     /* 批量删除店铺授权 */
 
+export const getStoreList    = params => get('/storeAuth/getStoreList', params);     /* 查询所有店铺 */
+
 /* 店铺授权 子账号*/
 export const authSonAdd    = params => post('/storeAuth/authSon/add', params);     /* 新增子账号 */
 export const authSonList    = params => get('/storeAuth/authSon/list', params);     /* 子账号列表 */

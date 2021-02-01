@@ -9,6 +9,7 @@ import store from './store/StoreIndex'
 
 Vue.config.productionTip = false
 
+
 new Vue({
   router,
   store,

@@ -79,7 +79,6 @@
                         const img = 'data:image/jpeg;base64,' + blobInfo.base64();
                         console.log(img);
                         // console.log(failure);
-
                         // return false
                         ApiImgUplod({
                             img:img,

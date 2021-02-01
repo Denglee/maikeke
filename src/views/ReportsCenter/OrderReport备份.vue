@@ -20,9 +20,61 @@
           range-separator="-"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-          value-format="yyyy-MM-dd"
-          :picker-options="pickerOptions2">
+          value-format="yyyy-MM-dd">
       </el-date-picker>
+
+      <!--搜索-->
+      <el-button icon="el-icon-search" @click="FnSearchShop" :loading="btnState.btnSearchLoad" class="public-btn">
+        搜索
+      </el-button>
+
+      <!--设置-->
+      <el-popover
+          placement="bottom"
+          width="400"
+          trigger="manual"
+          v-model="diaState.diaShowPopSet"
+          label-width='180px'>
+        <el-form class="public-form" :model="setForm">
+
+          <el-form-item label="展示量">
+            <div class="public-selInp">
+              <el-select placeholder="请选择" v-model="setForm.shopType">
+                <el-option v-for="(item,index) in symbolArr" :key="index"
+                           :value="item.value"
+                           :label="item.label">
+                </el-option>
+              </el-select>
+              <el-input placeholder="请输入" autocomplete="off" v-model="setForm.shopNum" clearable></el-input>
+            </div>
+          </el-form-item>
+
+          <el-form-item label="点击量">
+            <div class="public-selInp">
+              <el-select placeholder="请选择" v-model="setForm.clickType">
+                <el-option v-for="(item,index) in symbolArr" :key="index"
+                           :value="item.value"
+                           :label="item.label"></el-option>
+              </el-select>
+              <el-input placeholder="请输入" autocomplete="off" v-model="setForm.clickNum" clearable></el-input>
+            </div>
+          </el-form-item>
+
+          <div class="formR-main">
+            <el-button type="primary" class="public-btn" :loading="btnState.btnAddRankMonit"
+                       @click="diaState.diaShowPopSet = false">取消
+            </el-button>
+            <el-button type="primary" class="public-btn" :loading="btnState.btnAddRankMonit"
+                       @click="FnBtnSaveSet">保存
+            </el-button>
+          </div>
+
+        </el-form>
+
+        <el-button slot="reference" @click="diaState.diaShowPopSet = !diaState.diaShowPopSet"
+                   class="btn-set" icon="el-icon-setting"></el-button>
+
+      </el-popover>
 
     </el-form>
 
@@ -47,6 +99,7 @@
       <el-table-column prop="money" label="收货城市"></el-table-column>
       <el-table-column prop="money" label="收货州"></el-table-column>
       <el-table-column prop="money" label="收货地邮政编码"></el-table-column>
+
     </el-table>
 
     <el-pagination
@@ -59,7 +112,6 @@
         @size-change='sizeChange'
         @current-change="PageCurrent">
     </el-pagination>
-
   </div>
 </template>
 
@@ -69,63 +121,6 @@ export default {
   inject: ['reLoad'],
   data() {
     return {
-       pickerOptions2: {
-          disabledDate(time) {
-             return time.getTime() > Date.now();
-          },
-          shortcuts: [
-             {
-                text: '今天',
-                onClick(picker) {
-                   picker.$emit("pick");
-                   that.monthScreen = {
-                      monthVal:'',
-                      monthText:'今天',
-                      time:'1',
-                      day:'',
-                   };
-                   that.$emit('getMonthScreen',that.monthScreen);
-                }
-             }, {
-                text: '昨天',
-                onClick(picker) {
-                   picker.$emit("pick");
-                   that.monthScreen = {
-                      monthVal:'',
-                      monthText:'昨天',
-                      time:'2',
-                      day:'',
-                   };
-                   that.$emit('getMonthScreen',that.monthScreen);
-                }
-             },{
-                text: '过去七天',
-                onClick(picker) {
-                   picker.$emit("pick");
-                   that.monthScreen = {
-                      monthVal:'',
-                      monthText:'过去七天',
-                      time:'3',
-                      day:'',
-                   };
-                   that.$emit('getMonthScreen',that.monthScreen);
-                }
-             }, {
-                text: '过去30天',
-                onClick(picker) {
-                   picker.$emit("pick");
-                   that.monthScreen = {
-                      monthVal:'',
-                      monthText:'过去30天',
-                      time:'4',
-                      day:'',
-                   };
-                   that.$emit('getMonthScreen',that.monthScreen);
-                },
-             }
-          ]
-       },
-
       tabPosition: 'left',
       tabActiveName: 'name1',
       formData: {
