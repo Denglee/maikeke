@@ -179,13 +179,7 @@
          </el-tab-pane>
 
          <el-tab-pane lazy label="SP-推广的商品" name="name3">
-            <!--        <tinymce ref="editor"-->
-            <!--                 style="max-width: 80%;"-->
-            <!--                 v-model="user_des"-->
-            <!--                 :disabled="disabled"-->
-            <!--                 @onClick="onClick">-->
-            <!--        </tinymce>-->
-            <!--        <el-button @click="btnTinmyce">保存</el-button>-->
+
 
          </el-tab-pane>
 
@@ -207,7 +201,6 @@
 
 <script>
 
-import {getStoreList} from '@/assets/js/api'
 import AllStoreSel from "@/components/AllStoreSel/AllStoreSel";
 
 export default {
@@ -307,13 +300,6 @@ export default {
          this.formData.store = val;
       },
 
-      /*七天 日期筛选*/
-      getMonthScreen(val){
-         console.log(val);
-      },
-
-
-
       /*页面刷新*/
       FnRefresh() {
          // this.reLoad();
@@ -363,38 +349,10 @@ export default {
       },
 
 
-      // 鼠标单击的事件
-      onClick(e, editor) {
-      },
-      // 清空内容
-      clear() {
-         this.$refs.editor.clear()
-      },
-
-      btnTinmyce() {
-         console.log(this.user_des);
-      },
-
-
-
-
 
    },
    created() {
 
-
-      // this.FnGetStoreList();
-
-      // this.$root.countryArr.push({
-      //    label:'label',
-      //    value:'value'
-      // });
-
-      // FnGetStoreList().then(res => {
-      //    return res;
-      // });
-
-      // this.addNum();
    },
 
 }

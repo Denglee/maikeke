@@ -8,7 +8,7 @@
            <i class="el-icon-plus avatar-uploader-icon"
               :style="{width:width+'px',height:height+'px','line-height':height+'px','font-size':height/6+'px'}"></i>
         </el-upload>
-        <div>le
+        <div>
             <img v-if="imageUrl" :src="imageUrl" class="avatar" ref="singleImg">
         </div>
 
@@ -28,8 +28,8 @@
             targetUrl: {
                 // 上传地址
                 type: String,
-                // default: '/storage/upload'
-                default: `${process.env.API_ROOT}/sys/oss/upload`
+                default: '/storage/upload'
+                // default: `${process.env.API_ROOT}/sys/oss/upload`
             },
 
             initUrl: {

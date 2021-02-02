@@ -1,26 +1,45 @@
 <template>
-    <div>
-        <!-- 单图片上传 -->
-        <el-upload class="avatar-uploader" action="'string'"  list-type="picture"
-                   :auto-upload="false"
-                   :show-file-list="false"
-                   :on-change="handleCrop" :http-request="upload">
-           <i class="el-icon-plus avatar-uploader-icon"
-              :style="{width:width+'px',height:height+'px','line-height':height+'px','font-size':height/6+'px'}"></i>
-        </el-upload>
-        <div>
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" ref="singleImg">
-        </div>
 
-        <!-- 剪裁组件弹窗 -->
-        <el-dialog  :append-to-body="true" :visible.sync="cropperModel" width="1100px" :before-close="beforeClose">
-            <Cropper :img-file="file" ref="vueCropper" :fixedNumber="fixedNumber" @upload="upload">
-            </Cropper>
-        </el-dialog>
-    </div>
+       <div style="display: flex;align-items: center;">
+          <el-avatar  :src='imageUrl' :size="70" style="margin-right: 10px"></el-avatar>
+          <el-upload
+             action="string"
+             list-type="picture"
+             :auto-upload="false"
+             :show-file-list="false"
+             :on-change="handleCrop"
+             :http-request="upload">
+             <el-button size="small" type="primary">更换头像</el-button>
+          </el-upload>
+
+          <!-- 剪裁组件弹窗 -->
+          <el-dialog  :append-to-body="true" :visible.sync="cropperModel"
+                      width="1100px" :before-close="beforeClose">
+             <cropper :img-file="file" ref="vueCropper"
+                      :fixedNumber="fixedNumber"
+                      @upload="upload"
+                      v-bind="$attrs"></cropper>
+          </el-dialog>
+       </div>
+<!--        &lt;!&ndash; 单图片上传 &ndash;&gt;-->
+<!--        <el-upload class="avatar-uploader" -->
+<!--                   action="'string'"  -->
+<!--                   list-type="picture"-->
+<!--                   :auto-upload="false"-->
+<!--                   :show-file-list="false"-->
+<!--                   :on-change="handleCrop"-->
+<!--                   :http-request="upload">-->
+<!--           <i class="el-icon-plus avatar-uploader-icon"-->
+<!--              :style="{width:width+'px',height:height+'px','line-height':height+'px','font-size':height/6+'px'}"></i>-->
+<!--        </el-upload>-->
+<!--        <div>-->
+<!--            <img v-if="imageUrl" :src="imageUrl" class="avatar" ref="singleImg">-->
+<!--        </div>-->
+
+
 </template>
 <script>
-    import Cropper from '@/components/Cropper/Cropper';
+    import cropper from '@/components/cropper/cropper';
 
     export default {
         name: 'uploader',
@@ -42,16 +61,6 @@
                     return [1, 1];
                 }
             },
-            width: {
-                // 单图剪裁框宽度
-                type: Number,
-                default: 178
-            },
-            height: {
-                // 单图剪裁框高度
-                type: Number,
-                default: 178
-            }
         },
         data () {
             return {
@@ -75,29 +84,29 @@
                 if (val) {
                     if (typeof this.initUrl === 'string') {
                         this.imageUrl = val;
-                    } else {
-                        this.uploadList = this.formatImgArr(val);
-                        // this.$emit('imgupload', this.uploadList);
                     }
+                    // else {
+                    //     this.uploadList = this.formatImgArr(val);
+                    //     // this.$emit('imgupload', this.uploadList);
+                    // }
                 }
             }
         },
         mounted () {
             if (typeof this.initUrl === 'string') {
                 this.imageUrl = this.initUrl;
-            } else {
-                this.uploadList = this.formatImgArr(this.initUrl);
             }
+            // else {
+            //     this.uploadList = this.formatImgArr(this.initUrl);
+            // }
         },
         methods: {
 
-
-            /** **************************** single单图情况 **************************************/
+            /** ***************** single单图情况 ******************/
             handlePreviewSingle (file) { // 点击进行图片展示
                 this.dialogImageUrl = this.file.url;
                 this.dialogVisible = true;
             },
-
 
             beforeClose () {
                 console.log(this.uploadList);
@@ -110,23 +119,21 @@
                 this.file = file;
                 // this.imageUrl = file.url
             },
-            /************************************************************************************/
+            /************************************/
 
             async upload (data) {
                 console.log(data);
                 event.preventDefault();
-
                 this.imageUrl = data;
                 // this.isDisabled = true;
                 this.$refs.vueCropper.isDisabled = true;
                 this.cropperModel = false;
                 return  false;
             },
-
         },
         components: {
-            Cropper
-        }
+            cropper,
+        },
     };
 </script>
 <style>

@@ -198,6 +198,9 @@ export default {
          // this.staffPage = page;
          // this.getStaffIndex();
       },
+      sizeChange(){
+
+      },
 
       /* 获取 自定义列 所有选项 */
       FnGetAllTrChecked() {

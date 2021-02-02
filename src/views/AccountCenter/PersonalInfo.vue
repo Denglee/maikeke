@@ -1,25 +1,10 @@
 <template>
   <div class="public-main">
-
     <el-form :model="roleForm" class="person-form"  ref="refRoleForm" label-width="120px" label-position="left">
 
       <el-form-item label="员工头像">
-        <div style="display: flex;align-items: center;">
-          <el-avatar  :src='roleForm.userimage' :size="70"></el-avatar>
-          <el-upload
-              style="margin-left: 20px;"
-              action="#"
-              :on-change='changeUpload'
-              :show-file-list="false"
-              :auto-upload="false">
-            <el-button size="small" type="primary">更换头像</el-button>
-          </el-upload>
-
-          <!--弹出放大效果-->
-          <el-dialog :append-to-body="true" :visible.sync="diaVisible">
-            <img width="100%" :src="roleForm.userimage" alt="">
-          </el-dialog>
-        </div>
+         <SingleCropper :autoCropWidth ='200' :autoCropHeight ='200'
+                        :initUrl="roleForm.userimage"></SingleCropper>
       </el-form-item>
 
       <el-form-item label="姓名" prop="name" :rules="{ required: true, message: '请输入姓名', trigger: 'blur' }">
@@ -62,9 +47,10 @@
 </template>
 
 <script>
-
+import SingleCropper from "@/components/cropper/SingleCropper";
 export default {
   name: "PersonalInfo",
+   components:{SingleCropper},
   data() {
     return {
       

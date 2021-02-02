@@ -44,16 +44,6 @@ Vue.use(ElementUI, {
 import '@/assets/css/public.scss'
 
 
-
-
-// import tinymce from 'tinymce'
-// import VueTinymce from '@packy-tang/vue-tinymce'
-//
-// Vue.prototype.$tinymce = tinymce // 将全局tinymce对象指向给Vue作用域下
-// Vue.use(VueTinymce)              // 安装vue的tinymce组件
-
-
-
 /* 2.1、 全局 通用iframe 组件*/
 // import publicIframe from '@/components/publicIframe/publicIframe'
 // Vue.component(publicIframe.name,publicIframe);
@@ -62,14 +52,6 @@ import '@/assets/css/public.scss'
 // import goTop from "@/components/goTop";
 // Vue.component(goTop.name,goTop)
 
-/*2.4、注册全局组件*/
-// import topTabbar from '@/components/topTabbar'
-// Vue.component(topTabbar.name,topTabbar);
-
-
-/* 5、 引入 vue-cropper 图片 裁剪*/
-// import VueCropper from 'vue-cropper'
-// Vue.use(VueCropper);
 
 
  /*6、 引入 moment 时间转换*/
@@ -96,30 +78,27 @@ Vue.filter('tempTme', (dataStr) => {
 //     return Math.abs(Number(math))
 // });
 
-/*7、 引用md5*/
-// import md5 from 'js-md5';
-
 
 
 /*8、引入v-charts 官网：https://v-charts.js.org/#/histogram*/
-// import VCharts from 'v-charts'
-// import VeLine from 'v-charts/lib/line.common'  //折线图
-// import VeBar from 'v-charts/lib/bar.common' //条形图
-// import VeHistogram from 'v-charts/lib/histogram.common' //柱状图
-// import VePie from 'v-charts/lib/pie.common' //饼图
-// import VeRing from 'v-charts/lib/ring.common' //环图
-// // import VeFunnel from 'v-charts/lib/funnel.common' //图
-//
-// Vue.component(VeLine.name, VeLine);
-// Vue.component(VeBar.name, VeBar);
-// Vue.component(VeHistogram.name, VeHistogram);
-// Vue.component(VePie.name, VePie);
-// Vue.component(VeRing.name, VeRing);
-// // Vue.component(VeFunnel.name, VeLine);
-// Vue.use(VCharts);
+import VCharts from 'v-charts'
+import VeLine from 'v-charts/lib/line.common'  //折线图
+import VeBar from 'v-charts/lib/bar.common' //条形图
+import VeHistogram from 'v-charts/lib/histogram.common' //柱状图
+import VePie from 'v-charts/lib/pie.common' //饼图
+import VeRing from 'v-charts/lib/ring.common' //环图
+// import VeFunnel from 'v-charts/lib/funnel.common' //图
+
+Vue.component(VeLine.name, VeLine);
+Vue.component(VeBar.name, VeBar);
+Vue.component(VeHistogram.name, VeHistogram);
+Vue.component(VePie.name, VePie);
+Vue.component(VeRing.name, VeRing);
+// Vue.component(VeFunnel.name, VeLine);
+Vue.use(VCharts);
 
 
-/*9、打印   https://www.cnblogs.com/dhpong/p/10500370.html */
+/*9、old 打印   https://www.cnblogs.com/dhpong/p/10500370.html */
 // import Print from 'vue-print-nb'
 // Vue.use(Print);  //注册
 

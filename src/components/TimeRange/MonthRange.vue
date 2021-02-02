@@ -1,121 +1,132 @@
 <template>
-    <div class="time-selMonth">
-        <div class="time-selVal flex-between">
-            {{monthScreen.monthText}}
-            <i class="el-icon-caret-bottom"></i>
-        </div>
-
-        <el-date-picker
-            class="timeSel-box"
-            :popper-class="monthSelect"
-            v-model="monthScreen.monthVal"
-            type="daterange"
-            placeholder="选择月"
-            value-format="yyyy-MM"
-            format="yyyy年MM月"
-            @change="monthSel"
-            :picker-options="pickerOptions2">
-        </el-date-picker>
-
-    </div>
+   <el-date-picker
+      class="public-datePicker"
+      v-model="monthTime"
+      type="daterange"
+      align="right"
+      unlink-panels
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
+      :picker-options="pickerOptions"
+      @change="dataTimeChange"
+      value-format="yyyy-MM-dd">
+   </el-date-picker>
 </template>
 
 <script>
-    export default {
-        name: "monthSceen",  // 七天 30天 月份选择器
-        data() {
-            const that = this;
-            return {
-                monthSelect:'month-select',
-                monthScreen:{
-                    monthVal:'',
-                    monthText:'过去30天',
-                    time:'30',
-                    day:'',
-                },
-                pickerOptions2: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [
-                        {
-                            text: '今天',
-                            onClick(picker) {
-                                picker.$emit("pick");
-                                that.monthScreen = {
-                                    monthVal:'',
-                                    monthText:'今天',
-                                    time:'1',
-                                    day:'',
-                                };
-                                that.$emit('getMonthScreen',that.monthScreen);
-                            }
-                        }, {
-                            text: '昨天',
-                            onClick(picker) {
-                                picker.$emit("pick");
-                                that.monthScreen = {
-                                    monthVal:'',
-                                    monthText:'昨天',
-                                    time:'2',
-                                    day:'',
-                                };
-                                that.$emit('getMonthScreen',that.monthScreen);
-                            }
-                        },{
-                            text: '过去七天',
-                            onClick(picker) {
-                                picker.$emit("pick");
-                                that.monthScreen = {
-                                    monthVal:'',
-                                    monthText:'过去七天',
-                                    time:'3',
-                                    day:'',
-                                };
-                                that.$emit('getMonthScreen',that.monthScreen);
-                            }
-                        }, {
-                            text: '过去30天',
-                            onClick(picker) {
-                                picker.$emit("pick");
-                                that.monthScreen = {
-                                    monthVal:'',
-                                    monthText:'过去30天',
-                                    time:'4',
-                                    day:'',
-                                };
-                                that.$emit('getMonthScreen',that.monthScreen);
-                            },
-                        }
-                    ]
-                },
-            }
-        },
-        methods: {
-           /* 月份     day:'2020-03'
-            昨天     time:'1'
-            今天     time:'2'
-            过去7天  time:'7'
-            过去30天 time:'30'*/
-            monthSel(val){
-
-                let monthVal = this.monthScreen.monthVal;
-                console.log(monthVal);
-                if(monthVal){
-                    console.log(monthVal);
-                    this.monthScreen = {
-                        monthVal:val,
-                        monthText:val,
-                        time:'',
-                        day:val,
-                    };
-                    this.$emit('getMonthScreen',this.monthScreen);
-                }
-
+export default {
+   name: "MonthRange",  // 月份选择器
+   data() {
+      return {
+         monthTime:'',
+         pickerOptions: {
+            shortcuts: [{
+               text: '今天',
+               onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  picker.$emit('pick', [start, end]);
+               }
             },
-        },
-        created() {
+               {
+                  text: '昨天',
+                  onClick(picker) {
+                     const end = new Date();
+                     const start = new Date();
+                     start.setTime(start.getTime() - 3600 * 1000 * 24);
+                     end.setTime(end.getTime() - 3600 * 1000 * 24);
+                     picker.$emit('pick', [start, end]);
+                  }
+               }, {
+                  text: '最近7天',
+                  onClick(picker) {
+                     const end = new Date();
+                     const start = new Date();
+                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                     picker.$emit('pick', [start, end]);
+                  }
+               }, {
+                  text: '最近30天',
+                  onClick(picker) {
+                     const end = new Date();
+                     const start = new Date();
+                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                     picker.$emit('pick', [start, end]);
+                  }
+               }, {
+                  text: '本月',
+                  onClick(picker) {
+                     const end = getCurrentMonthLast()
+                     const start = getCurrentMonthFirst()
+                     picker.$emit('pick', [start, end])
+                     function getCurrentMonthFirst() {
+                        const date = new Date();
+                        console.log(date)
+                        date.setDate(1);
+                        return date
+                     }
+                     // 获取当前月的最后一天
+                     function getCurrentMonthLast() {
+                        const date = new Date();
+                        let currentMonth = date.getMonth();
+                        const nextMonth = ++currentMonth;
+                        const nextMonthFirstDay = new Date(date.getFullYear(), nextMonth, 1);
+                        const oneDay = 1000 * 60 * 60 * 24;
+                        return new Date(nextMonthFirstDay - oneDay);
+                     }
 
-        },
-    }
+                  }
+               },{
+                  text: '上月',
+                  onClick(picker) {
+                     const end = gettimeEnd();
+                     const start = gettimeStart();
+                     picker.$emit('pick', [start, end]);
+                     function gettimeStart() {
+                        const nowdays = new Date();
+                        let year = nowdays.getFullYear();
+                        let month = nowdays.getMonth();
+                        if (month === 0) {
+                           month = 12
+                           year = year - 1
+                        }
+                        if (month < 10) {
+                           month = '0' + month
+                        }
+                        let firstDayOfPreMonth = year + '-' + month + '-' + '01';
+                        firstDayOfPreMonth = firstDayOfPreMonth.toString();
+                        return new Date(firstDayOfPreMonth);
+                     }
+                     function gettimeEnd() {
+                        const nowdays = new Date();
+                        let year = nowdays.getFullYear();
+                        let month = nowdays.getMonth();
+                        if (month === 0) {
+                           month = 12
+                           year = year - 1
+                        }
+                        if (month < 10) {
+                           month = '0' + month
+                        }
+                        const lastDay = new Date(year, month, 0);
+                        let lastDayOfPreMonth = year + '-' + month + '-' + lastDay.getDate();
+                        lastDayOfPreMonth = lastDayOfPreMonth.toString();
+                        return new Date(lastDayOfPreMonth);
+                     }
+                  }
+               }, ]
+         },
+      }
+   },
+   methods: {
+      dataTimeChange(){
+         // console.log(this.monthTime);
+         this.$emit('FnSonMonth',this.monthTime);
+      },
+   },
+   created() {
+
+   },
+}
 </script>

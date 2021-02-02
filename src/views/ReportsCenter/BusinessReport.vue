@@ -16,16 +16,19 @@
                      </el-option>
                   </el-select>
 
-                  <el-date-picker
-                     class="public-datePicker"
-                     v-model="formData.order_time"
-                     type="daterange"
-                     unlink-panels
-                     range-separator="-"
-                     start-placeholder="开始日期"
-                     end-placeholder="结束日期"
-                     value-format="yyyy-MM-dd">
-                  </el-date-picker>
+<!--                  <el-date-picker-->
+<!--                     class="public-datePicker"-->
+<!--                     v-model="formData.order_time"-->
+<!--                     type="daterange"-->
+<!--                     unlink-panels-->
+<!--                     range-separator="-"-->
+<!--                     start-placeholder="开始日期"-->
+<!--                     end-placeholder="结束日期"-->
+<!--                     value-format="yyyy-MM-dd">-->
+<!--                  </el-date-picker>-->
+
+                  <MonthRange @FnSonMonth="FaMonthRange"></MonthRange>
+
 
                   <!--搜索-->
                   <el-button icon="el-icon-search" @click="FnSearchShop" :loading="btnState.btnSearchLoad"
@@ -148,9 +151,13 @@
 </template>
 
 <script>
+
+import MonthRange from "@/components/TimeRange/MonthRange";
+
 export default {
    name: "BusinessReport",
    inject: ['reLoad'],
+   components:{MonthRange},
    data() {
       return {
          tabPosition: 'left',
@@ -241,6 +248,10 @@ export default {
       }
    },
    methods: {
+      FaMonthRange(val){
+        console.log(val);
+        this.formData.order_time=val;
+      },
       /*页面刷新*/
       FnRefresh() {
          // this.reLoad();
