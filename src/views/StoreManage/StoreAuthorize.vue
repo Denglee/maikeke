@@ -90,8 +90,8 @@
          :current-page="pageArr.pageNum"
          :total="pageArr.total"
          :page-size="pageArr.pageSize"
-         @size-change='sizeChange'
-         @current-change="PageCurrent">
+         @size-change='FaSizeChange'
+         @current-change="FaPageCurrent">
       </el-pagination>
 
 
@@ -498,12 +498,12 @@ export default {
       },
 
       /*分页*/
-      PageCurrent(page) {
+      FaPageCurrent(page) {
          console.log(page);
          this.searchForm.pageNum = page;
          this.FnSelectStoreAuth();
       },
-      sizeChange(size){
+      FaSizeChange(size){
          console.log(size);
       },
 

@@ -69,8 +69,8 @@
         :current-page="pageArr.pageNum"
         :total="pageArr.total"
         :page-size="pageArr.pageSize"
-        @size-change='sizeChange'
-        @current-change="PageCurrent">
+        @size-change='FaSizeChange'
+        @current-change="FaPageCurrent">
      </el-pagination>
 
     <!--添加授权店铺信息  -->
@@ -250,7 +250,7 @@ export default {
     },
 
     /*分页*/
-    PageCurrent(page){
+    FaPageCurrent(page){
       console.log(page);
       this.searchForm.pageNum = page;
       this.FnSelectStoreAuth();

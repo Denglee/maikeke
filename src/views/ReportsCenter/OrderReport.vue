@@ -12,17 +12,7 @@
         </el-option>
       </el-select>
 
-      <el-date-picker
-          class="public-datePicker"
-          v-model="formData.order_time"
-          type="daterange"
-          unlink-panels
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          value-format="yyyy-MM-dd"
-          :picker-options="pickerOptions2">
-      </el-date-picker>
+
 
     </el-form>
 
@@ -49,82 +39,24 @@
       <el-table-column prop="money" label="收货地邮政编码"></el-table-column>
     </el-table>
 
-    <el-pagination
-        background
-        layout="total, prev, pager,next, sizes, jumper"
-        :page-sizes="[10, 20, 50, 100]"
-        :current-page="pageArr.pageNum"
+     <Pagination
+        :pageNum="pageArr.pageNum"
         :total="pageArr.total"
-        :page-size="pageArr.pageSize"
-        @size-change='sizeChange'
-        @current-change="PageCurrent">
-    </el-pagination>
+        :pageSize="pageArr.pageSize"
+        @SonSizeChange='FaSizeChange'
+        @SonCurrentChange="FaPageCurrent"></Pagination>
 
   </div>
 </template>
 
 <script>
+import Pagination from "@/components/Pagination/Pagination";
 export default {
   name: "OrderReport",
   inject: ['reLoad'],
+   components:{Pagination},
   data() {
     return {
-       pickerOptions2: {
-          disabledDate(time) {
-             return time.getTime() > Date.now();
-          },
-          shortcuts: [
-             {
-                text: '今天',
-                onClick(picker) {
-                   picker.$emit("pick");
-                   that.monthScreen = {
-                      monthVal:'',
-                      monthText:'今天',
-                      time:'1',
-                      day:'',
-                   };
-                   that.$emit('getMonthScreen',that.monthScreen);
-                }
-             }, {
-                text: '昨天',
-                onClick(picker) {
-                   picker.$emit("pick");
-                   that.monthScreen = {
-                      monthVal:'',
-                      monthText:'昨天',
-                      time:'2',
-                      day:'',
-                   };
-                   that.$emit('getMonthScreen',that.monthScreen);
-                }
-             },{
-                text: '过去七天',
-                onClick(picker) {
-                   picker.$emit("pick");
-                   that.monthScreen = {
-                      monthVal:'',
-                      monthText:'过去七天',
-                      time:'3',
-                      day:'',
-                   };
-                   that.$emit('getMonthScreen',that.monthScreen);
-                }
-             }, {
-                text: '过去30天',
-                onClick(picker) {
-                   picker.$emit("pick");
-                   that.monthScreen = {
-                      monthVal:'',
-                      monthText:'过去30天',
-                      time:'4',
-                      day:'',
-                   };
-                   that.$emit('getMonthScreen',that.monthScreen);
-                },
-             }
-          ]
-       },
 
       tabPosition: 'left',
       tabActiveName: 'name1',
@@ -249,12 +181,12 @@ export default {
     },
 
     /*分页 */
-    PageCurrent(page) {
+    FaPageCurrent(page) {
       console.log(page);
       // this.staffPage = page;
       // this.getStaffIndex();
     },
-    sizeChange(size) {
+    FaSizeChange(size) {
       console.log(size);
     },
 

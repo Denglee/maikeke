@@ -110,34 +110,30 @@
                         <div class="status-connect">{{ row.time | dateFormat }}</div>
                      </template>
                   </el-table-column>
-                  <el-table-column prop="country" label="ParentASIN"></el-table-column>
+                  <el-table-column prop="country" label="ParentASIN" width="90px"></el-table-column>
                   <el-table-column prop="type" label="ASIN"></el-table-column>
-                  <el-table-column prop="active" label="商品名称" sortable></el-table-column>
-                  <el-table-column prop="shopNum" label="MKSU" sortable></el-table-column>
+                  <el-table-column prop="active" label="商品名称"></el-table-column>
+                  <el-table-column prop="shopNum" label="MKSU"></el-table-column>
                   <el-table-column prop="clickNum" label="本地SKU"></el-table-column>
                   <el-table-column prop="store" label="店铺"></el-table-column>
                   <el-table-column prop="country" label="国家"></el-table-column>
-                  <el-table-column prop="lookNum" label="买家访问次数"></el-table-column>
-                  <el-table-column prop="lookNumRace" label="买家访问次数百分比"></el-table-column>
-                  <el-table-column prop="lookNum" label="页面浏览次数"></el-table-column>
-                  <el-table-column prop="lookNumRace" label="页面浏览次数百分比"></el-table-column>
-                  <el-table-column prop="lookNumRace" label="购买按钮赢的率"></el-table-column>
-                  <el-table-column prop="lookNum" label="已订购商品数量"></el-table-column>
-                  <el-table-column prop="lookNum" label="订购数量-B2B"></el-table-column>
-                  <el-table-column prop="lookNumRace" label="订单商品数量转化率"></el-table-column>
+                  <el-table-column prop="lookNum" label="买家访问次数" width="120px"></el-table-column>
+                  <el-table-column prop="lookNumRace" label="买家访问次数百分比" width="130px"></el-table-column>
+                  <el-table-column prop="lookNum" label="页面浏览次数" width="120px"></el-table-column>
+                  <el-table-column prop="lookNumRace" label="页面浏览次数百分比" width="130px"></el-table-column>
+                  <el-table-column prop="lookNumRace" label="购买按钮赢的率" width="130px"></el-table-column>
+                  <el-table-column prop="lookNum" label="已订购商品数量" width="120px"></el-table-column>
+                  <el-table-column prop="lookNum" label="订购数量-B2B" width="120px"></el-table-column>
+                  <el-table-column prop="lookNumRace" label="订单商品数量转化率" width="130px"></el-table-column>
                   <el-table-column prop="money" label="销售额"></el-table-column>
                </el-table>
 
-               <el-pagination
-                  background
-                  layout="total, prev, pager,next, sizes, jumper"
-                  :page-sizes="[10, 20, 50, 100]"
-                  :current-page="pageArr.pageNum"
+               <Pagination
+                  :pageNum="pageArr.pageNum"
                   :total="pageArr.total"
-                  :page-size="pageArr.pageSize"
-                  @size-change='sizeChange'
-                  @current-change="PageCurrent">
-               </el-pagination>
+                  :pageSize="pageArr.pageSize"
+                  @SonSizeChange='FaSizeChange'
+                  @SonCurrentChange="FaPageCurrent"></Pagination>
             </div>
 
          </el-tab-pane>
@@ -153,11 +149,11 @@
 <script>
 
 import MonthRange from "@/components/TimeRange/MonthRange";
-
+import Pagination from "@/components/Pagination/Pagination";
 export default {
    name: "BusinessReport",
    inject: ['reLoad'],
-   components:{MonthRange},
+   components:{MonthRange,Pagination},
    data() {
       return {
          tabPosition: 'left',
@@ -291,12 +287,12 @@ export default {
       },
 
       /*分页 */
-      PageCurrent(page) {
+      FaPageCurrent(page) {
          console.log(page);
          // this.staffPage = page;
          // this.getStaffIndex();
       },
-      sizeChange(size) {
+      FaSizeChange(size) {
          console.log(size);
       },
 

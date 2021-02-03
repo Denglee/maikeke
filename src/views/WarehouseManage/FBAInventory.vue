@@ -101,8 +101,8 @@
          :current-page="pageArr.pageNum"
          :total="pageArr.total"
          :page-size="pageArr.pageSize"
-         @size-change='sizeChange'
-         @current-change="PageCurrent">
+         @size-change='FaSizeChange'
+         @current-change="FaPageCurrent">
       </el-pagination>
 
    </div>
@@ -161,12 +161,12 @@ export default {
 
       /*分页*/
       /*分页*/
-      PageCurrent(page) {
+      FaPageCurrent(page) {
          console.log(page)
          this.pageArr.pageNum = page;
          // this.getStaffIndex();
       },
-      sizeChange(size){
+      FaSizeChange(size){
          console.log(size);
          this.pageArr.pageSize = size;
       },

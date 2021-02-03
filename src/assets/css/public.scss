@@ -199,16 +199,20 @@ input:-webkit-autofill {
   display: flex;
   border: solid 1px #ddd;
   border-radius: 6px;
+  width: 220px;
   input{
     border: none;
   }
   & >.el-select{
-    width: 30%;
+    width: 40%;
     border-right: solid 1px #ddd;
   }
   & >.el-input{
-    width: 70%;
+    width: 60%;
   }
+}
+.set-popover .public-selInp{
+  width: auto;
 }
 
 .public-table {

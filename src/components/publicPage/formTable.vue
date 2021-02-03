@@ -1,7 +1,12 @@
 <template>
    <div class="public-main">
-      <el-form :model="FormSearch" class="public-form" ref="refRoleForm" @submit.native.prevent
-               label-width="120px" label-position="left" :inline="true">
+      <el-form :model="FormSearch"
+               class="public-form"
+               ref="refRoleForm"
+               @submit.native.prevent
+               label-width="120px"
+               label-position="left"
+               :inline="true">
          <el-form-item label="关键词" prop="name">
             <el-input v-model="FormSearch.name" class="public-input" autocomplete="off" placeholder="请输入"
                       clearable></el-input>
@@ -48,6 +53,16 @@
             </el-date-picker>
          </el-form-item>
 
+         <div class="public-selInp">
+            <el-select placeholder="请选择" v-model="FormSearch.shopType">
+               <el-option v-for="(item,index) in projectArr" :key="index"
+                          :value="item.value"
+                          :label="item.label">
+               </el-option>
+            </el-select>
+            <el-input placeholder="请输入" autocomplete="off" v-model="FormSearch.shopNum" clearable></el-input>
+         </div>
+
          <el-form-item>
             <el-button type="primary" class="public-btn" :loading="btnState.btnPost"
                        @click="FnPostSearch('refRoleForm')">提交
@@ -73,22 +88,22 @@
          <el-table-column prop="storeName" label="页面编号"></el-table-column>
          <el-table-column prop="storeNum" label="页面路径"></el-table-column>
          <el-table-column prop="creat_time" label="页面类型" sortable>
-           <template slot-scope="{row}" slot="header">
-             <el-tooltip placement="top" >
-               <span class='tr-tooltip'>次品量/不可售量 <i class="el-icon-question"></i></span>
-               <div slot="content">自建仓对应次品量，FBA对应不可售库存。</div>
-             </el-tooltip>
-           </template>
+            <template slot-scope="{row}" slot="header">
+               <el-tooltip placement="top">
+                  <span class='tr-tooltip'>次品量/不可售量 <i class="el-icon-question"></i></span>
+                  <div slot="content">自建仓对应次品量，FBA对应不可售库存。</div>
+               </el-tooltip>
+            </template>
          </el-table-column>
          <el-table-column prop="state" label="数据权限状态">
-            <template slot-scope="scope">
+            <template slot-scope="{row}">
                <el-switch
-                  v-model="scope.row.state"
+                  v-model="row.state"
                   active-value="1"
                   inactive-value="0"
                   active-text="开"
                   inactive-text="关"
-                  @change='FnSwitch(scope.row.state)'>
+                  @change='FnSwitch(row.state)'>
                </el-switch>
             </template>
             <!--      <template slot-scope="scope">
@@ -236,7 +251,7 @@ export default {
          this.pageArr.pageNum = page;
          // this.getStaffIndex();
       },
-      sizeChange(size){
+      sizeChange(size) {
          // console.log(size);
          this.pageArr.pageSize = size;
       },

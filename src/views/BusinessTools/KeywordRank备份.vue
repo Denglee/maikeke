@@ -106,7 +106,7 @@
         :page-sizes="[10, 20, 50, 100]"
         :total="pageArr.pageTotalRows"
         :page-size="pageArr.pageSize"
-        @current-change="PageCurrent">
+        @current-change="FaPageCurrent">
     </el-pagination>
 
   </div>
@@ -316,7 +316,7 @@ export default {
     },
 
     /*分页 */
-    PageCurrent(page) {
+    FaPageCurrent(page) {
       console.log(page);
       this.pageArr.pageNum = page;
       this.FnGetList();

@@ -19,6 +19,16 @@
                      value-format="yyyy-MM-dd">
                   </el-date-picker>
 
+                  <div class="public-selInp">
+                     <el-select placeholder="请选择" v-model="setForm.shopType">
+                        <el-option v-for="(item,index) in symbolArr" :key="index"
+                                   :value="item.value"
+                                   :label="item.label">
+                        </el-option>
+                     </el-select>
+                     <el-input placeholder="请输入" autocomplete="off" v-model="setForm.shopNum" clearable></el-input>
+                  </div>
+
                   <!--搜索-->
                   <el-button icon="el-icon-search" @click="FnSearchShop" :loading="btnState.btnSearchLoad"
                              class="public-btn">
@@ -31,9 +41,9 @@
                      width="400"
                      trigger="manual"
                      v-model="diaState.diaShowPopSet"
-                     label-width='180px'>
+                     label-width='180px'
+                     popper-class="set-popover">
                      <el-form class="public-form" :model="setForm">
-
                         <el-form-item label="展示量">
                            <div class="public-selInp">
                               <el-select placeholder="请选择" v-model="setForm.shopType">
@@ -42,8 +52,7 @@
                                             :label="item.label">
                                  </el-option>
                               </el-select>
-                              <el-input placeholder="请输入" autocomplete="off" v-model="setForm.shopNum"
-                                        clearable></el-input>
+                              <el-input placeholder="请输入" autocomplete="off" v-model="setForm.shopNum" clearable></el-input>
                            </div>
                         </el-form-item>
 
@@ -54,8 +63,7 @@
                                             :value="item.value"
                                             :label="item.label"></el-option>
                               </el-select>
-                              <el-input placeholder="请输入" autocomplete="off" v-model="setForm.clickNum"
-                                        clearable></el-input>
+                              <el-input placeholder="请输入" autocomplete="off" v-model="setForm.clickNum" clearable></el-input>
                            </div>
                         </el-form-item>
 
@@ -74,8 +82,6 @@
                                 class="btn-set" icon="el-icon-setting"></el-button>
 
                   </el-popover>
-
-
 
                </el-form>
 
@@ -167,8 +173,8 @@
                   :current-page="pageArr.pageNum"
                   :total="pageArr.total"
                   :page-size="pageArr.pageSize"
-                  @size-change='sizeChange'
-                  @current-change="PageCurrent">
+                  @size-change='FaSizeChange'
+                  @current-change="FaPageCurrent">
                </el-pagination>
             </div>
 
@@ -339,12 +345,12 @@ export default {
       },
 
       /*分页 */
-      PageCurrent(page) {
+      FaPageCurrent(page) {
          console.log(page);
          // this.staffPage = page;
          // this.getStaffIndex();
       },
-      sizeChange(size) {
+      FaSizeChange(size) {
          console.log(size);
       },
 
