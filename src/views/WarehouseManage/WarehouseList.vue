@@ -104,14 +104,30 @@
             </template>
          </el-table-column>
       </el-table>
+      <!--分页-->
+      <Pagination
+         :pageNum="pageArr.pageNum"
+         :total="pageArr.total"
+         :pageSize="pageArr.pageSize"
+         @SonSizeChange='FaSizeChange'
+         @SonCurrentChange="FaPageCurrent"></Pagination>
    </div>
 </template>
 
 <script>
+import Pagination from "@/components/Pagination/Pagination";
+
 export default {
    name: "WarehouseList",
+   components:{Pagination,},
    data() {
       return {
+         pageArr: {
+            total: 100,
+            pageSize: 10,
+            pageNum: 4,
+         },
+
          /*搜索表单*/
          FormSearch:{
             type:'',
@@ -168,6 +184,18 @@ export default {
       FnPostSearch(){
          console.log(this.FormSearch);
       },
+
+      /*分页*/
+      FaPageCurrent(page) {
+         console.log(page)
+         this.pageArr.pageNum = page;
+         // this.getStaffIndex();
+      },
+      FaSizeChange(size){
+         console.log(size);
+         this.pageArr.pageSize = size;
+      },
+
    },
    created() {
 

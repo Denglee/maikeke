@@ -1,7 +1,7 @@
 <template>
    <div class="public-main">
       <el-form :model="searchForm" class="public-form" ref="refRoleForm" :inline="true">
-         <el-select v-model="searchForm.name" value.key="id" filterable clearable placeholder="请选择店铺负责人"
+         <el-select v-model="searchForm.name" value.key="id" filterable clearable placeholder="负责人"
                     class="public-select">
             <el-option v-for="(item, index) in projectArr" :key="item.id"
                        :value="item.value"
@@ -9,9 +9,35 @@
             </el-option>
          </el-select>
 
-         <el-input v-model="searchForm.SellerInfo" class="public-input" autocomplete="off" placeholder="请输入买家信息"
+         <el-select v-model="searchForm.site" value.key="id" filterable clearable placeholder="站点"
+                    class="public-select">
+            <el-option v-for="(item, index) in projectArr" :key="item.id"
+                       :value="item.value"
+                       :label="item.label">
+            </el-option>
+         </el-select>
+
+         <el-select v-model="searchForm.store" value.key="id" filterable clearable placeholder="店铺"
+                    class="public-select">
+            <el-option v-for="(item, index) in projectArr" :key="item.id"
+                       :value="item.value"
+                       :label="item.label">
+            </el-option>
+         </el-select>
+
+         <el-select v-model="searchForm.grade" value.key="id" filterable clearable placeholder="评级"
+                    class="public-select">
+            <el-option v-for="(item, index) in projectArr" :key="item.id"
+                       :value="item.value"
+                       :label="item.label">
+            </el-option>
+         </el-select>
+
+         <el-input v-model="searchForm.SellerBoss" class="public-input" autocomplete="off" placeholder="负责人"
                    clearable></el-input>
 
+         <el-input v-model="searchForm.SellerInfo" class="public-input" autocomplete="off" placeholder="买家信息"
+                   clearable></el-input>
          <el-date-picker
              class="public-datePicker"
              v-model="searchForm.order_time"
@@ -56,19 +82,19 @@
                </el-select>
             </template>
          </el-table-column>
-         <el-table-column v-if="TrCheckedArr[11].iState" prop="Remark" label="备注"></el-table-column>
+         <el-table-column v-if="TrCheckedArr[11].iState" prop="Remark" label="备注">
+            <template slot-scope="{row}">
+               <el-input v-model="row.Remark" autocomplete="off" clearable></el-input>
+            </template>
+         </el-table-column>
       </el-table>
 
-      <el-pagination
-         background
-         layout="total,  prev, pager,next, sizes, jumper"
-         :page-sizes="[10, 20, 50, 100]"
-         :current-page="pageArr.pageNum"
+      <Pagination
+         :pageNum="pageArr.pageNum"
          :total="pageArr.total"
-         :page-size="pageArr.pageSize"
-         @size-change='FaSizeChange'
-         @current-change="FaPageCurrent">
-      </el-pagination>
+         :pageSize="pageArr.pageSize"
+         @SonSizeChange='FaSizeChange'
+         @SonCurrentChange="FaPageCurrent"></Pagination>
 
       <!-- 自定义列 -->
       <el-dialog :append-to-body="true"
@@ -91,9 +117,13 @@
    </div>
 </template>
 
+import Pagination from "@/components/Pagination/Pagination";
 <script>
+import Pagination from "@/components/Pagination/Pagination";
+
 export default {
    name: "EvaluateMonitor",
+   components: {Pagination},
    data() {
       return {
          searchForm: {},
@@ -105,8 +135,9 @@ export default {
          },
 
          pageArr: {
-            pageTotalRows: 100,
-            pageListRows: 10,
+            pageNum: 1,
+             total: 20,
+            pageSize: 10,
          },
 
          statusArr: [

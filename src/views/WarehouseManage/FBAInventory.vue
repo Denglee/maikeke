@@ -1,30 +1,57 @@
 <template>
    <div class="public-main">
       <el-form :model="FormSearch" class="public-form" ref="refRoleForm" :inline="true">
-         <el-select v-model="FormSearch.project" value.key="id" filterable clearable placeholder="请选择状态"
+         <el-select v-model="FormSearch.project" value.key="id" filterable clearable placeholder="全部仓库"
                     class="public-select"  >
             <el-option v-for="(item, index) in projectArr" :key="index"
                        :value="item.value"
                        :label="item.label">
             </el-option>
          </el-select>
-         <el-select v-model="FormSearch.project" value.key="id" filterable clearable placeholder="请选择配对"
+         <el-select v-model="FormSearch.country" value.key="id" filterable clearable placeholder="所在国家"
                     class="public-select"  >
             <el-option v-for="(item, index) in projectArr" :key="index"
                        :value="item.value"
                        :label="item.label">
             </el-option>
          </el-select>
-         <el-date-picker
-            class="public-datePicker"
-            v-model="FormSearch.order_time"
-            type="daterange"
-            unlink-panels
-            range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            value-format="yyyy-MM-dd">
-         </el-date-picker>
+         <el-select v-model="FormSearch.store" value.key="id" filterable clearable placeholder="对用店铺"
+                    class="public-select"  >
+            <el-option v-for="(item, index) in projectArr" :key="index"
+                       :value="item.value"
+                       :label="item.label">
+            </el-option>
+         </el-select>
+         <el-select v-model="FormSearch.type" value.key="id" filterable clearable placeholder="全部分类"
+                    class="public-select"  >
+            <el-option v-for="(item, index) in projectArr" :key="index"
+                       :value="item.value"
+                       :label="item.label">
+            </el-option>
+         </el-select>
+         <el-select v-model="FormSearch.pingpai" value.key="id" filterable clearable placeholder="全部品牌"
+                    class="public-select"  >
+            <el-option v-for="(item, index) in projectArr" :key="index"
+                       :value="item.value"
+                       :label="item.label">
+            </el-option>
+         </el-select>
+         <el-select v-model="FormSearch.type" value.key="id" filterable clearable placeholder="全部配送方式"
+                    class="public-select"  >
+            <el-option v-for="(item, index) in projectArr" :key="index"
+                       :value="item.value"
+                       :label="item.label">
+            </el-option>
+         </el-select>
+         <div class="public-selInp">
+            <el-select placeholder="ASIN" v-model="FormSearch.shopType">
+               <el-option v-for="(item,index) in projectArr" :key="index"
+                          :value="item.value"
+                          :label="item.label">
+               </el-option>
+            </el-select>
+            <el-input placeholder="请输入" autocomplete="off" v-model="FormSearch.shopNum" clearable></el-input>
+         </div>
 
          <el-button type="primary" class="public-btn" :loading="btnState.btnPost"
                     @click="FnPostSearch('refRoleForm')">提交
@@ -35,6 +62,7 @@
                 :data="tableArr"
                 ref="refTable"
                 show-summary
+                height="500px"
                 :fit="false">
          <el-table-column prop="name" label="仓库" min-width="120px"></el-table-column>
          <el-table-column prop="type" label="图片"></el-table-column>
@@ -94,23 +122,22 @@
       </el-table>
 
       <!--分页-->
-      <el-pagination
-         background
-         layout="total,  prev, pager,next, sizes, jumper"
-         :page-sizes="[10, 20, 50, 100]"
-         :current-page="pageArr.pageNum"
+      <Pagination
+         :pageNum="pageArr.pageNum"
          :total="pageArr.total"
-         :page-size="pageArr.pageSize"
-         @size-change='FaSizeChange'
-         @current-change="FaPageCurrent">
-      </el-pagination>
+         :pageSize="pageArr.pageSize"
+         @SonSizeChange='FaSizeChange'
+         @SonCurrentChange="FaPageCurrent"></Pagination>
 
    </div>
 </template>
 
 <script>
+import Pagination from "@/components/Pagination/Pagination";
+
 export default {
    name: "FBAInventory",
+   components:{Pagination,},
    data() {
       return {
          pageArr: {
@@ -159,7 +186,6 @@ export default {
    },
    methods: {
 
-      /*分页*/
       /*分页*/
       FaPageCurrent(page) {
          console.log(page)

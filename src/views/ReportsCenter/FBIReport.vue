@@ -5,7 +5,7 @@
             <!--中间部分-->
             <div class="tab-content">
                <el-form class="public-form">
-                  <el-select v-model="formData.projectName" filterable multiple clearable collapse-tags
+                  <el-select v-model="FormSearch.projectName" filterable multiple clearable collapse-tags
                              popper-class="elSelect-checkbox" class="public-select" @change='chooseProject($event)'>
                      <el-option v-for="(item, index) in projectArr"
                                 :key="index"
@@ -15,10 +15,22 @@
                         <span style="margin-left: 8px">{{ item.value }}</span>
                      </el-option>
                   </el-select>
+                  <el-select placeholder="全部国家" v-model="FormSearch.country" class="public-select">
+                     <el-option v-for="(item,index) in projectArr" :key="index"
+                                :value="item.value"
+                                :label="item.label">
+                     </el-option>
+                  </el-select>
+                  <el-select placeholder="全部店铺" v-model="FormSearch.store" class="public-select">
+                     <el-option v-for="(item,index) in projectArr" :key="index"
+                                :value="item.value"
+                                :label="item.label">
+                     </el-option>
+                  </el-select>
 
                   <el-date-picker
                      class="public-datePicker"
-                     v-model="formData.order_time"
+                     v-model="FormSearch.order_time"
                      type="daterange"
                      unlink-panels
                      range-separator="-"
@@ -26,62 +38,21 @@
                      end-placeholder="结束日期"
                      value-format="yyyy-MM-dd">
                   </el-date-picker>
-
+                  <div class="public-selInp">
+                     <el-select placeholder="请选择" v-model="FormSearch.shopType">
+                        <el-option v-for="(item,index) in projectArr" :key="index"
+                                   :value="item.value"
+                                   :label="item.label">
+                        </el-option>
+                     </el-select>
+                     <el-input placeholder="请输入" autocomplete="off" v-model="FormSearch.shopNum" clearable></el-input>
+                  </div>
                   <!--搜索-->
                   <el-button icon="el-icon-search" @click="FnSearchShop" :loading="btnState.btnSearchLoad"
                              class="public-btn">
                      搜索
                   </el-button>
 
-                  <!--设置-->
-                  <el-popover
-                     placement="bottom"
-                     width="400"
-                     trigger="manual"
-                     v-model="diaState.diaShowPopSet"
-                     label-width='180px'>
-                     <el-form class="public-form" :model="setForm">
-
-                        <el-form-item label="展示量">
-                           <div class="public-selInp">
-                              <el-select placeholder="请选择" v-model="setForm.shopType">
-                                 <el-option v-for="(item,index) in symbolArr" :key="index"
-                                            :value="item.value"
-                                            :label="item.label">
-                                 </el-option>
-                              </el-select>
-                              <el-input placeholder="请输入" autocomplete="off" v-model="setForm.shopNum"
-                                        clearable></el-input>
-                           </div>
-                        </el-form-item>
-
-                        <el-form-item label="点击量">
-                           <div class="public-selInp">
-                              <el-select placeholder="请选择" v-model="setForm.clickType">
-                                 <el-option v-for="(item,index) in symbolArr" :key="index"
-                                            :value="item.value"
-                                            :label="item.label"></el-option>
-                              </el-select>
-                              <el-input placeholder="请输入" autocomplete="off" v-model="setForm.clickNum"
-                                        clearable></el-input>
-                           </div>
-                        </el-form-item>
-
-                        <div class="formR-main">
-                           <el-button type="primary" class="public-btn" :loading="btnState.btnAddRankMonit"
-                                      @click="diaState.diaShowPopSet = false">取消
-                           </el-button>
-                           <el-button type="primary" class="public-btn" :loading="btnState.btnAddRankMonit"
-                                      @click="FnBtnSaveSet">保存
-                           </el-button>
-                        </div>
-
-                     </el-form>
-
-                     <el-button slot="reference" @click="diaState.diaShowPopSet = !diaState.diaShowPopSet"
-                                class="btn-set" icon="el-icon-setting"></el-button>
-
-                  </el-popover>
 
                </el-form>
 
@@ -120,30 +91,115 @@
 
          <el-tab-pane lazy label="移除货件" name="name2">
 
+            <!--中间部分-->
+            <div class="tab-content">
+               <el-form class="public-form">
+                  <el-select v-model="FormSearch.projectName" filterable multiple clearable collapse-tags
+                             popper-class="elSelect-checkbox" class="public-select" @change='chooseProject($event)'>
+                     <el-option v-for="(item, index) in projectArr"
+                                :key="index"
+                                :value="item.name"
+                                :label="item.value">
+                        <span class="check"></span>
+                        <span style="margin-left: 8px">{{ item.value }}</span>
+                     </el-option>
+                  </el-select>
+                  <el-select placeholder="全部国家" v-model="FormSearch.country" class="public-select">
+                     <el-option v-for="(item,index) in projectArr" :key="index"
+                                :value="item.value"
+                                :label="item.label">
+                     </el-option>
+                  </el-select>
+                  <el-select placeholder="全部店铺" v-model="FormSearch.store" class="public-select">
+                     <el-option v-for="(item,index) in projectArr" :key="index"
+                                :value="item.value"
+                                :label="item.label">
+                     </el-option>
+                  </el-select>
+
+                  <el-date-picker
+                     class="public-datePicker"
+                     v-model="FormSearch.order_time"
+                     type="daterange"
+                     unlink-panels
+                     range-separator="-"
+                     start-placeholder="开始日期"
+                     end-placeholder="结束日期"
+                     value-format="yyyy-MM-dd">
+                  </el-date-picker>
+                  <div class="public-selInp">
+                     <el-select placeholder="请选择" v-model="FormSearch.shopType">
+                        <el-option v-for="(item,index) in projectArr" :key="index"
+                                   :value="item.value"
+                                   :label="item.label">
+                        </el-option>
+                     </el-select>
+                     <el-input placeholder="请输入" autocomplete="off" v-model="FormSearch.shopNum" clearable></el-input>
+                  </div>
+                  <!--搜索-->
+                  <el-button icon="el-icon-search" @click="FnSearchShop" :loading="btnState.btnSearchLoad"
+                             class="public-btn">
+                     搜索
+                  </el-button>
+
+
+               </el-form>
+
+               <!-- 表格-->
+               <el-table class="public-table" border
+                         :data="tableStaff"
+                         ref="multipleTable">
+                  <el-table-column prop="store" label="店铺"></el-table-column>
+                  <el-table-column prop="country" label="国家"></el-table-column>
+                  <el-table-column prop="day" label="时间" width="180px">
+                     <template slot-scope="{row}">
+                        <div class="status-connect">{{ row.day | dateFormat }}</div>
+                     </template>
+                  </el-table-column>
+                  <el-table-column prop="active" label="赔偿编号"></el-table-column>
+                  <el-table-column prop="shopNum" label="订单号"></el-table-column>
+                  <el-table-column prop="clickNum" label="原因"></el-table-column>
+                  <el-table-column prop="money" label="MSKU"></el-table-column>
+                  <el-table-column prop="money" label="FNSKU"></el-table-column>
+                  <el-table-column prop="money" label="ASIN"></el-table-column>
+                  <el-table-column prop="money" label="标题"></el-table-column>
+                  <el-table-column prop="money" label="状况"></el-table-column>
+                  <el-table-column prop="money" label="币种"></el-table-column>
+                  <el-table-column prop="money" label="每件商品赔偿金额" width="120px"></el-table-column>
+               </el-table>
+
+               <Pagination
+                  :pageNum="pageArr.pageNum"
+                  :total="pageArr.total"
+                  :pageSize="pageArr.pageSize"
+                  @SonSizeChange='FaSizeChange'
+                  @SonCurrentChange="FaPageCurrent"></Pagination>
+            </div>
+
          </el-tab-pane>
 
          <el-tab-pane lazy label="月存储费用" name="name3">
-
+            月存储费用
          </el-tab-pane>
 
          <el-tab-pane lazy label="长期存储费用" name="name4">
-
+            长期存储费用
          </el-tab-pane>
 
          <el-tab-pane lazy label="已接收库存" name="name5">
-
+            已接收库存
          </el-tab-pane>
 
          <el-tab-pane lazy label="每日库存历史" name="name6">
-
+            每日库存历史
          </el-tab-pane>
 
          <el-tab-pane lazy label="每月库存历史" name="name7">
-
+            每月库存历史
          </el-tab-pane>
 
          <el-tab-pane lazy label="库存动作详情" name="name8">
-
+            库存动作详情
          </el-tab-pane>
 
       </el-tabs>
@@ -164,7 +220,7 @@ export default {
          countryArr: this.GLOBAL.countryArr,
          tabPosition: 'left',
          tabActiveName: 'name1',
-         formData: {
+         FormSearch: {
             projectName: '',
             order_time: '',
          },
@@ -276,7 +332,7 @@ export default {
 
       /*搜索*/
       FnSearchShop() {
-         console.log(this.formData);
+         console.log(this.FormSearch);
          this.GLOBAL.btnStateChange(this, 'btnState', 'btnSearchLoad');
       },
 

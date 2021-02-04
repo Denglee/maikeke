@@ -42,6 +42,7 @@ Vue.use(ElementUI, {
 
 /* 1、引入自定义的全局的css*/
 import '@/assets/css/public.scss'
+import '@/assets/css/page.scss'
 
 
 /* 2.1、 全局 通用iframe 组件*/

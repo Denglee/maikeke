@@ -1,26 +1,35 @@
 <template>
    <div class="public-main">
       <el-form :model="FormSearch" class="public-form" ref="refRoleForm" :inline="true">
-         <el-radio-group v-model="FormSearch.orderType">
-            <el-radio-button label="1">全部订单</el-radio-button>
-            <el-radio-button label="2">测评订单</el-radio-button>
-            <el-radio-button label="3">留评订单</el-radio-button>
+         <el-select v-model="FormSearch.people" value.key="id" filterable clearable placeholder="负责人"
+                    class="public-select"  >
+            <el-option v-for="(item, index) in projectArr" :key="index"
+                       :value="item.value"
+                       :label="item.label">
+            </el-option>
+         </el-select>
+         <el-select v-model="FormSearch.country" value.key="id" filterable clearable placeholder="全部国家"
+                    class="public-select"  >
+            <el-option v-for="(item, index) in projectArr" :key="index"
+                       :value="item.value"
+                       :label="item.label">
+            </el-option>
+         </el-select>
+         <el-select v-model="FormSearch.store" value.key="id" filterable clearable placeholder="全部店铺"
+                    class="public-select"  >
+            <el-option v-for="(item, index) in projectArr" :key="index"
+                       :value="item.value"
+                       :label="item.label">
+            </el-option>
+         </el-select>
+         <el-select v-model="FormSearch.store" value.key="id" filterable clearable placeholder="全部状态"
+                    class="public-select"  >
+            <el-option v-for="(item, index) in projectArr" :key="index"
+                       :value="item.value"
+                       :label="item.label">
+            </el-option>
+         </el-select>
 
-         </el-radio-group>
-         <el-select v-model="FormSearch.project" value.key="id" filterable clearable placeholder="请选择状态"
-                    class="public-select"  >
-            <el-option v-for="(item, index) in projectArr" :key="index"
-                       :value="item.value"
-                       :label="item.label">
-            </el-option>
-         </el-select>
-         <el-select v-model="FormSearch.project" value.key="id" filterable clearable placeholder="请选择配对"
-                    class="public-select"  >
-            <el-option v-for="(item, index) in projectArr" :key="index"
-                       :value="item.value"
-                       :label="item.label">
-            </el-option>
-         </el-select>
          <el-date-picker
             class="public-datePicker"
             v-model="FormSearch.order_time"
@@ -31,48 +40,53 @@
             end-placeholder="结束日期"
             value-format="yyyy-MM-dd">
          </el-date-picker>
-
+         <el-input v-model="FormSearch.name" class="public-input" autocomplete="off" placeholder="请输入"
+                   clearable></el-input>
          <el-button type="primary" class="public-btn" :loading="btnState.btnPost"
-                    @click="FnPostSearch('refRoleForm')">提交
+                    @click="FnPostSearch('refRoleForm')">搜索
          </el-button>
       </el-form>
 
       <el-table class="public-table" border
                 :data="tableArr"
-                @selection-change="checkedStore"
                 ref="refTable"
-                height="600"
-                @row-click="handleRowClick">
-         <el-table-column type="selection"></el-table-column>
+                height="600">
+         <el-table-column prop="orderNum" label="订单号" width="120px"></el-table-column>
+         <el-table-column prop="MSKU" label="MSKU" width="120px"></el-table-column>
+         <el-table-column prop="ASIN" label="FNSKu"></el-table-column>
          <el-table-column prop="store" label="店铺"></el-table-column>
          <el-table-column prop="country" label="国家"></el-table-column>
-         <el-table-column prop="orderNum" label="订单号"></el-table-column>
-         <el-table-column prop="shopInfo" label="商品信息"></el-table-column>
-         <el-table-column prop="SKU" label="本地品名/SKU"></el-table-column>
-         <el-table-column prop="buyerInfo" label="买家信息"></el-table-column>
-         <el-table-column prop="orderTotal" label="订单总金额"></el-table-column>
-         <el-table-column prop="time" label="订单时间"></el-table-column>
-         <el-table-column prop="state" label="状态">
-            <template slot-scope="scope">
-               <span v-if="scope.row.state == 1" style="color:green;">在售</span>
-               <span v-else class="stop">停售</span>
-            </template>
-         </el-table-column>
-         <el-table-column label="操作">
-            <template slot-scope="scope">
-               <el-button @click.native.stop="FnDiaOrderDetail(scope.row,$event)">详情</el-button>
-            </template>
-         </el-table-column>
+         <el-table-column prop="SKU" label="品名/SKU"></el-table-column>
+         <el-table-column prop="type" label="类型"></el-table-column>
+         <el-table-column prop="type" label="状态"></el-table-column>
+         <el-table-column prop="type" label="库存属性"></el-table-column>
+         <el-table-column prop="buyNum" label="数量"></el-table-column>
+         <el-table-column prop="buyNum" label="取消数量"></el-table-column>
+         <el-table-column prop="buyNum" label="已处置数量"></el-table-column>
+         <el-table-column prop="buyNum" label="已发货"></el-table-column>
       </el-table>
+      <Pagination
+         :pageNum="pageArr.pageNum"
+         :total="pageArr.total"
+         :pageSize="pageArr.pageSize"
+         @SonSizeChange='FaSizeChange'
+         @SonCurrentChange="FaPageCurrent"></Pagination>
 
    </div>
 </template>
 
 <script>
+import Pagination from "@/components/Pagination/Pagination";
 export default {
    name: "RemoveOrder",
+   components:{Pagination,},
    data(){
       return{
+         pageArr: {
+            total: 10,  //总条数
+            pageSize: 20, //每页个数
+            pageNum: 1, //当前页数
+         },
          FormSearch:{
             orderType:1,
          },
@@ -100,9 +114,27 @@ export default {
                country:'美国',
                orderNum:'112-286-2336241',
                shopInfo:'Booty Bands，',
-               SKU:'',
-               buyerInfo:'',
-               orderTotal:'',
+               SKU:'A1-MK7-40mm',
+               MSKU:'fs47-grey-xiaohao',
+               ASIN:"B07B2WNNB2",
+               title:"Adjustable iPad Stand,Table Stand Holders",
+               buyNum:'1',
+               orderTotal:'LAS2',
+               listingErr:'1',
+               time:'2020-11-19',
+               state:1,
+            },
+            {
+               store:'BYKE-us',
+               country:'美国',
+               orderNum:'112-286-2336241',
+               shopInfo:'Booty Bands，',
+               SKU:'A1-MK7-40mm',
+               MSKU:'fs47-grey-xiaohao',
+               ASIN:"B07B2WNNB2",
+               title:"Adjustable iPad Stand,Table Stand Holders",
+               buyNum:'1',
+               orderTotal:'LAS2',
                listingErr:'1',
                time:'2020-11-19',
                state:1,
@@ -112,16 +144,6 @@ export default {
       }
    },
    methods:{
-      /* 1、 编辑选中  */
-      checkedStore(val) {
-         console.log(val);
-         this.checkedRows = val;
-      },
-      /*点击行触发，选中或不选中复选框 */
-      handleRowClick(row, column, event) {
-         this.$refs.refTable.toggleRowSelection(row);
-      },
-
       FnPostSearch(){
          console.log(this.FormSearch);
       },
@@ -135,11 +157,17 @@ export default {
          console.log(val);
       },
 
+      /*分页*/
+      FaPageCurrent(page) {
+         console.log(page)
+         // this.staffPage = page;
+         // this.getStaffIndex();
+      },
+      FaSizeChange(size) {
+         console.log(size);
+      },
    },
    created(){
-
-   },
-   components:{
 
    },
 }

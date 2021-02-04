@@ -10,7 +10,7 @@
       <el-table-column type="index" label="序号"></el-table-column>
       <el-table-column prop="storeName" label="页面编号"></el-table-column>
       <el-table-column prop="storeNum" label="页面路径"></el-table-column>
-      <el-table-column prop="creat_time" label="页面类型"></el-table-column>
+      <el-table-column prop="type" label="页面类型"></el-table-column>
       <el-table-column prop="storeFinance" label="数据权限状态">
         <template slot-scope="scope">
           <el-switch
@@ -23,18 +23,19 @@
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-dropdown @command="FnCommand">
-            <el-button type="primary">
-              编辑<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item :command="{ type:'delete', data:scope.row }">删除</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </template>
-      </el-table-column>
+       <el-table-column prop="storeFinance" label="字段权限状态">
+          <template slot-scope="scope">
+             <el-switch
+                v-model="scope.row.storeFinance"
+                active-value="1"
+                inactive-value="0"
+                active-text="开"
+                inactive-text="关"
+                @change='FnSwitch(scope.row.storeFinance)'>
+             </el-switch>
+          </template>
+       </el-table-column>
+       <el-table-column prop="creat_time" label="更新事件"></el-table-column>
     </el-table>
 
   </div>
@@ -59,6 +60,7 @@ export default {
           storeFinance:'1',
           creat_time:'2020-01-06',
           creater:'muzi',
+           type:1,
         },
         {
           img:'',
@@ -67,6 +69,7 @@ export default {
           storeFinance:'0',
           creat_time:'2020-01-06',
           creater:'muzi',
+           type:1,
         }
       ],
     }

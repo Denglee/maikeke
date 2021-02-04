@@ -131,7 +131,12 @@ input:-webkit-autofill {
   font-family: inherit;
 }
 
-
+.borderBom{
+  border-bottom: solid 1px $color-linghtWhite;
+}
+.marR5{
+  margin-right: 5px;
+}
 
 //通用content头部
 .public-header{
@@ -180,21 +185,29 @@ input:-webkit-autofill {
   width: 280px !important;
 }
 .public-select{
-  width: 160px !important;
+  width: 140px !important;
 }
 .public-selectFull{
   width: 100% !important;
 }
+/*级联菜单*/
 .public-cascader{
   .el-cascader-menu{
     min-height: 300px;
   }
-
+}
+/*td 图片大小*/
+.public-imgTd{
+  width: 60px;
 }
 .public-input{
   width: 180px !important;
 }
-
+.public-tip{
+  font-size: 12px;
+  //margin: 4px 0;
+  color: $color-fontGray;
+}
 .public-selInp{
   display: flex;
   border: solid 1px #ddd;

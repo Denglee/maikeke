@@ -7,15 +7,29 @@
             <el-radio-button label="3">留评订单</el-radio-button>
 
          </el-radio-group>
-         <el-select v-model="FormSearch.project" value.key="id" filterable clearable placeholder="请选择状态"
-                    class="public-select"  >
+         <el-select v-model="FormSearch.people" value.key="id" filterable clearable placeholder="负责人"
+                    class="public-select">
             <el-option v-for="(item, index) in projectArr" :key="index"
                        :value="item.value"
                        :label="item.label">
             </el-option>
          </el-select>
-         <el-select v-model="FormSearch.project" value.key="id" filterable clearable placeholder="请选择配对"
-                    class="public-select"  >
+         <el-select v-model="FormSearch.country" value.key="id" filterable clearable placeholder="全部国家"
+                    class="public-select">
+            <el-option v-for="(item, index) in projectArr" :key="index"
+                       :value="item.value"
+                       :label="item.label">
+            </el-option>
+         </el-select>
+         <el-select v-model="FormSearch.store" value.key="id" filterable clearable placeholder="全部店铺"
+                    class="public-select">
+            <el-option v-for="(item, index) in projectArr" :key="index"
+                       :value="item.value"
+                       :label="item.label">
+            </el-option>
+         </el-select>
+         <el-select v-model="FormSearch.wuliu" value.key="id" filterable clearable placeholder="全部物流类型"
+                    class="public-select">
             <el-option v-for="(item, index) in projectArr" :key="index"
                        :value="item.value"
                        :label="item.label">
@@ -32,8 +46,17 @@
             value-format="yyyy-MM-dd">
          </el-date-picker>
 
+         <div class="public-selInp">
+            <el-select placeholder="订单号" v-model="FormSearch.orderId">
+               <el-option v-for="(item,index) in projectArr" :key="index"
+                          :value="item.value"
+                          :label="item.label">
+               </el-option>
+            </el-select>
+            <el-input placeholder="请输入" autocomplete="off" v-model="FormSearch.shopNum" clearable></el-input>
+         </div>
          <el-button type="primary" class="public-btn" :loading="btnState.btnPost"
-                    @click="FnPostSearch('refRoleForm')">提交
+                    @click="FnPostSearch('refRoleForm')">搜索
          </el-button>
       </el-form>
 
@@ -46,8 +69,14 @@
          <el-table-column type="selection"></el-table-column>
          <el-table-column prop="store" label="店铺"></el-table-column>
          <el-table-column prop="country" label="国家"></el-table-column>
-         <el-table-column prop="orderNum" label="订单号"></el-table-column>
-         <el-table-column prop="shopInfo" label="商品信息"></el-table-column>
+         <el-table-column prop="orderNum" label="订单号" width="120px">
+            <template slot-scope="{row}">
+               <div>{{ row.orderNum }}</div>
+               <el-tag class="marR5">FBA</el-tag>
+               <el-tag class="marR5">测评</el-tag>
+            </template>
+         </el-table-column>
+         <el-table-column prop="shopInfo" label="商品信息" width="200px"></el-table-column>
          <el-table-column prop="SKU" label="本地品名/SKU"></el-table-column>
          <el-table-column prop="buyerInfo" label="买家信息"></el-table-column>
          <el-table-column prop="orderTotal" label="订单总金额"></el-table-column>
@@ -64,7 +93,13 @@
             </template>
          </el-table-column>
       </el-table>
-
+      <Pagination
+         :pageNum="pageArr.pageNum"
+         :total="pageArr.total"
+         :pageSize="pageArr.pageSize"
+         @SonSizeChange='FaSizeChange'
+         @SonCurrentChange="FaPageCurrent"></Pagination>
+      
       <!--订单详情-->
       <el-dialog :append-to-body="true"
                  title="订单详情"
@@ -152,18 +187,26 @@
 </template>
 
 <script>
-   export default {
-   name: "OrderList",
-   data(){
-      return{
-         FormSearch:{
-            orderType:1,
-         },
-         btnState:{
+import Pagination from "@/components/Pagination/Pagination";
 
+export default {
+
+   name: "OrderList",
+   components: {Pagination},
+   data() {
+      return {
+         pageArr: {
+            total: 10,  //总条数
+            pageSize: 20, //每页个数
+            pageNum: 1, //当前页数
          },
-         diaState:{
-            diaDetailOrder:true,
+
+         FormSearch: {
+            orderType: 1,
+         },
+         btnState: {},
+         diaState: {
+            diaDetailOrder: false,
          },
          projectArr: [
             {
@@ -177,24 +220,48 @@
                label: '店铺2',
             },
          ],
-         tableArr:[
+         tableArr: [
             {
-               store:'BYKE-us',
-               country:'美国',
-               orderNum:'112-286-2336241',
-               shopInfo:'Booty Bands，',
-               SKU:'',
-               buyerInfo:'',
-               orderTotal:'',
-               listingErr:'1',
-               time:'2020-11-19',
-               state:1,
+               store: 'BYKE-us',
+               country: '美国',
+               orderNum: '112-286-2336241',
+               shopInfo: 'Booty Bands，',
+               SKU: '',
+               buyerInfo: '',
+               orderTotal: '$0.00',
+               listingErr: '1',
+               time: '2020-11-19',
+               state: 1,
+            },
+            {
+               store: 'BYKE-us',
+               country: '美国',
+               orderNum: '112-286-2336241',
+               shopInfo: 'Booty Bands，',
+               SKU: '',
+               buyerInfo: '',
+               orderTotal: '$0.00',
+               listingErr: '1',
+               time: '2020-11-19',
+               state: 1,
+            },
+            {
+               store: 'BYKE-us',
+               country: '美国',
+               orderNum: '112-286-2336241',
+               shopInfo: 'Booty Bands，',
+               SKU: '',
+               buyerInfo: '',
+               orderTotal: '$0.00',
+               listingErr: '1',
+               time: '2020-11-19',
+               state: 1,
             },
          ],
 
       }
    },
-   methods:{
+   methods: {
       /* 1、 编辑选中  */
       checkedStore(val) {
          console.log(val);
@@ -205,26 +272,33 @@
          this.$refs.refTable.toggleRowSelection(row);
       },
 
-      FnPostSearch(){
+      FnPostSearch() {
          console.log(this.FormSearch);
       },
 
-      changeLisErr(val){
+      changeLisErr(val) {
          console.log(val);
       },
 
       /*详情弹窗*/
-      FnDiaOrderDetail(val,e){
+      FnDiaOrderDetail(val, e) {
          console.log(val);
          this.diaState.diaDetailOrder = true;
       },
 
+      /*分页*/
+      FaPageCurrent(page) {
+         console.log(page)
+         // this.staffPage = page;
+         // this.getStaffIndex();
+      },
+      FaSizeChange(size) {
+         console.log(size);
+      },
    },
-   created(){
+   created() {
 
    },
-   components:{
 
-   },
 }
 </script>

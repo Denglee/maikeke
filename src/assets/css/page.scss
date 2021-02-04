@@ -1,0 +1,21 @@
+@import "_themeColor";
+
+/* 财务管理 账户资金 */
+.funds-history{
+   margin: 20px 0;
+   .funds-left{
+      min-height: 400px;
+   }
+   .funds-title{
+      font-size: 18px;
+      margin-bottom: 20px;
+   }
+   .funds-subTitle{
+      color: $color-fontGray;
+      margin-top: 20px;
+   }
+   .funds-price{
+      font-size: 16px;
+      margin-bottom: 20px;
+   }
+}

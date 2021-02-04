@@ -227,7 +227,7 @@ let menu = {
             },
             {
                path: "KeywordRank",
-               meta: {title: "品牌键词排名"},
+               meta: {title: "关键词排名"},
             },
             {
                path: "CompeteMonitor",
@@ -334,10 +334,10 @@ let menu = {
                path: "BusinessReport",
                meta: {title: "业务报告",},
             },
-            {
-               path: "OrderReport",
-               meta: {title: "订单报表",},
-            },
+            // {
+            //    path: "OrderReport",
+            //    meta: {title: "订单报表",},
+            // },
             {
                path: "FBIReport",
                meta: {title: "FBI报表",},

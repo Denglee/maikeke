@@ -16,6 +16,7 @@
                       clearable></el-input>
          </el-form-item>
 
+<!--         单选-->
          <el-form-item label="select 单选：" prop="name">
             <el-select v-model="FormSearch.project" value.key="id" filterable clearable placeholder="请选择店铺负责人"
                        class="public-selectFull" @change="changeSel"
@@ -27,6 +28,7 @@
             </el-select>
          </el-form-item>
 
+<!--         多选-->
          <el-form-item label="select 多选：" prop="name">
             <el-select v-model="FormSearch.project2" filterable multiple clearable collapse-tags
                        popper-class="elSelect-checkbox" class="public-select">
@@ -135,9 +137,16 @@
          :total="pageArr.total"
          :page-size="pageArr.pageSize"
          :current-page="pageArr.pageNum"
-         @size-change='sizeChange'
-         @current-change="PageCurrent">
+         @size-change='FaSizeChange'
+         @current-change="FaPageCurrent">
       </el-pagination>
+
+      <Pagination
+         :pageNum="pageArr.pageNum"
+         :total="pageArr.total"
+         :pageSize="pageArr.pageSize"
+         @SonSizeChange='FaSizeChange'
+         @SonCurrentChange="FaPageCurrent"></Pagination>
 
       <!--添加授权店铺信息  -->
       <el-dialog :append-to-body="true"
@@ -246,12 +255,12 @@ export default {
       },
 
       /*分页*/
-      PageCurrent(page) {
+      FaPageCurrent(page) {
          // console.log(page)
          this.pageArr.pageNum = page;
          // this.getStaffIndex();
       },
-      sizeChange(size) {
+      FaSizeChange(size) {
          // console.log(size);
          this.pageArr.pageSize = size;
       },

@@ -1,18 +1,25 @@
 <template>
    <div class="public-main">
       <el-form :model="searchForm" class="public-form" ref="refRoleForm">
-         <el-select v-model="searchForm.name" value.key="id" filterable clearable placeholder="请选择"
+         <el-select v-model="searchForm.site" value.key="id" filterable clearable placeholder="站点"
                     class="public-select">
             <el-option v-for="(item, index) in projectArr" :key="index"
                        :value="item.value"
                        :label="item.label">
             </el-option>
          </el-select>
-         <el-input v-model="searchForm.SellerInfo" class="public-input" autocomplete="off" placeholder="请输入买家信息"
+         <el-select v-model="searchForm.name" value.key="id" filterable clearable placeholder="监控人"
+                    class="public-select">
+            <el-option v-for="(item, index) in projectArr" :key="index"
+                       :value="item.value"
+                       :label="item.label">
+            </el-option>
+         </el-select>
+         <el-input v-model="searchForm.SellerInfo" class="public-input" autocomplete="off" placeholder="ASIN/信息"
                    clearable></el-input>
 
          <el-button type="primary" class="public-btn" :loading="btnState.btnSavaASIN" @click="FnPostSearch('refRoleForm')">
-            提交
+            搜索
          </el-button>
 
          <div class="formR-main">
@@ -21,20 +28,28 @@
             </el-button>
          </div>
       </el-form>
+      <div class="public-tip">备注：更新频率设置：10分钟。通知方式：企业微信、站内右下角消息提示，右上角消息中心</div>
 
       <el-table class="public-table" border
                 :data="tableArr"
                 ref="refTable"
                 height="600">
-         <el-table-column type="section"></el-table-column>
+         <el-table-column type="selection"></el-table-column>
          <el-table-column prop="img" label="图片"></el-table-column>
          <el-table-column prop="ASIN" label="ASIN"></el-table-column>
          <el-table-column prop="title" label="标题"></el-table-column>
          <el-table-column prop="site" label="站点"></el-table-column>
-         <el-table-column prop="site" label="跟买次数"></el-table-column>
-         <el-table-column prop="site" label="排除店铺"></el-table-column>
-         <el-table-column prop="site" label="开始监控时间"></el-table-column>
-         <el-table-column prop="site" label="更新时间"></el-table-column>
+         <el-table-column prop="sellNum" label="跟买次数"></el-table-column>
+         <el-table-column prop="startTime" label="开始时间" sortable>
+            <template slot-scope="{row}">
+               <div class="status-connect">{{ row.startTime | dateFormat }}</div>
+            </template>
+         </el-table-column>
+         <el-table-column prop="update_time" label="更新时间">
+            <template slot-scope="{row}">
+               <div class="status-connect">{{ row.update_time | dateFormat }}</div>
+            </template>
+         </el-table-column>
          <el-table-column prop="site" label="监护人"></el-table-column>
          <el-table-column prop="site" label="操作">
             <template slot-scope="scope">
@@ -51,6 +66,13 @@
             </template>
          </el-table-column>
       </el-table>
+
+      <Pagination
+         :pageNum="pageArr.pageNum"
+         :total="pageArr.total"
+         :pageSize="pageArr.pageSize"
+         @SonSizeChange='FaSizeChange'
+         @SonCurrentChange="FaPageCurrent"></Pagination>
 
       <!-- 添加ASIN -->
       <el-dialog :append-to-body="true"
@@ -145,14 +167,15 @@
 </template>
 
 <script>
+import Pagination from "@/components/Pagination/Pagination";
+
 export default {
    name: "SellWith", /*跟卖*/
+   components: {Pagination},
    data() {
       return {
-
          btnState: {
             btnSavaASIN: false,
-
             btnSaveMonitor: false,
             btnSaveStore: false,
          },
@@ -161,7 +184,13 @@ export default {
 
             diaSetMonitor: false,  /*设置监控人*/
 
-            diaRemoveStore: true,  /*排除店铺*/
+            diaRemoveStore: false,  /*排除店铺*/
+         },
+
+         pageArr: {
+            pageNum: 1,
+            total: 20,
+            pageSize: 10,
          },
 
          /*表单搜索*/
@@ -184,7 +213,18 @@ export default {
                ASIN: 'B0B08BDG42',
                title: 'Mkeke',
                site: '1',
-               sellNo: '5',
+               sellNum: '5',
+               startTime:'1609136676',
+               update_time:'1609136676',
+            },
+            {
+               img: '',
+               ASIN: 'B0B08BDG42',
+               title: 'Mkeke',
+               site: '1',
+               sellNum: '5',
+               startTime:'1609136676',
+               update_time:'1609136676',
             }
          ],
 

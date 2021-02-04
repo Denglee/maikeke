@@ -1,26 +1,20 @@
 <template>
    <div class="public-main">
-      <el-form :model="FormSearch" class="public-form"  ref="refRoleForm"
+      <el-form :model="FormSearch" class="public-form" ref="refRoleForm"
                label-width="120px" label-position="left" :inline="true">
-         <el-form-item label="关键词" prop="name">
-            <el-input v-model="FormSearch.name" class="public-input" autocomplete="off" placeholder="请输入" clearable></el-input>
-         </el-form-item>
 
-         <el-form-item label="select 单选：" prop="store">
-            <el-select v-model="FormSearch.store" value.key="id" filterable clearable placeholder="请选择店铺"
-                       class="public-selectFull">
-               <el-option v-for="(item, index) in projectArr" :key="index"
-                          :value="item.value"
-                          :label="item.label">
-               </el-option>
-            </el-select>
-         </el-form-item>
+         <el-input v-model="FormSearch.ASIN" class="public-input" autocomplete="off" placeholder="请输入ASIN"
+                   clearable></el-input>
+         <el-input v-model="FormSearch.people" class="public-input" autocomplete="off" placeholder="请输入创建人"
+                   clearable></el-input>
+
          <el-button type="primary" class="public-btn" :loading="btnState.btnSearch"
-                    @click="FnPostSearch('refRoleForm')">搜索</el-button>
+                    @click="FnPostSearch('refRoleForm')">搜索
+         </el-button>
 
          <div class="formR-main">
             <el-button type="primary" class="public-btn" :loading="btnState.btnAddRankMonit"
-                       @click="diaState.diaAddRankMonit = true">添加排名监控
+                       @click="diaState.diaAddRankMonit = true">添加竞品
             </el-button>
          </div>
 
@@ -33,7 +27,14 @@
                 height="600"
                 @row-click="handleRowClick">
          <el-table-column type="selection"></el-table-column>
-         <el-table-column prop="img" label="图片"></el-table-column>
+         <el-table-column prop="img" label="图片">
+            <tempalte slot-scope="{row}">
+               <el-image
+                 class="public-imgTd"
+                  :src="row.img"
+                  :fit="fit"></el-image>
+            </tempalte>
+         </el-table-column>
          <el-table-column prop="ASIN" label="ASIN"></el-table-column>
          <el-table-column prop="keyword" label="标题"></el-table-column>
          <el-table-column prop="site" label="Reviews/Rating/Stars"></el-table-column>
@@ -51,7 +52,8 @@
                      操作<i class="el-icon-arrow-down el-icon--right"></i>
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
-                     <el-dropdown-item :command="{ type:'FnDelete', data:scope.row }">删除店铺</el-dropdown-item>
+                     <el-dropdown-item :command="{ type:'FnDelete', data:scope.row }">删除</el-dropdown-item>
+                     <el-dropdown-item :command="{ type:'FnHistory', data:scope.row }">历史信息</el-dropdown-item>
                   </el-dropdown-menu>
                </el-dropdown>
             </template>
@@ -59,16 +61,12 @@
       </el-table>
 
       <!--分页-->
-      <el-pagination
-         background
-         layout="total,  prev, pager,next, sizes, jumper"
-         :page-sizes="[10, 20, 50, 100]"
-         :current-page="pageArr.pageNum"
+      <Pagination
+         :pageNum="pageArr.pageNum"
          :total="pageArr.total"
-         :page-size="pageArr.pageSize"
-         @size-change='FaSizeChange'
-         @current-change="FaPageCurrent">
-      </el-pagination>
+         :pageSize="pageArr.pageSize"
+         @SonSizeChange='FaSizeChange'
+         @SonCurrentChange="FaPageCurrent"></Pagination>
 
       <!-- 添加排名监控 -->
       <el-dialog :append-to-body="true"
@@ -100,7 +98,8 @@
          <div class="flex-between">
             <div>备注：系统会获取默认的关键词排名，还可以通设置邮编的方式获取相应的排名数据</div>
             <el-button type="primary" class="public-btn" :loading="btnState.btnAddKeyword"
-                       @click="FnAddKeyword">添加关键词</el-button>
+                       @click="FnAddKeyword">添加关键词
+            </el-button>
          </div>
 
          <el-table class="public-table" border
@@ -108,7 +107,8 @@
                    ref="refRankTable">
             <el-table-column prop="keyword" label="关键词">
                <template slot-scope="scope">
-                  <el-input v-model="scope.row.keyword" class="public-input" autocomplete="off" placeholder="请输入" clearable></el-input>
+                  <el-input v-model="scope.row.keyword" class="public-input" autocomplete="off" placeholder="请输入"
+                            clearable></el-input>
                </template>
             </el-table-column>
             <el-table-column prop="keywordType" label="关键词类型">
@@ -132,7 +132,8 @@
             </el-table-column>
             <el-table-column prop="codeSet" label="邮编查询设置">
                <template slot-scope="scope">
-                  <el-input v-model="scope.row.codeSet" class="public-input" autocomplete="off" placeholder="请输入，以逗号隔开，比如40001,10001" clearable></el-input>
+                  <el-input v-model="scope.row.codeSet" class="public-input" autocomplete="off"
+                            placeholder="请输入，以逗号隔开，比如40001,10001" clearable></el-input>
                </template>
             </el-table-column>
             <el-table-column label="设置">
@@ -149,38 +150,96 @@
 
       </el-dialog>
 
+
+      <!-- 历史竞品 -->
+      <el-dialog :append-to-body="true"
+                 title="历史竞品"
+                 :visible.sync="diaState.diaHisCom"
+                 custom-class="public-dialog"
+                 :close-on-click-modal="false"
+                 width="1200px">
+         <el-form :model="FormSearch" class="public-form" ref="refRoleForm"
+                  label-width="120px" label-position="left" :inline="true">
+            <el-date-picker
+               class="public-datePicker"
+               v-model="FormSearch.order_time"
+               type="daterange"
+               unlink-panels
+               range-separator="-"
+               start-placeholder="开始日期"
+               end-placeholder="结束日期"
+               value-format="yyyy-MM-dd">
+            </el-date-picker>
+
+            <el-button type="primary" class="public-btn" :loading="btnState.btnSearch"
+                       @click="FnPostSearch('refRoleForm')">搜索
+            </el-button>
+
+         </el-form>
+
+         <el-table class="public-table" border
+                   :data="tableArr"
+                   ref="refTable">
+            <el-table-column prop="img" label="图片">
+               <tempalte slot-scope="{row}">
+                  <el-image
+                     class="public-imgTd"
+                     :src="row.img"
+                     :fit="fit"></el-image>
+               </tempalte>
+            </el-table-column>
+            <el-table-column prop="ASIN" label="ASIN"></el-table-column>
+            <el-table-column prop="keyword" label="标题"></el-table-column>
+            <el-table-column prop="site" label="Reviews/Rating/Stars"></el-table-column>
+            <el-table-column prop="keywordNum" label="销售排名"></el-table-column>
+            <el-table-column prop="createTime" label="销售价格"></el-table-column>
+            <el-table-column prop="createTime" label="购物车拥有者"></el-table-column>
+            <el-table-column prop="createTime" label="BEST SELLER"></el-table-column>
+            <el-table-column prop="createTime" label="coupon"></el-table-column>
+            <el-table-column prop="createTime" label="秒杀"></el-table-column>
+            <el-table-column prop="founder" label="创建人"></el-table-column>
+         </el-table>
+
+         <!--分页-->
+         <Pagination
+            :pageNum="pageArr.pageNum"
+            :total="pageArr.total"
+            :pageSize="pageArr.pageSize"
+            @SonSizeChange='FaSizeChange'
+            @SonCurrentChange="FaPageCurrent"></Pagination>
+      </el-dialog>
+
    </div>
 </template>
 
 <script>
-
+import Pagination from "@/components/Pagination/Pagination";
 export default {
    name: "KeywordRank",
+   components:{Pagination},
    data() {
-      return{
-         pageArr:{
-            total: 100,  //总条数
+      return {
+         pageArr: {
+            total: 10,  //总条数
             pageSize: 20, //每页个数
             pageNum: 1, //当前页数
          },
-         FormSearch:{
+         FormSearch: {},
+         btnState: {
+            btnSearch: false,
+            btnAddRankMonit: false,
+
+            btnAddKeyword: false,
+            btnSaveAddKeyword: false,
 
          },
-         btnState:{
-            btnSearch:false,
-            btnAddRankMonit:false,
-
-            btnAddKeyword:false,
-            btnSaveAddKeyword:false,
-         },
-         diaState:{
-            diaAddRankMonit:false,  //新增监控排名
+         diaState: {
+            diaAddRankMonit: false,  //新增监控排名
+            diaHisCom: true,
          },
 
-         FormAddRank:{
-
-         },
-         keywordTypeArr:[
+         FormAddRank: {},
+         keywordTypeArr: [
             {
                value: '1',
                label: '自然关键词',
@@ -192,48 +251,50 @@ export default {
          ],
          projectArr: [
             {
-               id:'1',
+               id: '1',
                value: 'shop1',
                label: '店铺1',
             },
             {
-               id:'2',
+               id: '2',
                value: 'shop2',
                label: '店铺2',
             },
          ],
 
          /*新增排名监控 表格*/
-         tableRankArr:[
+         tableRankArr: [
             {
-               keyword:'bihailantian',
-               keywordType:'1',
-               keywordCome:['2'],
-               codeSet:'1001',
+               keyword: 'bihailantian',
+               keywordType: '1',
+               keywordCome: ['2'],
+               codeSet: '1001',
             },
          ],
 
          /*排名监控*/
-         tableArr:[
+         tableArr: [
             {
-               img:'https://images-na.ssl-images-amazon.com/images/I/7181lYhgidL._AC_SX679_.jpg',
-               ASIN:'B08B8BDG42',
-               title:'Oral Thermoment for Adults.',
-               Stars:{
-                  reviews:894,
-                  ratings:2348,
-                  stars:4,
+               img: 'https://images-na.ssl-images-amazon.com/images/I/7181lYhgidL._AC_SX679_.jpg',
+               ASIN: 'B08B8BDG42',
+               title: 'Oral Thermoment for Adults.',
+               Stars: {
+                  reviews: 894,
+                  ratings: 2348,
+                  stars: 4,
                },
-               keyword:'Dispsable Face Masks',
-               site:'1',
-               keywordNum:'1',
-               createTime:'2020-12-10',
-               founder:'王小宝',
+               keyword: 'Dispsable Face Masks',
+               site: '1',
+               keywordNum: '1',
+               createTime: '2020-12-10',
+               founder: '王小宝',
             }
          ],
       }
    },
-   methods:{
+   methods: {
+
+
       /* 1、 编辑选中  */
       checkedStore(val) {
          console.log(val);
@@ -243,47 +304,48 @@ export default {
       handleRowClick(row, column, event) {
          this.$refs.refTable.toggleRowSelection(row);
       },
+      FnPostSearch(){
+
+      },
+
 
       /*表格 tr 操作 */
       FnCommand(val) {
          console.log(val);
-         /*设置监控人*/
-         if(val.type == 'FnSet'){
-            this.diaState.diaSetMonitor = true;
-         }
-         /*移除店铺*/
-         if(val.type == 'FnRemove'){
-            this.diaState.diaRemoveStore = true;
-         }
          /*删除*/
-         if(val.type == 'FnDelete'){
+         if (val.type == 'FnDelete') {
 
          }
+         /*删除*/
+         if (val.type == 'FnHistory') {
+            this.diaState.diaHisCom = true;
+         }
+
       },
 
       /*分页*/
-      FaPageCurrent(page){
+      FaPageCurrent(page) {
          console.log(page)
          // this.staffPage = page;
          // this.getStaffIndex();
       },
-      FaSizeChange(size){
+      FaSizeChange(size) {
          console.log(size);
       },
 
       /*添加关键词*/
-      FnAddKeyword(){
+      FnAddKeyword() {
          // let parentId = this.parentId;
          this.tableRankArr.push({
-            keyword:'',
-            keywordType:'',
-            keywordCome:['1'],
-            codeSet:'',
+            keyword: '',
+            keywordType: '',
+            keywordCome: ['1'],
+            codeSet: '',
          });
       },
 
       /*保存 排名监控*/
-      FnSaveAddKeyword(){
+      FnSaveAddKeyword() {
 
       },
 

@@ -1,19 +1,32 @@
 <template>
    <div class="public-main">
-      <!--头部-->
-      <div class="public-header">
-         <h4>结算明细</h4>
-      </div>
-
       <!--中间部分-->
       <div class="">
          <el-form class="public-form">
 
-            <el-select filterable multiple collapse-tags v-model="formData.projectName" placeholder="项目名称"
-                       class="public-select">
-               <el-option v-for="( item, index ) in projectArr" :key="index"
-                          :label="item.value"
-                          :value="item.name"></el-option>
+            <el-select placeholder="核算主体" v-model="FormSearch.zhuti" class="public-select">
+               <el-option v-for="(item,index) in projectArr" :key="index"
+                          :value="item.value"
+                          :label="item.label">
+               </el-option>
+            </el-select>
+            <el-select placeholder="核算店铺" v-model="FormSearch.store" class="public-select">
+               <el-option v-for="(item,index) in projectArr" :key="index"
+                          :value="item.value"
+                          :label="item.label">
+               </el-option>
+            </el-select>
+            <el-select placeholder="销售店铺" v-model="FormSearch.store2" class="public-select">
+               <el-option v-for="(item,index) in projectArr" :key="index"
+                          :value="item.value"
+                          :label="item.label">
+               </el-option>
+            </el-select>
+            <el-select placeholder="销售店铺" v-model="FormSearch.country" class="public-select">
+               <el-option v-for="(item,index) in projectArr" :key="index"
+                          :value="item.value"
+                          :label="item.label">
+               </el-option>
             </el-select>
 
             <el-date-picker
@@ -36,7 +49,8 @@
                placement="bottom"
                width="400"
                trigger="manual"
-               v-model="diaState.diaShowPopSet">
+               v-model="diaState.diaShowPopSet"
+               popper-class="set-popover">
                <el-form class="public-form" :model="setForm">
 
                   <el-select v-model="setForm.type" placeholder="全部分类" class="public-selectFull">
@@ -70,6 +84,7 @@
                                 :value="item.name">
                      </el-option>
                   </el-select>
+
                   <div class="formR-main">
                      <el-button type="primary" class="public-btn" :loading="btnState.btnAddRankMonit"
                                 @click="diaState.diaShowPopSet = false">取消
@@ -89,51 +104,45 @@
 
          <!-- 表格-->
          <el-table class="public-table" border
-                   :data="tableStaff"
-                   @selection-change="checkedStaff"
-                   ref="multipleTable"
-                   @row-click="handleRowClick">
-            <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="shop" label="店铺" sortable></el-table-column>
-            <el-table-column prop="project" label="项目"></el-table-column>
-
-            <el-table-column prop="state" label="状态">
-               <template slot-scope="scope">
-                  <div v-if="scope.row.state == 0 " class="status-connect">已完成</div>
-                  <div v-if="scope.row.state == 1 " class="status-break">已断开</div>
-               </template>
-            </el-table-column>
-            <el-table-column prop="register_time" label="开始时间" sortable>
-               <template slot-scope="scope">
-                  <div class="status-connect">{{ scope.row.start_time | dateFormat }}</div>
-               </template>
-            </el-table-column>
-            <el-table-column prop="register_time" label="结束时间">
-               <template slot-scope="scope">
-                  <div class="status-connect">{{ scope.row.end_time | dateFormat }}</div>
-               </template>
-            </el-table-column>
-
+                   :data="tableArr"
+                   ref="refTable"
+                   height="600">
+            <el-table-column prop="time" label="日期"></el-table-column>
+            <el-table-column prop="store" label="店铺"></el-table-column>
+            <el-table-column prop="country" label="国家"></el-table-column>
+            <el-table-column prop="MSKU" label="昨日余额"></el-table-column>
+            <el-table-column prop="ASIN" label="标准订单回款" width="100px"></el-table-column>
+            <el-table-column prop="MSKU" label="发票支付订单回款" width="130px"></el-table-column>
+            <el-table-column prop="MSKU" label="回款总额"></el-table-column>
+            <el-table-column prop="MSKU" label="预留金额"></el-table-column>
+            <el-table-column prop="MSKU" label="未结算的标准订单金额" width="150px"></el-table-column>
+            <el-table-column prop="MSKU" label="未结算的发票支付订单" width="150px"></el-table-column>
+            <el-table-column prop="MSKU" label="未结算单"></el-table-column>
+            <el-table-column prop="MSKU" label="可结算金额/可用资金" width="150px"></el-table-column>
+            <el-table-column prop="MSKU" label="今日账户余额" width="100px"></el-table-column>
+            <el-table-column prop="MSKU" label="较昨日业务增长额" width="130px"></el-table-column>
+            <el-table-column prop="MSKU" label="核算主体"></el-table-column>
+            <el-table-column prop="MSKU" label="核算店铺"></el-table-column>
+            <el-table-column prop="title" label="更新时间" orderable></el-table-column>
          </el-table>
 
          <!--分页-->
-         <el-pagination
-            background
-            layout="total, prev, pager,next, sizes, jumper"
-            :page-sizes="[10, 20, 50, 100]"
-            :current-page="pageArr.pageNum"
+         <Pagination
+            :pageNum="pageArr.pageNum"
             :total="pageArr.total"
-            :page-size="pageArr.pageSize"
-            @size-change='FaSizeChange'
-            @current-change="FaPageCurrent">
-         </el-pagination>
+            :pageSize="pageArr.pageSize"
+            @SonSizeChange='FaSizeChange'
+            @SonCurrentChange="FaPageCurrent"></Pagination>
+
       </div>
    </div>
 </template>
 
 <script>
+import Pagination from "@/components/Pagination/Pagination";
 export default {
    name: "SettlementDetails",
+   components:{Pagination},
    data() {
       return {
          formData: {
@@ -143,8 +152,9 @@ export default {
          setForm:{
             type:1,
          },
+         FormSearch:{},
          pageArr: {
-            total: 100,  //总条数
+            total: 40,  //总条数
             pageSize: 20, //每页个数
             pageNum: 1, //当前页数
          },
@@ -156,34 +166,20 @@ export default {
             diaShowPopSet:false,
          },
 
-         tableStaff: [
+         tableArr:[
             {
-               shop: '店铺2',
-               project: '项目2',
-               state: 0,
-               start_time: '1608538812',
-               end_time: '1609136676',
+               store:'BYKE-us',
+               country:'美国',
+               MSKU:'',
+               ASIN:"B07B2WNNB2",
+               time:'2020-11-19',
             },
             {
-               shop: '店铺1',
-               project: '项目1',
-               state: 1,
-               start_time: '1608452412',
-               end_time: '1609136676',
-            },
-            {
-               shop: '店铺3',
-               project: '项目3',
-               state: 1,
-               start_time: '1608625212',
-               end_time: '1609136676',
-            },
-            {
-               shop: '店铺4',
-               project: '项目4',
-               state: 1,
-               start_time: '1609136900',
-               end_time: '1609136800',
+               store:'BYKE-us',
+               country:'美国',
+               MSKU:'',
+               ASIN:"B07B2WNNB2",
+               time:'2020-11-19',
             },
          ],
 
