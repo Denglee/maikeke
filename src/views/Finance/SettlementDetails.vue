@@ -139,10 +139,10 @@
 </template>
 
 <script>
-import Pagination from "@/components/Pagination/Pagination";
+
 export default {
    name: "SettlementDetails",
-   components:{Pagination},
+   components:{},
    data() {
       return {
          formData: {

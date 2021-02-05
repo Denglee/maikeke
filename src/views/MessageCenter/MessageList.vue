@@ -34,7 +34,8 @@
             </el-date-picker>
 
             <!--搜索-->
-            <el-button icon="el-icon-search" @click="FnSearchShop" :loading="btnState.btnSearchLoad" class="public-btn">搜索</el-button>
+            <el-button icon="el-icon-search" @click="FnSearchShop"
+                       :loading="btnState.btnSearchLoad" class="public-btn">搜索</el-button>
 
             <div class="formR-main">
               <el-button icon="el-icon-search" @click="FnSearchShop" :loading="btnState.btnSearchLoad" class="public-btn">标记为已读</el-button>

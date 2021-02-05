@@ -41,7 +41,7 @@
             value-format="yyyy-MM-dd">
          </el-date-picker>
          <el-button type="primary" class="public-btn" :loading="btnState.btnPost"
-                    @click="FnPostSearch('refRoleForm')">搜索
+                    icon="el-icon-search"  @click="FnPostSearch('refRoleForm')">搜索
          </el-button>
 
       </el-form>
@@ -73,13 +73,13 @@
 </template>
 
 <script>
-import customThead from '@/components/publicPage/customThead'
+import customThead from '@/components/CustomThead/customThead'
 import {histogramConfig,} from '@/assets/js/VChartsConfig/VChartsConfig'
 
-import Pagination from "@/components/Pagination/Pagination";
+
 export default {
    name: "AccountFunds", //回款记录
-   components:{Pagination},
+   components:{},
    data() {
       return {
 
@@ -98,6 +98,8 @@ export default {
          storeArr:[
             { label:'', name:'' },
          ],
+
+
          TrCheckedArr: [
             {title: "名称", iState: true,},
             {title: "性别", iState: false,},

@@ -57,9 +57,7 @@
 
                   <!--搜索-->
                   <el-button icon="el-icon-search" @click="FnSearchShop" :loading="btnState.btnSearchLoad"
-                             class="public-btn">
-                     搜索
-                  </el-button>
+                             class="public-btn">搜索</el-button>
 
                   <!--设置-->
                   <el-popover
@@ -67,7 +65,8 @@
                      width="400"
                      trigger="manual"
                      v-model="diaState.diaShowPopSet"
-                     label-width='180px'>
+                     label-width='180px'
+                     popper-class="set-popover">
                      <el-form class="public-form" :model="setForm">
 
                         <el-form-item label="展示量">
@@ -78,8 +77,7 @@
                                             :label="item.label">
                                  </el-option>
                               </el-select>
-                              <el-input placeholder="请输入" autocomplete="off" v-model="setForm.shopNum"
-                                        clearable></el-input>
+                              <el-input placeholder="请输入" autocomplete="off" v-model="setForm.shopNum" clearable></el-input>
                            </div>
                         </el-form-item>
 
@@ -90,8 +88,7 @@
                                             :value="item.value"
                                             :label="item.label"></el-option>
                               </el-select>
-                              <el-input placeholder="请输入" autocomplete="off" v-model="setForm.clickNum"
-                                        clearable></el-input>
+                              <el-input placeholder="请输入" autocomplete="off" v-model="setForm.clickNum" clearable></el-input>
                            </div>
                         </el-form-item>
 
@@ -330,11 +327,11 @@
 <script>
 
 import MonthRange from "@/components/TimeRange/MonthRange";
-import Pagination from "@/components/Pagination/Pagination";
+
 export default {
    name: "BusinessReport",
    inject: ['reLoad'],
-   components:{MonthRange,Pagination},
+   components:{MonthRange,},
    data() {
       return {
          tabPosition: 'left',

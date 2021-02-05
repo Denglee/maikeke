@@ -1,7 +1,7 @@
 <template>
   <div class="public-main">
     <el-form class="public-form">
-      <el-select v-model="formData.projectName" filterable multiple clearable collapse-tags
+      <el-select v-model="FormSearch.projectName1" filterable multiple clearable collapse-tags placeholder="负责人"
                  popper-class="elSelect-checkbox" class="public-select" @change='chooseProject($event)'>
         <el-option v-for="(item, index) in projectArr"
                    :key="index"
@@ -11,18 +11,59 @@
           <span style="margin-left: 8px">{{ item.value }}</span>
         </el-option>
       </el-select>
-
+      <el-select v-model="FormSearch.projectName" filterable multiple clearable collapse-tags placeholder="全部国家"
+                 popper-class="elSelect-checkbox" class="public-select" @change='chooseProject($event)'>
+        <el-option v-for="(item, index) in projectArr"
+                   :key="index"
+                   :value="item.name"
+                   :label="item.value">
+          <span class="check"></span>
+          <span style="margin-left: 8px">{{ item.value }}</span>
+        </el-option>
+      </el-select>
+      <el-select v-model="FormSearch.projectName" filterable multiple clearable collapse-tags placeholder="全部店铺"
+                 popper-class="elSelect-checkbox" class="public-select" @change='chooseProject($event)'>
+        <el-option v-for="(item, index) in projectArr"
+                   :key="index"
+                   :value="item.name"
+                   :label="item.value">
+          <span class="check"></span>
+          <span style="margin-left: 8px">{{ item.value }}</span>
+        </el-option>
+      </el-select>
+      <el-date-picker
+          class="public-datePicker"
+          v-model="FormSearch.order_time"
+          type="daterange"
+          unlink-panels
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          value-format="yyyy-MM-dd">
+      </el-date-picker>
+      <div class="public-selInp">
+        <el-select placeholder="请选择" v-model="FormSearch.shopType">
+          <el-option v-for="(item,index) in projectArr" :key="index"
+                     :value="item.value"
+                     :label="item.label">
+          </el-option>
+        </el-select>
+        <el-input placeholder="请输入" autocomplete="off" v-model="FormSearch.shopNum" clearable></el-input>
+      </div>
+      <el-button icon="el-icon-search" @click="FnSearchShop" :loading="btnState.btnSearchLoad"
+                 class="public-btn">搜索</el-button>
     </el-form>
 
     <!-- 表格-->
     <el-table class="public-table" border
               :data="tableStaff"
-              ref="multipleTable">
+              ref="multipleTable"
+              height="500px">
       <el-table-column prop="store" label="订单"></el-table-column>
       <el-table-column prop="country" label="配送日期"></el-table-column>
       <el-table-column prop="type" label="MSKU"></el-table-column>
       <el-table-column prop="active" label="标题"></el-table-column>
-      <el-table-column prop="shopNum" label="本地品名/SKU"></el-table-column>
+      <el-table-column prop="shopNum" label="本地品名/SKU" width="100px"></el-table-column>
       <el-table-column prop="clickNum" label="店铺"></el-table-column>
       <el-table-column prop="money" label="国家"></el-table-column>
       <el-table-column prop="money" label="FNSKU"></el-table-column>
@@ -34,7 +75,7 @@
       <el-table-column prop="money" label="礼品金额"></el-table-column>
       <el-table-column prop="money" label="收货城市"></el-table-column>
       <el-table-column prop="money" label="收货州"></el-table-column>
-      <el-table-column prop="money" label="收货地邮政编码"></el-table-column>
+      <el-table-column prop="money" label="收货地邮政编码" width="120px"></el-table-column>
     </el-table>
 
      <Pagination
@@ -48,23 +89,24 @@
 </template>
 
 <script>
-import Pagination from "@/components/Pagination/Pagination";
+
+
 export default {
   name: "OrderReport",
   inject: ['reLoad'],
-   components:{Pagination},
+   components:{},
   data() {
     return {
 
       tabPosition: 'left',
       tabActiveName: 'name1',
-      formData: {
+      FormSearch: {
         projectName: '',
         order_time: '',
       },
       pageArr: {
         pageNum:1,
-        total:110,
+        total:10,
         pageSize:10,
       },
       setForm: {
@@ -167,8 +209,9 @@ export default {
     },
 
     /*搜索*/
+
     FnSearchShop() {
-      console.log(this.formData);
+      console.log(this.FormSearch);
       this.GLOBAL.btnStateChange(this, 'btnState', 'btnSearchLoad');
     },
 

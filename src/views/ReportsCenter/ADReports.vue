@@ -41,9 +41,7 @@
                             clearable></el-input>
                   <!--搜索-->
                   <el-button icon="el-icon-search" @click="FnSearchShop" :loading="btnState.btnSearchLoad"
-                             class="public-btn">
-                     搜索
-                  </el-button>
+                             class="public-btn">搜索</el-button>
 
                   <!--设置-->
                   <el-popover
@@ -90,7 +88,6 @@
 
                      <el-button slot="reference" @click="diaState.diaShowPopSet = !diaState.diaShowPopSet"
                                 class="btn-set" icon="el-icon-setting"></el-button>
-
                   </el-popover>
 
                </el-form>
@@ -176,16 +173,12 @@
                   </el-table-column>
                </el-table>
 
-               <el-pagination
-                  background
-                  layout="total, prev, pager,next, sizes, jumper"
-                  :page-sizes="[10, 20, 50, 100]"
-                  :current-page="pageArr.pageNum"
+              <Pagination
+                  :pageNum="pageArr.pageNum"
                   :total="pageArr.total"
-                  :page-size="pageArr.pageSize"
-                  @size-change='FaSizeChange'
-                  @current-change="FaPageCurrent">
-               </el-pagination>
+                  :pageSize="pageArr.pageSize"
+                  @SonSizeChange='FaSizeChange'
+                  @SonCurrentChange="FaPageCurrent"></Pagination>
             </div>
 
          </el-tab-pane>
@@ -369,16 +362,12 @@
                   </el-table-column>
                </el-table>
 
-               <el-pagination
-                  background
-                  layout="total, prev, pager,next, sizes, jumper"
-                  :page-sizes="[10, 20, 50, 100]"
-                  :current-page="pageArr.pageNum"
+              <Pagination
+                  :pageNum="pageArr.pageNum"
                   :total="pageArr.total"
-                  :page-size="pageArr.pageSize"
-                  @size-change='FaSizeChange'
-                  @current-change="FaPageCurrent">
-               </el-pagination>
+                  :pageSize="pageArr.pageSize"
+                  @SonSizeChange='FaSizeChange'
+                  @SonCurrentChange="FaPageCurrent"></Pagination>
             </div>
 
          </el-tab-pane>
@@ -410,7 +399,7 @@ import AllStoreSel from "@/components/AllStoreSel/AllStoreSel";
 export default {
    name: "ADReports",
    inject: ['reLoad'],
-   components: {AllStoreSel},
+   components: {AllStoreSel,},
    data() {
       return {
          tabPosition: 'left',
@@ -498,6 +487,7 @@ export default {
       }
    },
    methods: {
+
 
       FaChangeStore(val){
          console.log(val);

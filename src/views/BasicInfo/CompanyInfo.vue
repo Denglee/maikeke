@@ -17,7 +17,10 @@
         <el-input type="textarea" v-model="roleForm.ReportTo" autocomplete="off" placeholder="请输入企业地址" clearable></el-input>
       </el-form-item>
        <el-form-item label="企业LOGO" prop="ReportTo">
-          <el-input type="textarea" v-model="roleForm.ReportTo" autocomplete="off" placeholder="" clearable></el-input>
+<!--          <el-input type="textarea" v-model="roleForm.ReportTo" autocomplete="off" placeholder="" clearable></el-input>-->
+         <SingleCropper :autoCropWidth ='300'
+                        :autoCropHeight ='150'
+                        :initUrl="roleForm.userimage"></SingleCropper>
        </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="postStaffAdd('role')">提交</el-button>
@@ -28,9 +31,10 @@
 </template>
 
 <script>
-
+import SingleCropper from "@/components/cropper/SingleCropper";
 export default {
   name: "PersonalInfo",
+  components:{SingleCropper},
   data() {
     return {
 

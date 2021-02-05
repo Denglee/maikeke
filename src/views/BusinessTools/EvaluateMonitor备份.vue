@@ -22,7 +22,8 @@
           value-format="yyyy-MM-dd">
       </el-date-picker>
 
-      <el-button type="primary" class="public-btn" :loading="btnState.btnPost" @click="FnPostSearch()">搜索</el-button>
+      <el-button type="primary" class="public-btn"
+                 icon="el-icon-search" :loading="btnState.btnPost" @click="FnPostSearch()">搜索</el-button>
 
     </el-form>
 

@@ -56,7 +56,7 @@
             <el-input placeholder="请输入" autocomplete="off" v-model="FormSearch.shopNum" clearable></el-input>
          </div>
          <el-button type="primary" class="public-btn" :loading="btnState.btnPost"
-                    @click="FnPostSearch('refRoleForm')">搜索
+                    icon="el-icon-search" @click="FnPostSearch('refRoleForm')">搜索
          </el-button>
       </el-form>
 
@@ -99,7 +99,7 @@
          :pageSize="pageArr.pageSize"
          @SonSizeChange='FaSizeChange'
          @SonCurrentChange="FaPageCurrent"></Pagination>
-      
+
       <!--订单详情-->
       <el-dialog :append-to-body="true"
                  title="订单详情"
@@ -187,12 +187,12 @@
 </template>
 
 <script>
-import Pagination from "@/components/Pagination/Pagination";
+
 
 export default {
 
    name: "OrderList",
-   components: {Pagination},
+   components: {},
    data() {
       return {
          pageArr: {

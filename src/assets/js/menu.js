@@ -334,10 +334,10 @@ let menu = {
                path: "BusinessReport",
                meta: {title: "业务报告",},
             },
-            // {
-            //    path: "OrderReport",
-            //    meta: {title: "订单报表",},
-            // },
+            {
+               path: "OrderReport",
+               meta: {title: "订单报表",},
+            },
             {
                path: "FBIReport",
                meta: {title: "FBI报表",},

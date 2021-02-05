@@ -2,9 +2,9 @@
 
 /* 财务管理 账户资金 */
 .funds-history{
-   margin: 20px 0;
+   margin: 10px 0 20px;
    .funds-left{
-      min-height: 400px;
+      //min-height: 400px;
    }
    .funds-title{
       font-size: 18px;
@@ -12,7 +12,7 @@
    }
    .funds-subTitle{
       color: $color-fontGray;
-      margin-top: 20px;
+      margin-top: 29px;
    }
    .funds-price{
       font-size: 16px;

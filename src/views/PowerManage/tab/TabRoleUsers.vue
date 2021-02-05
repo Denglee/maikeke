@@ -4,7 +4,7 @@
       <div class="flex-between">
         <el-form>
           <el-input v-model="searchForm.trueName" placeholder="搜索用户名或者真实姓名" autocomplete="off" clearable
-                    @keyup.enter.native = "FnSearchShop">
+                    icon="el-icon-search"   @keyup.enter.native = "FnSearchShop">
             <i slot="suffix" class="el-input__icon el-icon-search" @click="FnSearchShop"></i>
           </el-input>
         </el-form>

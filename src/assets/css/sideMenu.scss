@@ -96,16 +96,28 @@
 
    /* 折叠菜单样式 */
    .el-menu--collapse {
+      .el-submenu__title{
+         text-align: center;
+         line-height: inherit !important;
+         padding: 4px 0 !important;
+         //border: solid 1px red;
+      }
       .side-menu-item {
          transition: font-size 0.5s;
          i {
             font-size: 20px;
          }
-         span,
+         span{
+            //color: red;
+            display: block;
+            font-size: 12px;
+            margin-top: 4px;
+         }
          .el-menu--inline,
          .el-submenu__icon-arrow {
             display: none;
          }
+
       }
    }
 }

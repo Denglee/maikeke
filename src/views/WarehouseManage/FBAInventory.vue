@@ -54,7 +54,7 @@
          </div>
 
          <el-button type="primary" class="public-btn" :loading="btnState.btnPost"
-                    @click="FnPostSearch('refRoleForm')">提交
+                    icon="el-icon-search" @click="FnPostSearch('refRoleForm')">搜索
          </el-button>
       </el-form>
 
@@ -133,11 +133,11 @@
 </template>
 
 <script>
-import Pagination from "@/components/Pagination/Pagination";
+
 
 export default {
    name: "FBAInventory",
-   components:{Pagination,},
+   components:{},
    data() {
       return {
          pageArr: {

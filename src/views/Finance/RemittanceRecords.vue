@@ -40,7 +40,7 @@
              value-format="yyyy-MM-dd">
           </el-date-picker>
           <el-button type="primary" class="public-btn" :loading="btnState.btnPost"
-                     @click="FnPostSearch('refRoleForm')">搜索
+                     icon="el-icon-search"   @click="FnPostSearch('refRoleForm')">搜索
           </el-button>
 
        </el-form>
@@ -74,7 +74,7 @@
        <el-table class="public-table" border
                  :data="tableArr"
                  ref="refTable"
-                 height="600">
+                 height="30vh">
           <el-table-column prop="time" label="日期"></el-table-column>
           <el-table-column prop="store" label="店铺"></el-table-column>
           <el-table-column prop="country" label="国家"></el-table-column>
@@ -105,11 +105,11 @@
 <script>
 
 import {histogramConfig,} from '@/assets/js/VChartsConfig/VChartsConfig'
-import Pagination from "@/components/Pagination/Pagination";
+
 
 export default {
     name: "RemittanceRecords", //回款记录
-   components:{Pagination},
+   components:{},
     data(){
      return{
         HisColor:histogramConfig.color,
@@ -160,6 +160,34 @@ export default {
               ASIN:"B07B2WNNB2",
               time:'2020-11-19',
            },
+          {
+            store:'BYKE-us',
+            country:'美国',
+            MSKU:'',
+            ASIN:"B07B2WNNB2",
+            time:'2020-11-19',
+          },
+          {
+            store:'BYKE-us',
+            country:'美国',
+            MSKU:'',
+            ASIN:"B07B2WNNB2",
+            time:'2020-11-19',
+          },
+          {
+            store:'BYKE-us',
+            country:'美国',
+            MSKU:'',
+            ASIN:"B07B2WNNB2",
+            time:'2020-11-19',
+          },
+          {
+            store:'BYKE-us',
+            country:'美国',
+            MSKU:'',
+            ASIN:"B07B2WNNB2",
+            time:'2020-11-19',
+          },
         ],
      }
     },

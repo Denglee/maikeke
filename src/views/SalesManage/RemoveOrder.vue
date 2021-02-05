@@ -43,7 +43,7 @@
          <el-input v-model="FormSearch.name" class="public-input" autocomplete="off" placeholder="请输入"
                    clearable></el-input>
          <el-button type="primary" class="public-btn" :loading="btnState.btnPost"
-                    @click="FnPostSearch('refRoleForm')">搜索
+                    icon="el-icon-search"   @click="FnPostSearch('refRoleForm')">搜索
          </el-button>
       </el-form>
 
@@ -76,10 +76,10 @@
 </template>
 
 <script>
-import Pagination from "@/components/Pagination/Pagination";
+
 export default {
    name: "RemoveOrder",
-   components:{Pagination,},
+   components:{},
    data(){
       return{
          pageArr: {

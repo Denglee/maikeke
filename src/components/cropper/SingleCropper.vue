@@ -9,7 +9,7 @@
              :show-file-list="false"
              :on-change="handleCrop"
              :http-request="upload">
-             <el-button size="small" type="primary">更换头像</el-button>
+             <el-button size="small" type="primary">更换</el-button>
           </el-upload>
 
           <!-- 剪裁组件弹窗 -->

@@ -48,11 +48,14 @@ import '@/assets/css/page.scss'
 /* 2.1、 全局 通用iframe 组件*/
 // import publicIframe from '@/components/publicIframe/publicIframe'
 // Vue.component(publicIframe.name,publicIframe);
+/*引用 全局分页*/
+import Pagination from '@/components/Pagination/Pagination'
+Vue.component(Pagination.name,Pagination);
+
 
 /* 2.2、  引用 自定义  回到顶部*/
 // import goTop from "@/components/goTop";
 // Vue.component(goTop.name,goTop)
-
 
 
  /*6、 引入 moment 时间转换*/

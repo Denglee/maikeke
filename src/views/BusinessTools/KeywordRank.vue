@@ -32,7 +32,7 @@
                    clearable></el-input>
 
          <el-button type="primary" class="public-btn" :loading="btnState.btnSearch"
-                    @click="FnPostSearch('refRoleForm')">搜索
+                    icon="el-icon-search"  @click="FnPostSearch('refRoleForm')">搜索
          </el-button>
 
          <div class="formR-main">
@@ -166,11 +166,11 @@
 
 <script>
 
-import Pagination from "@/components/Pagination/Pagination";
+
 
 export default {
    name: "KeywordRank",
-   components: {Pagination},
+   components: {},
    data() {
       return {
 
@@ -305,13 +305,10 @@ export default {
 
       },
 
+
    },
    created() {
 
    },
 }
 </script>
-
-<style scoped lang="scss">
-
-</style>

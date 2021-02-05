@@ -9,7 +9,7 @@
                    clearable></el-input>
 
          <el-button type="primary" class="public-btn" :loading="btnState.btnSearch"
-                    @click="FnPostSearch('refRoleForm')">搜索
+                    icon="el-icon-search"  @click="FnPostSearch('refRoleForm')">搜索
          </el-button>
 
          <div class="formR-main">
@@ -172,7 +172,7 @@
             </el-date-picker>
 
             <el-button type="primary" class="public-btn" :loading="btnState.btnSearch"
-                       @click="FnPostSearch('refRoleForm')">搜索
+                       icon="el-icon-search"    @click="FnPostSearch('refRoleForm')">搜索
             </el-button>
 
          </el-form>
@@ -213,10 +213,10 @@
 </template>
 
 <script>
-import Pagination from "@/components/Pagination/Pagination";
+
 export default {
    name: "KeywordRank",
-   components:{Pagination},
+   components:{},
    data() {
       return {
          pageArr: {

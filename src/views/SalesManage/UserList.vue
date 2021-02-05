@@ -33,7 +33,7 @@
          </el-date-picker>
 
          <el-button type="primary" class="public-btn" :loading="btnState.btnPost"
-                    @click="FnPostSearch('refRoleForm')">提交
+                    icon="el-icon-search" @click="FnPostSearch('refRoleForm')">搜索
          </el-button>
       </el-form>
 

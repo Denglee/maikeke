@@ -18,9 +18,9 @@
          <el-input v-model="searchForm.SellerInfo" class="public-input" autocomplete="off" placeholder="ASIN/信息"
                    clearable></el-input>
 
-         <el-button type="primary" class="public-btn" :loading="btnState.btnSavaASIN" @click="FnPostSearch('refRoleForm')">
-            搜索
-         </el-button>
+         <el-button type="primary" class="public-btn"  icon="el-icon-search"
+                    :loading="btnState.btnSavaASIN" @click="FnPostSearch('refRoleForm')">
+            搜索</el-button>
 
          <div class="formR-main">
             <el-button type="primary" class="public-btn" :loading="btnState.btnSavaASIN"
@@ -167,11 +167,11 @@
 </template>
 
 <script>
-import Pagination from "@/components/Pagination/Pagination";
+
 
 export default {
    name: "SellWith", /*跟卖*/
-   components: {Pagination},
+   components: {},
    data() {
       return {
          btnState: {
@@ -315,6 +315,15 @@ export default {
       FnBtnSaveRemoveStore(){
          console.log(this.removeStoreForm.storeVal);
       },
+     /*分页*/
+     FaPageCurrent(page) {
+       console.log(page)
+       // this.staffPage = page;
+       // this.getStaffIndex();
+     },
+     FaSizeChange(size) {
+       console.log(size);
+     },
 
    },
    created() {
