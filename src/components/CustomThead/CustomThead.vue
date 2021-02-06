@@ -98,7 +98,6 @@ export default {
          // console.log(this.isTrCheckedArr);
          this.$emit('closeDia');
          this.isTrCheckedArr = this.nowTrCheckedArr;
-
       },
    },
    created() {

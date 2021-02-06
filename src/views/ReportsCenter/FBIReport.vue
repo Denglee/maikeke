@@ -38,6 +38,7 @@
                 end-placeholder="结束日期"
                 value-format="yyyy-MM-dd">
             </el-date-picker>
+
             <div class="public-selInp">
               <el-select placeholder="请选择" v-model="FormSearch.shopType">
                 <el-option v-for="(item,index) in projectArr" :key="index"
@@ -47,6 +48,7 @@
               </el-select>
               <el-input placeholder="请输入" autocomplete="off" v-model="FormSearch.shopNum" clearable></el-input>
             </div>
+
             <!--搜索-->
             <el-button icon="el-icon-search" @click="FnSearchShop" :loading="btnState.btnSearchLoad"
                        class="public-btn">搜索</el-button>

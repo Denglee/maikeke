@@ -36,7 +36,6 @@
 <!--            <img v-if="imageUrl" :src="imageUrl" class="avatar" ref="singleImg">-->
 <!--        </div>-->
 
-
 </template>
 <script>
     import cropper from '@/components/cropper/cropper';
