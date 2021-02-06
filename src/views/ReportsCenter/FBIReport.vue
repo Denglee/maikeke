@@ -206,12 +206,35 @@
 </template>
 
 <script>
-
 export default {
   name: "FBIReport",
   inject: ['reLoad'],
+  components:{},
   data() {
     return {
+
+      // 数据结构
+      tableData: [
+        {uid:'uid20210206',peopleNumber:100, source:'网站', },
+        {uid:'uid20210206',peopleNumber:100, source:'网站', },
+      ], // 为请求到的table数据
+      tableHeader: [  // 表头信息，可根据minWidth修改宽度
+        { prop: 'uid', label: '订单号', minWidth: '160px' },
+        {
+          prop: 'peopleNumber',
+          label: '人数',
+          sortable: 'custom',
+          minWidth: '75px',
+        },
+        {
+          prop: 'source',
+          label: '来源',
+          columnKey: 'sourceList',
+          minWidth: '90px',
+          render: (h, params) => {return h('span',params.row.source)
+          }
+        },
+      ],
 
       countryArr: this.GLOBAL.countryArr,
       tabPosition: 'left',
@@ -250,7 +273,6 @@ export default {
           label: '<',
         }
       ],
-
 
       tableStaff: [
         {
@@ -348,6 +370,15 @@ export default {
       console.log(size);
     },
 
+    handleSort(val){
+      console.log(val);
+    },
+    handleClick(val){
+      console.log(val);
+    },
+    filterHandler(val){
+      console.log(val);
+    },
   },
   created() {
 
