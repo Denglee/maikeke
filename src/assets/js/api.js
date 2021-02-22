@@ -17,9 +17,12 @@ import { get, post, put, axiosDelete } from './axios';
 /*
 A、登录 + 侧边栏
 * */
+export const LoginIn = params => post('/auth/login', params); /*登录*/
+export const getCodeImg = params => get('/code', params); /*获取验证图片*/
+
 
 export const ApiLayoutNav = params => get('admin/Web/indexMenu', params); /*获取侧边栏 nav*/
-export const ApiloginIn = params => post('admin/Web/login', params); /*登录*/
+
 export const ApiloginOut = params => post('admin/Web/login_out', params); /*退出*/
 export const ApiChangePass = params => post('admin/Web/update_password', params); /*修改密码*/
 export const ApiTopSearch = params => post('admin/Member/getMemberInfo', params); /*HeaderTop 头部搜索*/
@@ -46,6 +49,15 @@ export const authSonAdd    = params => post('/storeAuth/authSon/add', params);  
 export const authSonList    = params => get('/storeAuth/authSon/list', params);     /* 子账号列表 */
 export const authSondelete    = params => axiosDelete('/storeAuth/authSon/'+params);     /* 删除 子账号列表 */
 export const authSonUpdate    = params => put('/storeAuth/authSon/update', params);     /* 更新子账号列表 */
+
+
+/*角色信息*/
+export const role = params => post('/role', params);     /* 新增角色role */
+export const roleList = params => get('/role/list', params);     /* 查询角色信息 */
+
+/*菜单*/
+export const listMenu = params => get('/menu/list', params);     /* 菜单信息 */
+// export const listMenu = params => get('/menu/list', params);     /* 菜单信息 */
 
 /*
 staffAdd({

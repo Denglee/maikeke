@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!--<routerConfigure-view v-if="isRouterAlive" :key="key"/>-->
-    <router-view v-if="isRouterAlive"></router-view>
+    <router-view ></router-view>
 
   </div>
 </template>

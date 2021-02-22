@@ -5,10 +5,13 @@
          <div class="cropper">
             <vueCropper ref="cropper" :img="option.img" :outputSize="option.size" :outputType="option.outputType"
                         :info="true" :full="option.full" :canMove="option.canMove" :canMoveBox="option.canMoveBox"
-                        :original="option.original" :autoCrop="option.autoCrop" :autoCropWidth="option.autoCropWidth"
-                        :autoCropHeight="option.autoCropHeight" :fixedBox="option.fixedBox"
+                        :original="option.original" :autoCrop="option.autoCrop"
+                        :autoCropWidth="option.autoCropWidth"
+                        :autoCropHeight="option.autoCropHeight"
+                        :fixedBox="option.fixedBox"
                         @realTime="realTime" :fixed="option.fixed" :fixedNumber="fixedNumber"></vueCropper>
-            <!-- <vueCropper ref="cropper" :img="option.img" :outputSize="option.size" :outputType="option.outputType"></vueCropper> -->
+            <!-- <vueCropper ref="cropper" :img="option.img"
+            :outputSize="option.size" :outputType="option.outputType"></vueCropper> -->
          </div>
          <!-- 预览框 -->
          <div class="show-preview"
@@ -47,21 +50,12 @@ import {VueCropper} from 'vue-cropper';
 export default {
    name: 'cropper',  //裁切
    props: {
-      // autoCropWidth: {
-      //    // 单图剪裁框宽度
-      //    type: Number,
-      //    default: 178,
-      // },
-      // autoCropHeight: {
-      //    // 单图剪裁框宽度
-      //    type: Number,
-      //    default: 178,
-      // },
       imgFile: {
          type: Object || Array,
       },
-      fixedNumber: {
+      fixedNumber: {   // 截图框比例  (默认:[1:1])
          type: Array || Object,
+         default:[1, 1],
       }
    },
    data() {
@@ -76,23 +70,22 @@ export default {
             original: false, // 上传图片按照原始比例渲染  (默认:false)
             canMoveBox: true, // 截图框能否拖动  (默认:true)
             autoCrop: true, // 是否默认生成截图框  (默认:false)
-            autoCropWidth: 480, // 默认生成截图框宽度  (默认:80%)
-            autoCropHeight: 320, // 默认生成截图框高度  (默认:80%)
+            autoCropWidth: 320,  // 默认生成截图框宽度  (默认:80%)
+            autoCropHeight: 160, // 默认生成截图框高度  (默认:80%)
             fixedBox: false, // 固定截图框大小 不允许改变  (默认:false)
             fixed: true, // 是否开启截图框宽高固定比例  (默认:true)
-            fixedNumber: [1.5, 1], // 截图框比例  (默认:[1:1])
-            enlarge: 1
+            enlarge: 1,  // 图片根据截图框输出比例倍数
          },
          isDisabled: false,
-         downImg: '#'
+         downImg: '#',
       };
    },
    created() {
       window.addEventListener('touchmove', this.changeScale, {passive: false})
    },
    mounted(){
-      // console.log(this.$attrs.autoCropWidth);
-      // console.log(this.$attrs.autoCropHeight);
+      console.log(this.$attrs.autoCropWidth);
+      console.log(this.$attrs.autoCropHeight);
       this.option.autoCropWidth = this.$attrs.autoCropWidth;
       this.option.autoCropHeight = this.$attrs.autoCropHeight;
    },
@@ -102,7 +95,6 @@ export default {
          // 图片缩放
          num = num || 1;
          this.$refs.cropper.changeScale(num);
-
       },
       rotateLeft() {
          // 向左旋转

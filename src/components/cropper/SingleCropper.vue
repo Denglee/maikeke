@@ -1,174 +1,199 @@
 <template>
 
-       <div style="display: flex;align-items: center;">
-          <el-avatar  :src='imageUrl' :size="70" style="margin-right: 10px"></el-avatar>
-          <el-upload
-             action="string"
-             list-type="picture"
-             :auto-upload="false"
-             :show-file-list="false"
-             :on-change="handleCrop"
-             :http-request="upload">
-             <el-button size="small" type="primary">更换</el-button>
-          </el-upload>
+   <div style="display: flex;align-items: center;">
+      <el-avatar :src='imageUrl' :size="70" class='marR10' v-if="isAvater"></el-avatar>
+      <el-image v-else :src="imageUrl" :style="{width:imgWidth +'px',height:imgHeight +'px' }"
+                class='marR10'></el-image>
+      <el-upload
+         action="string"
+         list-type="picture"
+         :auto-upload="false"
+         :show-file-list="false"
+         :on-change="handleCrop"
+         :http-request="upload">
+         <el-button size="small" type="primary">更换</el-button>
+      </el-upload>
 
-          <!-- 剪裁组件弹窗 -->
-          <el-dialog  :append-to-body="true" :visible.sync="cropperModel"
-                      width="1100px" :before-close="beforeClose">
-             <cropper :img-file="file" ref="vueCropper"
-                      :fixedNumber="fixedNumber"
-                      @upload="upload"
-                      v-bind="$attrs"></cropper>
-          </el-dialog>
-       </div>
-<!--        &lt;!&ndash; 单图片上传 &ndash;&gt;-->
-<!--        <el-upload class="avatar-uploader" -->
-<!--                   action="'string'"  -->
-<!--                   list-type="picture"-->
-<!--                   :auto-upload="false"-->
-<!--                   :show-file-list="false"-->
-<!--                   :on-change="handleCrop"-->
-<!--                   :http-request="upload">-->
-<!--           <i class="el-icon-plus avatar-uploader-icon"-->
-<!--              :style="{width:width+'px',height:height+'px','line-height':height+'px','font-size':height/6+'px'}"></i>-->
-<!--        </el-upload>-->
-<!--        <div>-->
-<!--            <img v-if="imageUrl" :src="imageUrl" class="avatar" ref="singleImg">-->
-<!--        </div>-->
+      <!-- 剪裁组件弹窗 -->
+      <el-dialog :append-to-body="true" :visible.sync="cropperModel"
+                 width="1100px" :before-close="beforeClose">
+         <cropper :img-file="file" ref="vueCropper"
+                  :fixedNumber="fixedNumber"
+                  @upload="upload"
+                  v-bind="$attrs"></cropper>
+      </el-dialog>
+   </div>
+   <!--        &lt;!&ndash; 单图片上传 &ndash;&gt;-->
+   <!--        <el-upload class="avatar-uploader" -->
+   <!--                   action="'string'"  -->
+   <!--                   list-type="picture"-->
+   <!--                   :auto-upload="false"-->
+   <!--                   :show-file-list="false"-->
+   <!--                   :on-change="handleCrop"-->
+   <!--                   :http-request="upload">-->
+   <!--           <i class="el-icon-plus avatar-uploader-icon"-->
+   <!--              :style="{width:width+'px',height:height+'px','line-height':height+'px','font-size':height/6+'px'}"></i>-->
+   <!--        </el-upload>-->
+   <!--        <div>-->
+   <!--            <img v-if="imageUrl" :src="imageUrl" class="avatar" ref="singleImg">-->
+   <!--        </div>-->
 
 </template>
 <script>
-    import cropper from '@/components/cropper/cropper';
+import cropper from '@/components/cropper/cropper';
 
-    export default {
-        name: 'uploader',
-        props: {
-            targetUrl: {
-                // 上传地址
-                type: String,
-                // default: '/storage/upload'
-                default: `${process.env.API_ROOT}/sys/oss/upload`
-            },
+export default {
+   name: 'uploader',
+   props: {
+      isAvater: {
+         type: Boolean,
+         default: false,
+      },
+      imgWidth: {
+         // 单图显示宽度
+         type: Number,
+         default: 120,
+      },
+      imgHeight: {
+         // 单图显示高度
+         type: Number,
+         default: 220,
+      },
 
-            initUrl: {
-                // 初始图片链接
-                default: ''
-            },
-            fixedNumber: {
-                // 剪裁框比例设置
-                default: function () {
-                    return [1, 1];
-                }
-            },
-        },
-        data () {
-            return {
-                file: '', // 当前被选择的图片文件
-                imageUrl: '', // 单图情况框内图片链接
-                uploadList: [], // 上传图片列表
-                dialogVisible: false, // 展示弹窗开关
-                cropperModel: false, // 剪裁组件弹窗开关
-            };
-        },
-        updated () {
-            if (this.$refs.vueCropper) {
-                this.$refs.vueCropper.Update();
-            }
-        },
+      targetUrl: {
+         // 上传地址
+         type: String,
+         // default: '/storage/upload'
+         default: `${process.env.API_ROOT}/sys/oss/upload`
+      },
 
-        watch: {
-            initUrl: function (val) {
-                // 监听传入初始化图片
-                // console.info('watch');
-                if (val) {
-                    if (typeof this.initUrl === 'string') {
-                        this.imageUrl = val;
-                    }
-                    // else {
-                    //     this.uploadList = this.formatImgArr(val);
-                    //     // this.$emit('imgupload', this.uploadList);
-                    // }
-                }
-            }
-        },
-        mounted () {
+      initUrl: {
+         // 初始图片链接
+         default: ''
+      },
+      fixedNumber: {
+         // 剪裁框比例设置
+         default: function () {
+            return [1, 1];
+         }
+      },
+   },
+   data() {
+      return {
+         file: '', // 当前被选择的图片文件
+         imageUrl: '', // 单图情况框内图片链接
+         uploadList: [], // 上传图片列表
+         dialogVisible: false, // 展示弹窗开关
+         cropperModel: false, // 剪裁组件弹窗开关
+      };
+   },
+   updated() {
+      if (this.$refs.vueCropper) {
+         this.$refs.vueCropper.Update();
+      }
+   },
+
+   watch: {
+      initUrl: function (val) {
+         // 监听传入初始化图片
+         // console.info('watch');
+         if (val) {
             if (typeof this.initUrl === 'string') {
-                this.imageUrl = this.initUrl;
+               this.imageUrl = val;
             }
             // else {
-            //     this.uploadList = this.formatImgArr(this.initUrl);
+            //     this.uploadList = this.formatImgArr(val);
+            //     // this.$emit('imgupload', this.uploadList);
             // }
-        },
-        methods: {
+         }
+      }
+   },
+   mounted() {
+      if (typeof this.initUrl === 'string') {
+         this.imageUrl = this.initUrl;
+      }
+      // else {
+      //     this.uploadList = this.formatImgArr(this.initUrl);
+      // }
+   },
+   methods: {
 
-            /** ***************** single单图情况 ******************/
-            handlePreviewSingle (file) { // 点击进行图片展示
-                this.dialogImageUrl = this.file.url;
-                this.dialogVisible = true;
-            },
+      /** ***************** single单图情况 ******************/
+      handlePreviewSingle(file) { // 点击进行图片展示
+         this.dialogImageUrl = this.file.url;
+         this.dialogVisible = true;
+      },
 
-            beforeClose () {
-                console.log(this.uploadList);
-                this.cropperModel = false;
-            },
-            handleCrop (file, files) {
-                // console.log(file);
-                // 点击弹出剪裁框
-                this.cropperModel = true;
-                this.file = file;
-                // this.imageUrl = file.url
-            },
-            /************************************/
+      beforeClose() {
+         console.log(this.uploadList);
+         this.cropperModel = false;
+      },
+      handleCrop(file, files) {
+         // console.log(file);
+         // 点击弹出剪裁框
+         this.cropperModel = true;
+         this.file = file;
+         // this.imageUrl = file.url
+      },
+      /************************************/
 
-            async upload (data) {
-                console.log(data);
-                event.preventDefault();
-                this.imageUrl = data;
-                // this.isDisabled = true;
-                this.$refs.vueCropper.isDisabled = true;
-                this.cropperModel = false;
-                return  false;
-            },
-        },
-        components: {
-            cropper,
-        },
-    };
+      async upload(data) {
+         console.log(data);
+         event.preventDefault();
+         this.imageUrl = data;
+         // this.isDisabled = true;
+         this.$refs.vueCropper.isDisabled = true;
+         this.cropperModel = false;
+         return false;
+      },
+   },
+   components: {
+      cropper,
+   },
+};
 </script>
 <style>
-    .avatar-uploader .el-upload {
-        border: 1px dashed #d9d9d9;
-        border-radius: 6px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
-    .avatar-uploader .el-upload:hover {
-        border-color: #409eff;
-    }
-    .avatar-uploader-icon {
-        color: #8c939d;
-        text-align: center;
-    }
-    .avatar {
-        display: block;
-    }
-    .reupload {
-        border-radius: 50%;
-        position: absolute;
-        color: #fff;
-        background-color: #000000;
-        opacity: 0.6;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: none;
-    }
-    #uploadIcon{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: none;
-    }
+.marR10{
+   margin-right: 10px;
+}
+.avatar-uploader .el-upload {
+   border: 1px dashed #d9d9d9;
+   border-radius: 6px;
+   cursor: pointer;
+   position: relative;
+   overflow: hidden;
+}
+
+.avatar-uploader .el-upload:hover {
+   border-color: #409eff;
+}
+
+.avatar-uploader-icon {
+   color: #8c939d;
+   text-align: center;
+}
+
+.avatar {
+   display: block;
+}
+
+.reupload {
+   border-radius: 50%;
+   position: absolute;
+   color: #fff;
+   background-color: #000000;
+   opacity: 0.6;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   display: none;
+}
+
+#uploadIcon {
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   display: none;
+}
 </style>

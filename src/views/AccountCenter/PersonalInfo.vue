@@ -3,7 +3,7 @@
     <el-form :model="roleForm" class="person-form"  ref="refRoleForm" label-width="120px" label-position="left">
 
       <el-form-item label="员工头像">
-         <SingleCropper :autoCropWidth ='200' :autoCropHeight ='200'
+         <SingleCropper :autoCropWidth ='200' :autoCropHeight ='200' :isAvater="true"
                         :initUrl="roleForm.userimage"></SingleCropper>
       </el-form-item>
 

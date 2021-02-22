@@ -20,7 +20,7 @@
               inactive-value="0"
               active-text="开"
               inactive-text="关"
-              @change='FnSwitch(scope.row.storeFinance)'>
+              @change='FnSwitch(scope.row)'>
           </el-switch>
         </template>
       </el-table-column>

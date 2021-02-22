@@ -66,6 +66,13 @@ export const asyncRoutes = [
             component: () => import(/* webpackChunkName: "PowerRole" */ '../views/PowerManage/PowerRole'),
             meta: {title: '业务系统角色'}
          },
+         {
+            path: "MenuManage",
+            name: 'MenuManage',
+            component: () => import(/* webpackChunkName: "MenuManage" */ '../views/PowerManage/MenuManage'),
+            meta: {title: '菜单管理'}
+         },
+
       ]
    },
 

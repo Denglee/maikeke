@@ -44,7 +44,11 @@ let menu = {
          children: [
             {
                path: "PowerRole",
-               meta: {title: "业务系统角色",},
+               meta: {title: "角色管理",},
+            },
+            {
+               path: "MenuManage",
+               meta: {title: "菜单管理",},
             },
          ]
       },

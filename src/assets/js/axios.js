@@ -18,6 +18,12 @@ axios.interceptors.request.use(config => {
    // 在发送请求之前做些什么 验证token之类的
 
    // Loading.service(true);
+      let token =localStorage.getItem('accessToken')
+      if (token) {
+         config.headers.common['token'] = token;
+      }
+
+
    return config;
 }, error => {
    // 对请求错误做些什么
