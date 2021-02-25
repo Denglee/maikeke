@@ -28,7 +28,8 @@
 
          <el-table-column type="selection"></el-table-column>
          <el-table-column prop="userName" label="用户名"></el-table-column>
-         <el-table-column prop="trueName" label="真实姓名"></el-table-column>
+         <el-table-column prop="nickName" label="真实姓名"></el-table-column>
+         <el-table-column prop="phonenumber" label="手机号码"></el-table-column>
          <el-table-column prop="tel" label="手机号"></el-table-column>
          <el-table-column prop="store" label="可查看的店铺">
             <template slot-scope="scope">
@@ -83,11 +84,12 @@
 </template>
 
 <script>
+import {queryUser,getRole} from '@/assets/js/api'
 export default {
    name: "RoleUsers",
    props: {
-      checkID: {
-         type: String,
+      checkRoleId: {
+         type: String | Number,
       }
    },
    data() {
@@ -121,19 +123,32 @@ export default {
                value:'store3',
             },
          ],
+
          tableArr: [
-            {
-               userName: 'MK001',
-               trueName: '王小宝',
-               tel: '17688829444',
-               store: '1',
-               product: '1',
-               email: '1',
-            }
+            // {
+            //    userName: 'MK001',
+            //    trueName: '王小宝',
+            //    tel: '17688829444',
+            //    store: '1',
+            //    product: '1',
+            //    email: '1',
+            // }
          ],
       }
    },
    methods: {
+
+      FnGetUser(){
+         queryUser(this.checkRoleId).then(res=>{
+            console.log(res);
+            this.tableArr = res.data;
+         });
+
+         getRole(this.checkRoleId).then(res=>{
+            console.log(res);
+         });
+      },
+
       /*搜索用户名或者真实姓名 */
       FnSearchShop() {
          console.log(this.searchForm.storeName);
@@ -184,6 +199,9 @@ export default {
    },
    created() {
 
+   },
+   mounted(){
+      this.FnGetUser();
    },
 }
 </script>

@@ -1,194 +1,222 @@
 <template>
    <div>
-      <el-table :data="tableData6" :span-method="objectSpanMethod" border style="width: 100%; margin-top: 20px">
-         <el-table-column prop="name" label="菜单模块" width="180"></el-table-column>
-         <el-table-column prop="page" label="页面">
-            <template slot-scope="scope">
-               <el-checkbox  v-model="scope.row.page.value"
-                             @change="checkPage(scope.row)">{{scope.row.page.name}}</el-checkbox>
-            </template>
-         </el-table-column>
-         <el-table-column prop="amount1" label="功能项">
-            <template slot-scope="scope">
-<!--               <el-checkbox-group v-model="roleArr.effect" @change="checkGN">-->
-<!--               <el-checkbox-group v-model="scope.row.amount1" @change="checkGN(scope.row)">-->
-                  <el-checkbox v-for="(item,index) in scope.row.amount1" @change="checkGN(scope.row)"
-                               :label="item.name"  :key="index" v-model="item.value" >
-                  </el-checkbox>
-<!--               </el-checkbox-group>-->
-            </template>
-         </el-table-column>
+      <el-form :model="PermissForm" >
+         <div class="power-box">
+            <div class="power-row">
+               <div class="power-left">菜单模块</div>
+               <div class="power-right">
+                  <ul class="power-row2">
+                     <li class="power-left2">页面</li>
+                     <li class="power-left3">功能项</li>
+                     <li class="power-right2">数据权限</li>
+                  </ul>
+               </div>
+            </div>
+            <div class="power-row" v-for="(itemFirst, index) in tableData6" :key="index">
+               <div class="power-left">{{itemFirst.menuName}}</div>
 
-         <el-table-column prop="amount2" label="数据权限">
-            <template slot-scope="scope">
-               <el-select v-model="scope.row.amount2"  popper-class="elSelect-checkbox" class="public-select">
-                  <el-option v-for="(item, index) in amount2"
-                             :key="index"
-                             :value="item.value"
-                             :label="item.label">
-                  </el-option>
-               </el-select>
-            </template>
-         </el-table-column>
-         <el-table-column prop="amount3" label="字段权限"></el-table-column>
-      </el-table>
+               <div class="power-right">
+                  <ul class="power-row2" v-for="(itemSecond, index2) in itemFirst.children" :key="index2">
+                     <li class="power-left2">
+                        <el-checkbox-group v-model="PermissForm.PermissSecond">
+                           <el-checkbox :label="itemSecond.menuId" :value="itemSecond.menuId" >{{itemSecond.menuName}}</el-checkbox>
+                        </el-checkbox-group>
+                     </li>
+                     <li class="power-left3">
+                        <el-checkbox-group v-model="PermissForm.PermissThird" v-for="(itemThird, index3) in itemSecond.children" :key="index3">
+                           <el-checkbox  :checked="itemThird.checked == 1" :label="itemThird.menuId" :value="itemThird.menuId" >{{itemThird.menuName}}</el-checkbox>
+                        </el-checkbox-group>
+                     </li>
+                     <li class="power-right2">
+                        <el-select v-model="itemSecond.dataScope"
+                                   @change="changeLevel(itemSecond)"
+                                    v-if="itemSecond.ifScope == 1">
+                           <el-option :value="0" label="未分配"></el-option>
+                           <el-option :value="1" label="所有数据权限"></el-option>
+                           <el-option :value="2" label="本部门数据权限"></el-option>
+                           <el-option :value="3" label="本部门及以下数据权限"></el-option>
+                           <el-option :value="4" label="本人及以下部门数据权限"></el-option>
+                           <el-option :value="5" label="本人"></el-option>
+                        </el-select>
+
+                     </li>
+                  </ul>
+               </div>
+
+            </div>
+         </div>
+      </el-form>
+
+      <el-button @click="saveRole">保存</el-button>
    </div>
 </template>
 
 <script>
 
+import {menuRoleTree,selectMenuTable} from '@/assets/js/api'
 export default {
    name: "RolePermissions",
    props: {
-      checkID: {
-         type: String,
-      },
+      checkRoleId: {
+         type: String | Number,
+      }
    },
 
    data() {
       return {
-         roleArr: {
-            checkedCities: [],
-            effect: [],
-         },
-         checkedCities:[],
+         isIndeterminate: true,
+         checkAll: false,
 
-         spanArr: [],
+         PermissForm:{
+            PermissSecond:[],
+            PermissThird:[],
+         },
+         dataRoleMenuVos:[],
+
          amount2:[
             {label:'本人',value:'1'},
             {label:'本人以及下属',value:'2'},
          ],
-         tableData6: [
-            {
-               id: '1',
-               name: '用户管理',
-               page:{
-                  name:'附件记录',
-                  value:true,
-               },
-               // amount1: ['增加','修改','查询','查看'],
-               amount1: [
-                  {
-                     name:'增加',
-                     value:false,
-                  },
-                  {
-                     name:'修改',
-                     value:true,
-                  },
-                  {
-                     name:'查询',
-                     value:true,
-                  },
-                  {
-                     name:'查看',
-                     value:true,
-                  },
-               ],
-               amount2: 1,
-               amount3: 1,
-            },
-            {
-               id: '1',
-               name: '用户管理',
-               page:{
-                  name:'基础设置',
-                  value:false,
-               },
-               amount1: [
-                  {
-                     name:'增加',
-                     value:false,
-                  },
-                  {
-                     name:'修改',
-                     value:false,
-                  },
-               ],
-               amount2: 1,
-               amount3: 1,
-            },
-            {
-               id: '2',
-               name: '微信设置',
-               page:{
-                  name:'微信用户',
-                  value:false,
-               },
-               amount1: [
-                  {
-                     name:'增加',
-                     value:false,
-                  },
-                  {
-                     name:'修改',
-                     value:false,
-                  },
-               ],
-               amount2: 1,
-               amount3: 1,
-            },
-            {
-               id: '2',
-               name: '微信设置',
-               page:{
-                  name:'微信设置',
-                  value:false,
-               },
-               amount1: [
-                  {
-                     name:'增加',
-                     value:false,
-                  },
-                  {
-                     name:'修改',
-                     value:false,
-                  },
-               ],
-               amount2: 1,
-               amount3: 1,
-            },
-         ],
 
+         tableData6:[],
       }
    },
    methods: {
-      checkGN(val){
-         console.log(val);
+      FnGetMenuRoleTree(checkRoleId){
+         // menuRoleTree(checkRoleId).then(res=>{
+         selectMenuTable(checkRoleId).then(res=>{
+            let menuData = res.data;
+            this.tableData6 = menuData;
+            this.PermissThird = res.checkedKeys;
+
+            /*循环选中 */
+            menuData.forEach((item,index)=>{
+               item.children.forEach((item2,index2)=>{
+                  // console.log(item2);
+
+                  /*如果checked == 1 就添加到选中*/
+                  if(item2.checked == 1){
+                     this.PermissForm.PermissSecond.push(item2.menuId);
+                     this.dataRoleMenuVos.push({
+                        dataScope:item2.dataScope,
+                        menuId:item2.menuId,
+                     })
+                  }
+               });
+
+            })
+            // console.log(this.PermissForm.PermissSecond);
+         })
       },
-      checkPage(val){
-         console.log(val);
+
+
+      /*分配 select*/
+      changeLevel(val){
+         // console.log(val);
+         // console.log(val.menuId);
+         // console.log(val.dataScope);
+         /*循环修改*/
+         this.dataRoleMenuVos.forEach((item,index)=>{
+            if(val.menuId == item.menuId){
+               item.dataScope = val.dataScope;
+            }
+         })
+         // console.log(this.dataRoleMenuVos);
       },
-      getSpanArr(data) {
-         for (var i = 0; i < data.length; i++) {
-            if (i === 0) {
-               this.spanArr.push(1);
-               this.pos = 0
-            } else {
-               // 判断当前元素与上一个元素是否相同
-               if (data[i].id === data[i - 1].id) {
-                  this.spanArr[this.pos] += 1;
-                  this.spanArr.push(0);
-               } else {
-                  this.spanArr.push(1);
-                  this.pos = i;
+
+
+      saveRole(){
+         // console.log(this.PermissForm);
+         // console.log(this.dataRoleMenuVos);
+         let roleMenuVosArr = [];
+         /*页面 + 数据 id一样添加*/
+         this.PermissForm.PermissSecond.forEach((item,index)=>{
+            this.dataRoleMenuVos.forEach((item2,index2)=>{
+               if(item == item2.menuId){
+                  roleMenuVosArr.push({
+                     dataScope:item2.dataScope,
+                     menuId:item2.menuId,
+                  })
                }
-            }
-         }
+            })
+         })
+
+         /*功能*/
+         this.PermissForm.PermissThird.forEach((item,index)=>{
+            roleMenuVosArr.push({
+               dataScope:0,
+               menuId:item,
+            });
+         })
+         console.log(roleMenuVosArr);
       },
-      objectSpanMethod({row, column, rowIndex, columnIndex}) {
-         if (columnIndex === 0) {
-            const _row = this.spanArr[rowIndex];
-            const _col = _row > 0 ? 1 : 0;
-            return {
-               rowspan: _row,
-               colspan: _col
-            }
-         }
-      },
+
 },
    created() {
-      this.getSpanArr(this.tableData6);
+
+   },
+   mounted(){
+      this.FnGetMenuRoleTree(this.checkRoleId);
    },
 }
 </script>
+<style lang="scss">
+.power-box{
+   width: 100%;
+   height: auto;
+   border: 1px solid #eee;
+}
+.power-row{
+   display: flex;
+   background: #fff;
+   border-bottom: 1px solid #eee;
+   &:last-child {
+      border: 0;
+   }
+}
+.power-row2{
+   display: flex;
+   border-bottom: solid 1px #eee;
+   &:last-child {
+      border: 0;
+   }
+}
+.power-left{
+   width:15%;
+   flex-shrink: 0;
+   border-right: 1px solid #eee;
+   padding: 5px;
+   -webkit-box-sizing: border-box;
+   box-sizing: border-box;
+}
+.power-left2{
+   border-right: solid 1px #ddd;
+   padding: 5px;
+   display: flex;
+   width: 20%;
+   flex-shrink: 0;
+}
+.power-left3{
+   padding: 5px;
+   display: flex;
+   flex-wrap: wrap;
+   width: 65%;
+   .el-checkbox-group{
+      margin-right: 10px;
+   }
+}
+
+.power-right {
+   border-right: 1px solid #eee;
+   width: 85%;
+   //padding:0 5px;
+   &:last-child {
+      border-right: 0;
+   }
+}
+.power-right2{
+   width: 15%;
+   border-left: solid 1px #eee;
+   padding: 5px;
+}
+</style>

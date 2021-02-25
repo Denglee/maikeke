@@ -1,10 +1,10 @@
 <template>
    <div class="public-main">
-      <el-button icon="el-icon-folder-add" @click="FnBtnAdd" :loading="btnState.btnAdd" class="public-btn">
+      <el-button icon="el-icon-folder-add" @click="FnBtnAdd" :loading="btnUnit.btnAdd" class="public-btn">
          新增国家
       </el-button>
       <el-table class="public-table" border
-                v-loading= 'btnState.loadTable'
+                v-loading= 'btnUnit.loadTable'
                 :data="tableArr"
                 ref="refTable"
                 height="600">
@@ -45,7 +45,7 @@
       <!--添加\编辑区域站点 -->
       <el-dialog :append-to-body="true"
                  :title="diaTitle"
-                 :visible.sync="diaState.diaAddSite"
+                 :visible.sync="diaUnit.diaAddSite"
                  custom-class="public-dialog"
                  :close-on-click-modal="false"
                  @close='FnCloseAddSite'
@@ -93,9 +93,9 @@
             </el-form-item>
 
             <el-form-item class="alignR">
-               <el-button type="primary" @click="diaState.diaAddSite = false;" :loading="btnState.btnCancelSite">取消
+               <el-button type="primary" @click="diaUnit.diaAddSite = false;" :loading="btnUnit.btnCancelSite">取消
                </el-button>
-               <el-button type="primary" @click="FnBtnSaveAddSite('RefAddSiteForm')" :loading="btnState.btnSubmitSite">
+               <el-button type="primary" @click="FnBtnSaveAddSite('RefAddSiteForm')" :loading="btnUnit.btnSubmitSite">
                   保存</el-button>
             </el-form-item>
          </el-form>
@@ -105,7 +105,7 @@
 
 <script>
 
-import {listState, addState, updateState, getState, delState, delDict} from '@/assets/js/api'
+import {listUnit, addUnit, updateUnit, getUnit, delUnit, delDict} from '@/assets/js/api'
 
 export default {
    name: "CountryManage",
@@ -116,10 +116,10 @@ export default {
             total: 20,
             pageSize: 10,
          },
-         diaState: {
+         diaUnit: {
             diaAddSite: false,
          },
-         btnState: {
+         btnUnit: {
             loadTable:true,
             btnAdd: false,
             btnCancelSite: false,
@@ -133,9 +133,9 @@ export default {
       }
    },
    methods: {
-      FnGetListState() {
-         listState().then(res => {
-            this.btnState.loadTable = false;
+      FnGetListUnit() {
+         listUnit().then(res => {
+            this.btnUnit.loadTable = false;
             console.log(res);
             this.tableArr = res.data;
             this.pageArr.total = res.total;
@@ -145,20 +145,20 @@ export default {
       /*添加*/
       FnBtnAdd() {
          this.addSiteForm = {};
-         this.diaState.diaAddSite = true;
+         this.diaUnit.diaAddSite = true;
          this.diaTitle = '添加国家';
-         this.GLOBAL.btnStateChange(this, 'btnState', 'btnAdd');
+         this.GLOBAL.btnUnitChange(this, 'btnUnit', 'btnAdd');
       },
 
       /*删除站点 方法*/
-      FnDelState(statename,stateIds){
+      FnDelUnit(statename,stateIds){
          let that = this;
          this.$confirm('是否确认删除' + statename + ' 的数据项?', "警告", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
             type: "warning"
          }).then(function() {
-            delState(stateIds).then(res=>{
+            delUnit(stateIds).then(res=>{
                console.log(res);
                that.$message(res.msg);
             })
@@ -173,13 +173,13 @@ export default {
          if(val.type == 'delete'){
             let statename = val.data.englishName;
             let stateIds = val.data.stateId;
-            that.FnDelState(statename,stateIds);
+            that.FnDelUnit(statename,stateIds);
          }
 
          /*修改*/
          if(val.type == 'update'){
             this.addSiteForm = val.data;
-            this.diaState.diaAddSite = true;
+            this.diaUnit.diaAddSite = true;
             this.diaTitle = "修改国家";
          }
       },
@@ -193,15 +193,15 @@ export default {
       FnBtnSaveAddSite() {
          let stateId = this.addSiteForm.stateId;
          console.log(stateId);
-         this.GLOBAL.btnStateChange(this, 'btnState', 'btnSubmitSite');
+         this.GLOBAL.btnUnitChange(this, 'btnUnit', 'btnSubmitSite');
          if(stateId){
             /*有 stateId， 则修改*/
-            updateState(this.addSiteForm).then(res => {
+            updateUnit(this.addSiteForm).then(res => {
                console.log(res);
             })
          }else{
             /*没有 stateId，则添加*/
-            addState(this.addSiteForm).then(res => {
+            addUnit(this.addSiteForm).then(res => {
                console.log(res);
             })
          }
@@ -220,7 +220,7 @@ export default {
       },
    },
    created() {
-      this.FnGetListState();
+      this.FnGetListUnit();
    },
 }
 </script>

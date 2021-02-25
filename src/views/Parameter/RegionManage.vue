@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import {listArea} from "@/assets/js/api";
+
 export default {
   name: "RegionManage",
   data() {
@@ -39,10 +41,15 @@ export default {
     }
   },
   methods: {
-
+     FnGetListArea(){
+        listArea().then(res=>{
+           console.log(res);
+           this.tableArr = res.data;
+        })
+     },
   },
   created() {
-
+     this.FnGetListArea();
   },
 }
 </script>

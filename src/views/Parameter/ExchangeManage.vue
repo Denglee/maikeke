@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import {listRate} from '@/assets/js/api'
 export default {
   name: "ExchangeManage",
   data() {
@@ -54,10 +55,16 @@ export default {
     }
   },
   methods: {
+     FnGetRate(){
+        listRate().then(res=>{
+           console.log(res);
+           this.tableArr = res.data;
+        })
+     },
 
   },
   created() {
-
+     this.FnGetRate();
   },
 }
 </script>

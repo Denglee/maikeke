@@ -52,14 +52,110 @@ export const authSonUpdate    = params => put('/storeAuth/authSon/update', param
 
 
 /*角色信息*/
-export const role = params => post('/role', params);     /* 新增角色role */
-export const roleList = params => get('/role/list', params);     /* 查询角色信息 */
+export const addUser = params => post('/system/user/', params);     /* 新增   */
+export const updateUser = params => put('/system/user/', params);     /* 修改   */
+export const getUser = params => get('/system/user/'+params);     /* 获取 id下的 信息  */
+export const saveUser = params => put('/system/user/'+params);     /* 获取 id下的 信息  */
+export const delUser = params => axiosDelete('/system/user/'+params);     /* 删除 */
+export const listUser = params => get('/system/user/list', params);     /* 查询列表   */
 
-/*菜单*/
-export const listMenu = params => get('/menu/list', params);     /* 菜单信息 */
-// export const listMenu = params => get('/menu/list', params);     /* 菜单信息 */
+
+/* 21-02-23 菜单 */
+export const addMenu = params => post('/system/menu/', params);     /* 新增 菜单  */
+export const updateMenu = params => put('/system/menu/', params);     /* 修改 菜单  */
+export const getMenu = params => get('/system/menu/'+params);     /* 获取 id下的 菜单信息  */
+export const listMenu = params => get('/system/menu/list', params);     /* 菜单信息 */
+export const menuGetRouters = params => get('/system/menu/getRouters', params);     /* 获取路由信息 */
+export const menuDelRouters = params => axiosDelete('/system/menu/'+params);     /* 删除 */
+export const menuRoleTree = params => get('/system/menu/roleMenuTreeselect/'+params);     /* 获取权限树 */
+export const selectMenuTable = params => get('/system/menu/selectMenuTable/' +params);     /* 获取 权限树 结构*/
+
+/* 21-02-23 字典 */
+export const addDict = params => post('/system/dict/type/', params);     /* 新增   */
+export const updateDict = params => put('/system/dict/type/', params);     /* 修改   */
+export const listDict = params => get('/system/dict/type/list/', params);     /* 查询字典类型列表   */
+export const getDict = params => get('/system/dict/type/'+params);     /* 获取 id下的 菜单信息  */
+export const delDict = params => axiosDelete('/system/dict/type/'+params);     /* 删除 */
+
+/* 21-02-23 部门 */
+export const addDept = params => post('/system/dept/', params);     /* 新增   */
+export const updateDept = params => put('/system/dept/', params);     /* 修改   */
+export const listDept = params => get('/system/dept/list', params);     /* 查询列表   */
+export const getDept = params => get('/system/dept/'+params);     /* 获取 id下的 信息  */
+export const delDept = params => axiosDelete('/system/dept/'+params);     /* 删除 */
+
+/* 21-02-23 岗位  */
+export const addPost = params => post('/system/post/', params);     /* 新增   */
+export const updatePost = params => put('/system/post/', params);     /* 修改   */
+export const listPost = params => get('/system/post/list', params);     /* 查询列表   */
+export const getPost = params => get('/system/post/'+params);     /* 获取 id下的 信息  */
+export const delPost = params => axiosDelete('/system/post/'+params);     /* 删除 */
+
+/* 21-02-23 角色 */
+export const addRole = params => post('/system/role/', params);     /* 新增   */
+export const updateRole = params => put('/system/role/', params);     /* 修改   */
+export const getRole = params => get('/system/role/'+params);     /* 获取 id下的 信息  */
+export const saveRole = params => put('/system/role/'+params);     /* 获取 id下的 信息  */
+export const delRole = params => axiosDelete('/system/role/'+params);     /* 删除 */
+export const changeRoleStatus = params => put('/system/role/changeStatus/'+params);     /* 获取 id下的 信息  */
+export const listRole = params => get('/system/role/list', params);     /* 查询列表   */
+export const optionRole = params => get('/system/role/optionselect', params);     /* 查询列表选择   */
+export const queryUser = params => get('/system/role/queryUser/'+params);     /* 查询列表选择   */
+
+
+/* 21-02-23 国家 */
+export const addState = params => post('/system/state/', params);     /* 新增   */
+export const updateState = params => put('/system/state/', params);     /* 修改   */
+export const listState = params => get('/system/state/list', params);     /* 查询列表   */
+export const getState = params => get('/system/state/'+params);     /* 获取 id下的 信息  */
+export const delState = params => axiosDelete('/system/state/'+params);     /* 删除 */
+
+/* 21-02-23 站点 */
+export const addSite= params => post('/system/site/', params);     /* 新增   */
+export const updateSite = params => put('/system/site/', params);     /* 修改   */
+export const listSite = params => get('/system/site/list', params);     /* 查询列表   */
+export const getSite = params => get('/system/site/'+params);     /* 获取 id下的 信息  */
+export const delSite = params => axiosDelete('/system/site/'+params);     /* 删除 */
+
+/* 21-02-25 区域 */
+export const addArea= params => post('/system/area/', params);     /* 新增   */
+export const updateArea = params => put('/system/area/', params);     /* 修改   */
+export const listArea = params => get('/system/area/list', params);     /* 查询列表   */
+export const getArea = params => get('/system/area/'+params);     /* 获取 id下的 信息  */
+export const delArea = params => axiosDelete('/system/area/'+params);     /* 删除 */
+
+/* 21-02-25 应用管理 */
+export const addApply= params => post('/system/apply/', params);     /* 新增   */
+export const updateApply = params => put('/system/apply/', params);     /* 修改   */
+export const listApply = params => get('/system/apply/list', params);     /* 查询列表   */
+export const getApply = params => get('/system/apply/'+params);     /* 获取 id下的 信息  */
+export const delApply = params => axiosDelete('/system/apply/'+params);     /* 删除 */
+
+/* 21-02-25 汇率管理 */
+export const addRate= params => post('/system/rate/', params);     /* 新增   */
+export const updateRate = params => put('/system/rate/', params);     /* 修改   */
+export const listRate = params => get('/system/rate/list', params);     /* 查询列表   */
+export const getRate = params => get('/system/rate/'+params);     /* 获取 id下的 信息  */
+export const delRate = params => axiosDelete('/system/rate/'+params);     /* 删除 */
+
+/* 21-02-25 企业管理 */
+export const addDetails= params => post('/system/details/', params);     /* 新增   */
+export const updateDetails = params => put('/system/details/', params);     /* 修改   */
+export const listDetails = params => get('/system/details/list', params);     /* 查询列表   */
+export const getDetails = params => get('/system/details/'+params);     /* 获取 id下的 信息  */
+export const delDetails = params => axiosDelete('/system/details/'+params);     /* 删除 */
+
+/* 21-02-25 单位管理 */
+export const addUnit= params => post('/system/unit/', params);     /* 新增   */
+export const updateUnit = params => put('/system/unit/', params);     /* 修改   */
+export const listUnit = params => get('/system/unit/list', params);     /* 查询列表   */
+export const getUnit = params => get('/system/unit/'+params);     /* 获取 id下的 信息  */
+export const delUnit = params => axiosDelete('/system/unit/'+params);     /* 删除 */
+
+
 
 /*
+
 staffAdd({
     userimage:userimage,
     information:2,

@@ -2,26 +2,26 @@
   <div class="public-main">
 
     <el-form :model="roleForm" class="addForm-box"  ref="refRoleForm" label-width="120px" label-position="left">
-      <el-form-item label="企业名称" prop="name" :rules="{ required: true, message: '请输入企业名称', trigger: 'blur' }">
-        <el-input v-model="roleForm.name" autocomplete="off" placeholder="请输入企业名称" clearable></el-input>
+      <el-form-item label="企业名称" prop="companyName" :rules="{ required: true, message: '请输入企业名称', trigger: 'blur' }">
+        <el-input v-model="roleForm.companyName" autocomplete="off" placeholder="请输入企业名称" clearable></el-input>
       </el-form-item>
 
-      <el-form-item label="联系人" prop="telephone">
-        <el-input v-model="roleForm.telephone" autocomplete="off" placeholder="请输入联系人" clearable></el-input>
+      <el-form-item label="联系人" prop="contacts">
+        <el-input v-model="roleForm.contacts" autocomplete="off" placeholder="请输入联系人" clearable></el-input>
       </el-form-item>
 
-      <el-form-item label="联系电话" prop="ReportTo">
-        <el-input v-model="roleForm.ReportTo" autocomplete="off" placeholder="请输入联系电话" clearable></el-input>
+      <el-form-item label="联系电话" prop="tel">
+        <el-input v-model="roleForm.tel" autocomplete="off" placeholder="请输入联系电话" clearable></el-input>
       </el-form-item>
-      <el-form-item label="企业地址" prop="ReportTo">
-        <el-input type="textarea" v-model="roleForm.ReportTo" autocomplete="off" placeholder="请输入企业地址" clearable></el-input>
+      <el-form-item label="企业地址" prop="site">
+        <el-input type="textarea" v-model="roleForm.site" autocomplete="off" placeholder="请输入企业地址" clearable></el-input>
       </el-form-item>
        <el-form-item label="企业LOGO" prop="ReportTo">
          <SingleCropper :autoCropWidth ='220'
                         :autoCropHeight ='100'
                         :imgWidth="200"
                         :imgHeight="100"
-                        :initUrl="roleForm.userimage"></SingleCropper>
+                        :initUrl="roleForm.logoPath"></SingleCropper>
        </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="postStaffAdd('role')">提交</el-button>
@@ -33,6 +33,8 @@
 
 <script>
 import SingleCropper from "@/components/cropper/SingleCropper";
+import {listDetails} from "@/assets/js/api";
+
 export default {
   name: "PersonalInfo",
   components:{SingleCropper},
@@ -48,7 +50,7 @@ export default {
       imgUrl: '',   //头像 上传路径
 
       roleForm: {
-        userimage:'',
+         logoPath:'',
       }, /*表单*/
     }
   },
@@ -57,10 +59,10 @@ export default {
     /*3.1、头像 上传 选中*/
     changeUpload(file){
       console.log(file);
-      this.roleForm.userimage = '';
+      this.roleForm.logoPath = '';
       this.GLOBAL.getEleBase64(file.raw).then(res => {
         console.log(res);
-        this.roleForm.userimage = res;
+        this.roleForm.logoPath = res;
       });
     },
 
@@ -77,9 +79,15 @@ export default {
       });
     },
 
+     FnGetListDetails(){
+        listDetails().then(res=>{
+           console.log(res);
+           this.roleForm = res.data[0];
+        })
+     },
   },
   created() {
-
+     this.FnGetListDetails();
   },
 }
 </script>

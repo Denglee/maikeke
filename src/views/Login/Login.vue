@@ -4,7 +4,7 @@
          <h3 class="title">后台管理系统</h3>
          <el-form-item prop="username">
             <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
-               <icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
+               <i slot="prefix" icon-class="user" class="el-input__icon input-icon" />
             </el-input>
          </el-form-item>
          <el-form-item prop="password">
@@ -15,7 +15,7 @@
                placeholder="密码"
                @keyup.enter.native="handleLogin"
             >
-               <icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
+               <i slot="prefix" icon-class="password" class="el-input__icon input-icon" />
             </el-input>
          </el-form-item>
          <el-form-item prop="code">
@@ -26,7 +26,7 @@
                style="width: 63%"
                @keyup.enter.native="handleLogin"
             >
-               <icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
+               <i slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
             </el-input>
             <div class="login-code">
                <img :src="codeUrl" @click="getCode" class="login-code-img"/>
@@ -154,6 +154,7 @@ export default {
                   }else{
                      this.loading = false;
                      this.getCode();
+                     this.$message.error(res.msg);
                   }
                }).catch(res=>{
                   this.loading = false;

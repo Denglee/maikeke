@@ -10,7 +10,7 @@
             text-color="#fff"
             active-text-color="#409eff">
             <SideMenuItem
-               v-for="route in routes.data"
+               v-for="route in routes"
                :key="route.path"
                :item="route"
                :base-path="route.path"/>
@@ -23,7 +23,9 @@
 <script>
 import {mapGetters,mapMutations} from 'vuex'
 import SideMenuItem from './SideMenuItem'
-import menuNav from '@/assets/js/menu'  /* 侧边栏数据 */
+import menuNav from '@/assets/js/menu'
+
+import {menuGetRouters} from "@/assets/js/api";  /* 侧边栏数据 */
 
 export default {
    name: 'SideMenu',
@@ -31,9 +33,24 @@ export default {
    data() {
       return {
          routes: menuNav,
+         // routes: [],
       }
    },
-
+   methods:{
+      FnGetMenuGetRouters(){
+         menuGetRouters().then(res=>{
+            if(res.code == 200){
+               console.log(res.data);
+               this.routes = res.data;
+            }else {
+               this.$message.error(res.message);
+            }
+         })
+      },
+   },
+   created() {
+     this.FnGetMenuGetRouters();
+   },
    computed: {
       ...mapGetters('StoreNavSide', ['collapsed']),
       // routes() {

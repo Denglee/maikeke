@@ -107,12 +107,47 @@ function axiosSuc(that = this, msg = '成功', time = 1500) {
    }, time)
 }
 
+// 表单重置
+// export function resetForm(that, refName) {
+//    if (this.$refs[refName] !== undefined) {
+//       that.$refs[refName].resetFields();
+//    }
+// }
+export function resetForm(refName) {
+   if (this.$refs[refName]) {
+      this.$refs[refName].resetFields();
+   }
+}
 
+export function isMobile() {
+   return navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i);
+}
 
+export function  handleTree(data, id, parentId, children, rootId) {
+   id = id || 'id'
+   parentId = parentId || 'parentId'
+   children = children || 'children'
+   rootId = rootId || Math.min.apply(Math, data.map(item => { return item[parentId] })) || 0
+   //对源数据深度克隆
+   const cloneData = JSON.parse(JSON.stringify(data))
+   //循环所有项
+   const treeData = cloneData.filter(father => {
+      let branchArr = cloneData.filter(child => {
+         //返回每一项的子级数组
+         return father[id] === child[parentId]
+      });
+      branchArr.length > 0 ? father.children = branchArr : '';
+      //返回第一层
+      return father[parentId] === rootId;
+   });
+   return treeData != '' ? treeData : data;
+}
 
 export default {
    localUrl,
    getEleBase64: getEleBase64,
    btnStateChange: btnStateChange,
    axiosSuc: axiosSuc,
+   resetForm,
+   handleTree,
 }

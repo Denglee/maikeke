@@ -8,11 +8,11 @@
               height="600"
               @row-click="handleRowClick">
       <el-table-column type="selection"></el-table-column>
-      <el-table-column prop="img" label="应用图片"></el-table-column>
-      <el-table-column prop="storeName" label="应用编号"></el-table-column>
-      <el-table-column prop="storeNum" label="应用名称"></el-table-column>
-      <el-table-column prop="creat_time" label="备注"></el-table-column>
-      <el-table-column prop="storeFinance" label="状态">
+      <el-table-column prop="applyLogo" label="应用图片"></el-table-column>
+      <el-table-column prop="applyNum" label="应用编号"></el-table-column>
+      <el-table-column prop="applyName" label="应用名称"></el-table-column>
+      <el-table-column prop="remark" label="备注"></el-table-column>
+      <el-table-column prop="status" label="状态">
         <template slot-scope="scope">
           <el-switch
               v-model="scope.row.storeFinance"
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import {listApply} from '@/assets/js/api'
 export default {
   name: "ApplyManage", //店铺核算主体
   data() {
@@ -71,6 +72,13 @@ export default {
     }
   },
   methods: {
+     FnListApply(){
+        listApply().then(res=>{
+           console.log(res);
+           this.tableArr = res.data;
+        })
+     },
+
     /* 1、 编辑选中  */
     checkedStore(val) {
       console.log(val);
@@ -102,7 +110,7 @@ export default {
 
   },
   created() {
-
+     this.FnListApply();
   },
 }
 </script>
