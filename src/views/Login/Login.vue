@@ -140,7 +140,7 @@ export default {
                }).then(res=>{
                   console.log(res);
                   if(res.code == 200){
-                    localStorage.setItem('accessToken', res.data.access_token);
+                     localStorage.setItem('accessToken', res.data.access_token);
                      this.$message({
                         message: '登录成功',
                         type: 'success',

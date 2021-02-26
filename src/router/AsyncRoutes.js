@@ -30,9 +30,11 @@ export const asyncRoutes = [
          {
             path: "user",
             name: 'user',
-            component: () => import(/* webpackChunkName: "user" */ '../views/System/user'),
+            component: () => import(/* webpackChunkName: "PeopleManage" */ '../views/BasicInfo/PeopleManage'),
+            // component: () => import(/* webpackChunkName: "user" */ '../views/System/user'),
             meta: {title: '用户管理'}
          },
+
          {
             path: "dict",
             name: 'dict',

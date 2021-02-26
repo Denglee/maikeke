@@ -51,7 +51,7 @@ export const authSondelete    = params => axiosDelete('/storeAuth/authSon/'+para
 export const authSonUpdate    = params => put('/storeAuth/authSon/update', params);     /* 更新子账号列表 */
 
 
-/*角色信息*/
+/*用户 信息*/
 export const addUser = params => post('/system/user/', params);     /* 新增   */
 export const updateUser = params => put('/system/user/', params);     /* 修改   */
 export const getUser = params => get('/system/user/'+params);     /* 获取 id下的 信息  */
@@ -83,6 +83,7 @@ export const updateDept = params => put('/system/dept/', params);     /* 修改 
 export const listDept = params => get('/system/dept/list', params);     /* 查询列表   */
 export const getDept = params => get('/system/dept/'+params);     /* 获取 id下的 信息  */
 export const delDept = params => axiosDelete('/system/dept/'+params);     /* 删除 */
+export const treeSelDept = params => get('/system/dept/treeselect');     /* 删除 */
 
 /* 21-02-23 岗位  */
 export const addPost = params => post('/system/post/', params);     /* 新增   */
@@ -95,7 +96,7 @@ export const delPost = params => axiosDelete('/system/post/'+params);     /* 删
 export const addRole = params => post('/system/role/', params);     /* 新增   */
 export const updateRole = params => put('/system/role/', params);     /* 修改   */
 export const getRole = params => get('/system/role/'+params);     /* 获取 id下的 信息  */
-export const saveRole = params => put('/system/role/'+params);     /* 获取 id下的 信息  */
+export const saveRole = params => put('/system/role/', params);     /* 修改   */
 export const delRole = params => axiosDelete('/system/role/'+params);     /* 删除 */
 export const changeRoleStatus = params => put('/system/role/changeStatus/'+params);     /* 获取 id下的 信息  */
 export const listRole = params => get('/system/role/list', params);     /* 查询列表   */

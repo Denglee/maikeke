@@ -84,6 +84,7 @@
 </template>
 
 <script>
+import PersonalInfo from '@/views/AccountCenter/PersonalInfo'
 import {queryUser,getRole} from '@/assets/js/api'
 export default {
    name: "RoleUsers",
@@ -92,6 +93,7 @@ export default {
          type: String | Number,
       }
    },
+   components:{PersonalInfo},
    data() {
       return {
 
@@ -138,8 +140,8 @@ export default {
    },
    methods: {
 
-      FnGetUser(){
-         queryUser(this.checkRoleId).then(res=>{
+      FnGetUser(checkRoleId){
+         queryUser(checkRoleId).then(res=>{
             console.log(res);
             this.tableArr = res.data;
          });
@@ -201,7 +203,7 @@ export default {
 
    },
    mounted(){
-      this.FnGetUser();
+      this.FnGetUser(this.checkRoleId);
    },
 }
 </script>

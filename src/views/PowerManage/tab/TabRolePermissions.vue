@@ -18,13 +18,13 @@
                <div class="power-right">
                   <ul class="power-row2" v-for="(itemSecond, index2) in itemFirst.children" :key="index2">
                      <li class="power-left2">
-                        <el-checkbox-group v-model="PermissForm.PermissSecond">
+                        <el-checkbox-group v-model="PermissForm.PermissPage">
                            <el-checkbox :label="itemSecond.menuId" :value="itemSecond.menuId" >{{itemSecond.menuName}}</el-checkbox>
                         </el-checkbox-group>
                      </li>
                      <li class="power-left3">
-                        <el-checkbox-group v-model="PermissForm.PermissThird" v-for="(itemThird, index3) in itemSecond.children" :key="index3">
-                           <el-checkbox  :checked="itemThird.checked == 1" :label="itemThird.menuId" :value="itemThird.menuId" >{{itemThird.menuName}}</el-checkbox>
+                        <el-checkbox-group v-model="PermissForm.PermissFunction" v-for="(itemThird, index3) in itemSecond.children" :key="index3">
+                           <el-checkbox  :label="itemThird.menuId" :value="itemThird.menuId" >{{itemThird.menuName}}</el-checkbox>
                         </el-checkbox-group>
                      </li>
                      <li class="power-right2">
@@ -47,13 +47,13 @@
          </div>
       </el-form>
 
-      <el-button @click="saveRole">保存</el-button>
+      <el-button @click="FnSaveRole">保存</el-button>
    </div>
 </template>
 
 <script>
 
-import {menuRoleTree,selectMenuTable} from '@/assets/js/api'
+import {menuRoleTree, selectMenuTable, saveRole, updateDept} from '@/assets/js/api'
 export default {
    name: "RolePermissions",
    props: {
@@ -68,10 +68,11 @@ export default {
          checkAll: false,
 
          PermissForm:{
-            PermissSecond:[],
-            PermissThird:[],
+            PermissPage:[],  //页面
+            PermissFunction:[],  //功能项
          },
-         dataRoleMenuVos:[],
+         dataRoleMenuPage:[],  //页面集合
+         dataRoleMenuArr:[],  //菜单集合
 
          amount2:[
             {label:'本人',value:'1'},
@@ -79,59 +80,96 @@ export default {
          ],
 
          tableData6:[],
+
+         /*保存提交 携带参数*/
+         RoleParm:{
+            roleSort:0,
+            roleName:'',
+            roleKey:'',
+         },
       }
    },
    methods: {
       FnGetMenuRoleTree(checkRoleId){
-         // menuRoleTree(checkRoleId).then(res=>{
+         // console.log(checkRoleId);
+         this.PermissForm.PermissPage = [];
+         this.PermissForm.PermissFunction = [];
+         this.dataRoleMenuPage = [];
+         this.dataRoleMenuArr = [];
+
          selectMenuTable(checkRoleId).then(res=>{
-            let menuData = res.data;
+            let menuData = res.data.list;
             this.tableData6 = menuData;
-            this.PermissThird = res.checkedKeys;
+
+            this.RoleParm = {
+               roleSort:res.data.roleSort,
+               roleName:res.data.roleName,
+               roleKey:res.data.roleKey,
+            };
 
             /*循环选中 */
-            menuData.forEach((item,index)=>{
-               item.children.forEach((item2,index2)=>{
+            menuData.forEach((menu,index)=>{
+               // console.log(item.menuId);
+               /*第一级别 菜单模块 保存menuid*/
+               this.dataRoleMenuArr.push({
+                  dataScope:0,
+                  menuId:menu.menuId,
+               })
+               menu.children.forEach((page2,index2)=>{
                   // console.log(item2);
-
                   /*如果checked == 1 就添加到选中*/
-                  if(item2.checked == 1){
-                     this.PermissForm.PermissSecond.push(item2.menuId);
-                     this.dataRoleMenuVos.push({
-                        dataScope:item2.dataScope,
-                        menuId:item2.menuId,
+                  if(page2.checked == 1){
+                     /*页面*/
+                     this.PermissForm.PermissPage.push(page2.menuId);
+                     this.dataRoleMenuPage.push({
+                        dataScope:page2.dataScope,
+                        menuId:page2.menuId,
                      })
                   }
+                  page2.children.forEach((fun3,index3)=>{
+                     if(fun3.checked == 1){
+                        /*功能*/
+                        this.PermissForm.PermissFunction.push(fun3.menuId);
+                     }
+                  })
                });
-
             })
-            // console.log(this.PermissForm.PermissSecond);
+            // console.log(this.PermissForm.PermissFunction);
+            // console.log(this.dataRoleMenuPage);
+            // console.log(this.PermissForm.PermissPage);
          })
       },
 
-
-      /*分配 select*/
+      /*分配 select 减少*/
       changeLevel(val){
-         // console.log(val);
-         // console.log(val.menuId);
-         // console.log(val.dataScope);
+         console.log(val);
+
          /*循环修改*/
-         this.dataRoleMenuVos.forEach((item,index)=>{
+         this.dataRoleMenuPage.forEach((item,index)=>{
             if(val.menuId == item.menuId){
                item.dataScope = val.dataScope;
             }
          })
-         // console.log(this.dataRoleMenuVos);
+         // console.log(this.dataRoleMenuPage);
       },
 
-
-      saveRole(){
+      /*保存*/
+      FnSaveRole(){
          // console.log(this.PermissForm);
-         // console.log(this.dataRoleMenuVos);
+         // console.log(this.dataRoleMenuPage);
          let roleMenuVosArr = [];
+
+         /*菜单集合*/
+         this.dataRoleMenuArr.forEach((item,index)=>{
+            roleMenuVosArr.push({
+               dataScope:item.dataScope,
+               menuId:item.menuId,
+            });
+         })
+
          /*页面 + 数据 id一样添加*/
-         this.PermissForm.PermissSecond.forEach((item,index)=>{
-            this.dataRoleMenuVos.forEach((item2,index2)=>{
+         this.PermissForm.PermissPage.forEach((item,index)=>{
+            this.dataRoleMenuPage.forEach((item2,index2)=>{
                if(item == item2.menuId){
                   roleMenuVosArr.push({
                      dataScope:item2.dataScope,
@@ -140,15 +178,36 @@ export default {
                }
             })
          })
+         // console.log( this.PermissForm.PermissFunction);
 
-         /*功能*/
-         this.PermissForm.PermissThird.forEach((item,index)=>{
+         /*功能 集合*/
+         this.PermissForm.PermissFunction.forEach((item,index)=>{
             roleMenuVosArr.push({
                dataScope:0,
                menuId:item,
             });
          })
-         console.log(roleMenuVosArr);
+
+         // console.log(roleMenuVosArr);
+
+         let dataParm = {
+            roleMenuVos:roleMenuVosArr,
+            roleId:this.checkRoleId,
+            roleSort:this.RoleParm.roleSort,
+            roleName:this.RoleParm.roleName,
+            roleKey:this.RoleParm.roleKey,
+         };
+
+         console.log(dataParm);
+         /*保存接口*/
+         saveRole(dataParm).then(res=>{
+            console.log(res);
+            if(res.code== 200){
+               this.$message.success(res.msg);
+            }else{
+               this.$message.error(res.msg);
+            }
+         })
       },
 
 },

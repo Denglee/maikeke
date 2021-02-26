@@ -28,7 +28,7 @@
          </el-tab-pane>
          <el-tabs v-model="SubTabActiveName" @tab-click="FnChangeSubTab" id="SubTabs-power">
             <el-tab-pane lazy label="角色用户" name="sub0" >
-               <TabRoleUsers :checkRoleId="checkRoleId"></TabRoleUsers>
+               <TabRoleUsers :checkRoleId="checkRoleId" ref="refTabRole"></TabRoleUsers>
             </el-tab-pane>
             <el-tab-pane lazy label="角色权限" name="sub1">
                <TabRolePermissions :checkRoleId="checkRoleId" ref="refTabRolePermiss"></TabRolePermissions>
@@ -64,7 +64,7 @@
             <el-form-item label="显示顺序：" prop="roleSort">
                <el-input-number v-model="addForm.roleSort" controls-position="right" :min="0" />
             </el-form-item>
-            <el-form-item label="显示顺序：" prop="roleSort">
+            <el-form-item label="显示状态：" prop="status">
                <el-radio-group v-model="addForm.status">
                   <el-radio label='0'>正常</el-radio>
                   <el-radio label='1'>停用</el-radio>
@@ -72,11 +72,10 @@
             </el-form-item>
 
             <el-form-item>
-               <el-checkbox v-model="btnState.checkedCopy">
+               <el-checkbox v-model="checkedCopy">
                   复制角色信息
-                  <el-select v-model="copyRole" placeholder="请选择">
-                     <el-option value="1">角色1</el-option>
-                     <el-option value="2">角色2</el-option>
+                  <el-select v-model="addForm.copyRole" placeholder="请选择">
+                    <el-option :label="item.roleName" :value="item.roleId" v-for="(item,index) in copyRoleArr" :key="index"></el-option>
                   </el-select>
                </el-checkbox>
             </el-form-item>
@@ -106,7 +105,10 @@ export default {
          tabActiveName: '0',
          SubTabActiveName: 'sub1',
 
-         addForm: { },
+         addForm: {
+
+         },
+         checkedCopy: false,
          searchForm: {
             storeName: '',
          },
@@ -119,7 +121,6 @@ export default {
             btnCancel: false,
             btnSubmit: false,
             btnCreateRole: false,
-            checkedCopy: false,
          },
          copyRole: '',
          editableTabs: [
@@ -138,20 +139,35 @@ export default {
          ],
 
          checkRoleId: '1',  //选中 传值 到tab 子组件
+
+         copyRoleArr:[],  //复制角色下拉框数组
       }
    },
    methods: {
+      /*获取列表接口*/
       FnGetRoleList(){
          listRole().then(res=>{
             console.log(res);
             if(res.code == 200){
                this.editableTabs = res.data;
-               this.tabActiveName = res.data[0].roleId+'';
-               this.checkRoleId = res.data[0].roleId;
-               console.log(res.data[0].roleId);
+
+               /*如果没有缓存 则获第一个*/
+               let tabActiveName = window.localStorage.getItem('tabActiveName');
+               if(!tabActiveName){
+                  this.tabActiveName = res.data[0].roleId+'';
+                  this.checkRoleId = res.data[0].roleId;
+               }
             }
          });
       },
+      /*获取下拉 角色 option 复制角色Arr*/
+      FnGetOptionRole(){
+         optionRole().then(res=>{
+            console.log(res);
+            this.copyRoleArr = res.data;
+         })
+      },
+
       /*搜索 */
       FnSearchShop() {
          console.log(this.searchForm.storeName);
@@ -159,6 +175,7 @@ export default {
 
       /*添加*/
       FnCreateRole() {
+         this.FnGetOptionRole();
          this.diaState.diaAddRole = true;
       },
 
@@ -166,7 +183,7 @@ export default {
 
       },
 
-      /*添加 提交*/
+      /*添加 角色 提交*/
       FnBtnAddSub() {
          this.GLOBAL.btnStateChange(this, 'btnState', 'btnSubmit');
          addRole(this.addForm).then(res=>{
@@ -174,7 +191,7 @@ export default {
             if(res.code == 200){
 
             }else{
-               this.$message.error(res.msg);
+               // this.$message.error(res.msg);
             }
          })
       },
@@ -184,7 +201,14 @@ export default {
          console.log(tab.name);
          this.checkRoleId = tab.name;
          this.tabName = tab.label;
-         this.$refs.refTabRolePermiss.FnGetMenuRoleTree(tab.name);
+         window.localStorage.setItem('tabActiveName',tab.name);
+
+         console.log(this.SubTabActiveName);
+         if(this.SubTabActiveName == 'sub0'){
+            this.$refs.refTabRole.FnGetUser(tab.name);
+         }else{
+            this.$refs.refTabRolePermiss.FnGetMenuRoleTree(tab.name);
+         }
       },
 
       /*subTab 切换点击事件 */
@@ -197,10 +221,18 @@ export default {
 
    created() {
       this.FnGetRoleList();
+
       let SubTabActiveName = window.localStorage.getItem('SubTabPowerRoleActiveName');
       if(SubTabActiveName){
          // console.log(SubTabActiveName);
          this.SubTabActiveName = SubTabActiveName;
+      }
+
+      let tabActiveName = window.localStorage.getItem('tabActiveName');
+      if(tabActiveName){
+         // console.log(tabActiveName);
+         this.tabActiveName = tabActiveName;
+         this.checkRoleId = tabActiveName;
       }
    },
 

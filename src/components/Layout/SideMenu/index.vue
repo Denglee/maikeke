@@ -38,12 +38,16 @@ export default {
    },
    methods:{
       FnGetMenuGetRouters(){
+         let that = this;
          menuGetRouters().then(res=>{
             if(res.code == 200){
                console.log(res.data);
                this.routes = res.data;
             }else {
                this.$message.error(res.message);
+               setTimeout(() => {
+                  that.$router.push({path: '/login'});
+               }, 1500);
             }
          })
       },

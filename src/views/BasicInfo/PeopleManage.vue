@@ -46,29 +46,28 @@
          </el-form>
          <el-table class="public-table" border
                    :data="tableArr"
-                   ref="refTable"
-         >
+                   ref="refTable">
             <el-table-column type="selection"></el-table-column>
-            <el-table-column prop="username" label="用户名"></el-table-column>
-            <el-table-column prop="nickname" label="姓名"></el-table-column>
-            <el-table-column prop="tel" label="电话">
+            <el-table-column prop="nickName" label="用户名"></el-table-column>
+            <el-table-column prop="userName" label="姓名"></el-table-column>
+            <el-table-column prop="phonenumber" label="电话">
                <template slot-scope="scope">
-                  <el-input v-model="scope.row.tel" @blur="blurInp"></el-input>
+                  <el-input v-model="scope.row.phonenumber" @blur="blurInp"></el-input>
                </template>
             </el-table-column>
             <el-table-column prop="department" label="所属部门"></el-table-column>
             <el-table-column prop="station" label="岗位"></el-table-column>
             <el-table-column prop="leader" label="直属领导"></el-table-column>
             <el-table-column prop="role" label="角色"></el-table-column>
-            <el-table-column prop="state" label="账户状态" min-width="100px">
+            <el-table-column prop="state" label="账户状态" min-width="120px">
                <template slot-scope="scope">
                   <el-switch
-                     v-model="scope.row.state"
-                     active-value="1"
-                     inactive-value="0"
-                     active-text="开启"
-                     inactive-text="关闭"
-                     @change='FnBtnAdd(scope.row.state)'>
+                     v-model="scope.row.status"
+                     active-value="0"
+                     inactive-value="1"
+                     active-text="正常"
+                     inactive-text="停用"
+                     @change='FnBtnAdd(scope.row.status)'>
                   </el-switch>
                </template>
             </el-table-column>
@@ -86,6 +85,7 @@
 </template>
 
 <script>
+import {addUser,listUser,treeSelDept} from '@/assets/js/api'
 export default {
    name: 'PeopleManage',
    watch: {
@@ -139,151 +139,7 @@ export default {
             },
          ],
 
-         tableArr: [
-            {
-               id: 1,
-               username: 'WBYYH',
-               nickname: '王先生',
-               tel: '13454554741',
-               department: '财务部',
-               station: '业务员',
-               leader: '郭女士',
-               role: '需求计划专员',
-               state: '1',
-            },
-            {
-               id: 1,
-               username: 'WBYYH',
-               nickname: '王先生',
-               tel: '13454554741',
-               department: '财务部',
-               station: '业务员',
-               leader: '郭女士',
-               role: '需求计划专员',
-               state: '1',
-            },
-            {
-               id: 1,
-               username: 'WBYYH',
-               nickname: '王先生',
-               tel: '13454554741',
-               department: '财务部',
-               station: '业务员',
-               leader: '郭女士',
-               role: '需求计划专员',
-               state: '1',
-            },
-            {
-               id: 1,
-               username: 'WBYYH',
-               nickname: '王先生',
-               tel: '13454554741',
-               department: '财务部',
-               station: '业务员',
-               leader: '郭女士',
-               role: '需求计划专员',
-               state: '1',
-            },
-            {
-               id: 1,
-               username: 'WBYYH',
-               nickname: '王先生',
-               tel: '13454554741',
-               department: '财务部',
-               station: '业务员',
-               leader: '郭女士',
-               role: '需求计划专员',
-               state: '1',
-            },
-            {
-               id: 1,
-               username: 'WBYYH',
-               nickname: '王先生',
-               tel: '13454554741',
-               department: '财务部',
-               station: '业务员',
-               leader: '郭女士',
-               role: '需求计划专员',
-               state: '1',
-            },
-            {
-               id: 1,
-               username: 'WBYYH',
-               nickname: '王先生',
-               tel: '13454554741',
-               department: '财务部',
-               station: '业务员',
-               leader: '郭女士',
-               role: '需求计划专员',
-               state: '1',
-            },
-            {
-               id: 1,
-               username: 'WBYYH',
-               nickname: '王先生',
-               tel: '13454554741',
-               department: '财务部',
-               station: '业务员',
-               leader: '郭女士',
-               role: '需求计划专员',
-               state: '1',
-            },
-            {
-               id: 1,
-               username: 'WBYYH',
-               nickname: '王先生',
-               tel: '13454554741',
-               department: '财务部',
-               station: '业务员',
-               leader: '郭女士',
-               role: '需求计划专员',
-               state: '1',
-            },
-            {
-               id: 1,
-               username: 'WBYYH',
-               nickname: '王先生',
-               tel: '13454554741',
-               department: '财务部',
-               station: '业务员',
-               leader: '郭女士',
-               role: '需求计划专员',
-               state: '1',
-            },
-            {
-               id: 1,
-               username: 'WBYYH',
-               nickname: '王先生',
-               tel: '13454554741',
-               department: '财务部',
-               station: '业务员',
-               leader: '郭女士',
-               role: '需求计划专员',
-               state: '1',
-            },
-            {
-               id: 1,
-               username: 'WBYYH',
-               nickname: '王先生',
-               tel: '13454554741',
-               department: '财务部',
-               station: '业务员',
-               leader: '郭女士',
-               role: '需求计划专员',
-               state: '1',
-            },
-            {
-               id: 1,
-               username: 'WBYYH',
-               nickname: '王先生',
-               tel: '13454554741',
-               department: '财务部',
-               station: '业务员',
-               leader: '郭女士',
-               role: '需求计划专员',
-               state: '1',
-            }
-         ],
+         tableArr:[],
       }
    },
    methods: {
@@ -307,6 +163,27 @@ export default {
 
       },
 
+      /*获取 用户列表 api 事件*/
+      FnGetListUser(){
+         listUser().then(res=>{
+            console.log(res);
+            this.tableArr =res.data;
+         })
+      },
+
+      /*获取部门列表 api 事件*/
+      FnGetTreeSelDept(){
+         treeSelDept().then(res=>{
+            console.log(res);
+            this.treeData=res.data;
+         })
+      },
+
+
    },
+   created(){
+      this.FnGetListUser();
+      this.FnGetTreeSelDept();
+   }
 }
 </script>
