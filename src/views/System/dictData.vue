@@ -2,29 +2,21 @@
   <div class="public-main">
     <div class="formR-main">
       <el-button icon="el-icon-folder-add" @click="FnBtnAdd" :loading="btnState.btnAdd" class="public-btn">
-        新增单位
+        新增字典
       </el-button>
     </div>
     <el-table class="public-table" border
               :data="tableArr"
               ref="refTable"
               height="600">
-      <el-table-column type="index" label="序号"></el-table-column>
-      <el-table-column prop="unitNum" label="单位编号"></el-table-column>
-      <el-table-column prop="unitName" label="单位名称"></el-table-column>
-      <el-table-column prop="orderNum" label="排序"></el-table-column>
-      <el-table-column prop="status" label="状态">
-        <template slot-scope="{row}">
-          <el-switch
-              v-model="row.status"
-              active-value="0"
-              inactive-value="1"
-              active-text="正常"
-              inactive-text="停用"
-              @change='FnSwitchState(row.state)'>
-          </el-switch>
-        </template>
-      </el-table-column>
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="字典编码" align="center" prop="dictCode" />
+      <el-table-column label="字典标签" align="center" prop="dictLabel" />
+      <el-table-column label="字典键值" align="center" prop="dictValue" />
+      <el-table-column label="字典排序" align="center" prop="dictSort" />
+      <el-table-column label="状态" align="center" prop="status"/>
+      <el-table-column label="备注" align="center" prop="remark"/>
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180"></el-table-column>
 
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -51,30 +43,40 @@
     <!--添加\编辑区域站点 -->
     <el-dialog :append-to-body="true"
                :title="diaTitle"
-               :visible.sync="diaState.diaAddUnit"
+               :visible.sync="diaState.diaAddDict"
                custom-class="public-dialog"
                :close-on-click-modal="false"
                @close='FnCloseAddSite'
                width="800px">
       <el-form :model="addSiteForm" ref="RefAddSiteForm" label-width="156px" class="public-diaForm">
-        <el-form-item label="单位名称：" prop="unitName">
-          <el-input type="text" v-model="addSiteForm.unitName" autocomplete="off" clearable
-                    placeholder="单位名称"></el-input>
+        <el-form-item label="字典类型">
+
+          <el-input v-model="addSiteForm.dictType" :disabled="true" />
         </el-form-item>
-        <el-form-item label="单位编号：" prop="unitNum">
-          <el-input type="text" v-model="addSiteForm.unitNum" autocomplete="off" clearable
-                    placeholder="单位编号"></el-input>
+        <el-form-item label="数据标签" prop="dictLabel">
+          <el-input v-model="addSiteForm.dictLabel" placeholder="请输入数据标签" />
         </el-form-item>
-        <el-form-item label="显示排序：" prop="orderNum">
-          <el-input-number v-model="addSiteForm.orderNum" controls-position="right" :min="0"/>
+        <el-form-item label="数据键值" prop="dictValue">
+          <el-input v-model="addSiteForm.dictValue" placeholder="请输入数据键值" />
         </el-form-item>
-        <el-form-item label="状态：" prop="status">
-          <el-radio v-model="addSiteForm.status" label="0">正常</el-radio>
-          <el-radio v-model="addSiteForm.status" label="1">停用</el-radio>
+        <el-form-item label="显示排序" prop="dictSort">
+          <el-input-number v-model="addSiteForm.dictSort" controls-position="right" :min="0" />
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-radio-group v-model="addSiteForm.status">
+<!--            <el-radio-->
+<!--                v-for="dict in statusOptions"-->
+<!--                :key="dict.dictValue"-->
+<!--                :label="dict.dictValue"-->
+<!--            >{{dict.dictLabel}}</el-radio>-->
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="addSiteForm.remark" type="textarea" placeholder="请输入内容"></el-input>
         </el-form-item>
 
         <el-form-item class="alignR">
-          <el-button type="primary" @click="diaState.diaAddUnit = false;" :loading="btnState.btnCancelSite">取消
+          <el-button type="primary" @click="diaState.diaAddDict = false;" :loading="btnState.btnCancelSite">取消
           </el-button>
           <el-button type="primary" @click="FnBtnSaveAddSite('RefAddSiteForm')" :loading="btnState.btnSubmitSite">
             保存
@@ -86,7 +88,7 @@
 </template>
 
 <script>
-import {addUnit, delUnit, listUnit, updateUnit} from '@/assets/js/api'
+import {addDictData, listDictData,getDict, updateDictData, delDictData} from '@/assets/js/api'
 
 export default {
   name: "ExchangeManage",
@@ -98,7 +100,7 @@ export default {
         pageSize: 10,
       },
       diaState: {
-        diaAddUnit: false,
+        diaAddDict: false,
       },
       btnState: {
         loadTable: true,
@@ -108,15 +110,33 @@ export default {
       },
 
       /*添加表单*/
-      addSiteForm: {},
+      addSiteForm: {
+
+      },
       diaTitle: '添加',
       tableArr: [],
+
+      /*typeArr*/
+      dictDataArr:{},
+      dictType:'',
     }
   },
   methods: {
-    /*单位列表 api*/
-    FnGetUnit() {
-      listUnit().then(res => {
+    /*字典列表 type api*/
+    FnGetDictType(id) {
+      getDict(id).then(res => {
+        console.log(res);
+        this.dictDataArr = res.data;
+        this.dictType = res.data.dictType;
+        this.FnGetDictList(res.data.dictType);
+      })
+    },
+
+    /*字典列表 type api*/
+    FnGetDictList(type) {
+      listDictData({
+        dictType:type,
+      }).then(res => {
         console.log(res);
         this.tableArr = res.data;
         this.pageArr.total = res.total;
@@ -126,20 +146,21 @@ export default {
     /*添加*/
     FnBtnAdd() {
       this.addSiteForm = {};
-      this.diaState.diaAddUnit = true;
-      this.diaTitle = '添加单位';
+      this.addSiteForm.dictType = this.dictType;
+      this.diaState.diaAddDict = true;
+      this.diaTitle = '添加字典';
       this.GLOBAL.btnStateChange(this, 'btnState', 'btnAdd');
     },
 
     /*删除 方法*/
-    FnDelUnit(UnitName, UnitIds) {
+    FnDelDict(DictName, DictIds) {
       let that = this;
-      this.$confirm('是否确认删除' + UnitName + '?', "警告", {
+      this.$confirm('是否确认删除' + DictName + '?', "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(function () {
-        delUnit(UnitIds).then(res => {
+        delDictData(DictIds).then(res => {
           console.log(res);
           that.$message(res.msg);
         })
@@ -153,43 +174,39 @@ export default {
       /*删除*/
       if (val.type == 'delete') {
         console.log( val.data);
-        let Unitname = val.data.unitName;
-        let UnitIds = val.data.unitId;
+        let Dictname = val.data.dictLabel;
+        let DictIds = val.data.dictCode;
 
-        console.log(Unitname);
-        console.log(UnitIds);
-        that.FnDelUnit(Unitname, UnitIds);
+        console.log(Dictname);
+        console.log(DictIds);
+        that.FnDelDict(Dictname, DictIds);
       }
 
       /*修改*/
       if (val.type == 'update') {
         this.addSiteForm = val.data;
-
-        this.diaState.diaAddUnit = true;
-        this.diaTitle = "修改单位";
+        this.diaState.diaAddDict = true;
+        this.diaTitle = "修改字典";
       }
     },
 
-    FnSwitchState(){
-
-    },
     /*关闭*/
     FnCloseAddSite() {},
 
     /*保存添加、修改*/
     FnBtnSaveAddSite() {
-      let UnitId = this.addSiteForm.UnitId;
-      console.log(UnitId);
+      let DictId = this.addSiteForm.dictCode;
+      console.log(DictId);
       this.GLOBAL.btnStateChange(this, 'btnState', 'btnSubmitSite');
-      if (UnitId) {
-        /*有 UnitId， 则修改*/
-        updateUnit(this.addSiteForm).then(res => {
+      if (DictId) {
+        /*有 DictId， 则修改*/
+        updateDictData(this.addSiteForm).then(res => {
           console.log(res);
           this.$message(res.msg);
         })
       } else {
-        /*没有 UnitId，则添加*/
-        addUnit(this.addSiteForm).then(res => {
+        /*没有 DictId，则添加*/
+        addDictData(this.addSiteForm).then(res => {
           console.log(res);
           this.$message(res.msg);
         })
@@ -207,7 +224,10 @@ export default {
     },
   },
   created() {
-    this.FnGetUnit();
+    const dictId = this.$route.params.id;
+    console.log(dictId);
+
+    this.FnGetDictType(dictId);
   },
 }
 </script>

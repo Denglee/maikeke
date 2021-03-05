@@ -76,7 +76,8 @@
                  :close-on-click-modal="false"
                  width="1200px">
          <el-form :model="FormAddRank" ref="RefAddForm" label-width="136px" class="" :inline="true">
-            <el-form-item label="站点：" prop="site" :rules="{ required: true, message: '请选择', trigger: 'change' }">
+            <el-form-item label="站点：" prop="site"
+                          :rules="{ required: true, message: '请选择', trigger: 'change' }">
                <el-select v-model="FormSearch.site" value.key="id" filterable clearable placeholder="请选择店铺"
                           class="public-selectFull">
                   <el-option v-for="(item, index) in projectArr" :key="index"

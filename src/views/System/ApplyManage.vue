@@ -2,7 +2,7 @@
   <div class="public-main">
     <div class="formR-main">
       <el-button icon="el-icon-folder-add" @click="FnBtnAdd" :loading="btnState.btnAdd" class="public-btn">
-        新增单位
+        新增应用
       </el-button>
     </div>
     <el-table class="public-table" border
@@ -10,9 +10,9 @@
               ref="refTable"
               height="600">
       <el-table-column type="index" label="序号"></el-table-column>
-      <el-table-column prop="unitNum" label="单位编号"></el-table-column>
-      <el-table-column prop="unitName" label="单位名称"></el-table-column>
-      <el-table-column prop="orderNum" label="排序"></el-table-column>
+      <el-table-column prop="applyNum" label="应用编号"></el-table-column>
+      <el-table-column prop="applyNum" label="应用编号"></el-table-column>
+      <el-table-column prop="applyName" label="应用名称"></el-table-column>
       <el-table-column prop="status" label="状态">
         <template slot-scope="{row}">
           <el-switch
@@ -25,6 +25,7 @@
           </el-switch>
         </template>
       </el-table-column>
+      <el-table-column prop="remark" label="备注"></el-table-column>
 
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -51,30 +52,36 @@
     <!--添加\编辑区域站点 -->
     <el-dialog :append-to-body="true"
                :title="diaTitle"
-               :visible.sync="diaState.diaAddUnit"
+               :visible.sync="diaState.diaAddApply"
                custom-class="public-dialog"
                :close-on-click-modal="false"
                @close='FnCloseAddSite'
                width="800px">
       <el-form :model="addSiteForm" ref="RefAddSiteForm" label-width="156px" class="public-diaForm">
-        <el-form-item label="单位名称：" prop="unitName">
-          <el-input type="text" v-model="addSiteForm.unitName" autocomplete="off" clearable
-                    placeholder="单位名称"></el-input>
+        <el-form-item label="应用logo：" prop="applyLogo">
+          <el-input type="text" v-model="addSiteForm.applyLogo" autocomplete="off" clearable
+                    placeholder="应用logo"></el-input>
         </el-form-item>
-        <el-form-item label="单位编号：" prop="unitNum">
-          <el-input type="text" v-model="addSiteForm.unitNum" autocomplete="off" clearable
-                    placeholder="单位编号"></el-input>
+        <el-form-item label="应用名称：" prop="applyName">
+          <el-input type="text" v-model="addSiteForm.applyName" autocomplete="off" clearable
+                    placeholder="应用名称"></el-input>
         </el-form-item>
-        <el-form-item label="显示排序：" prop="orderNum">
-          <el-input-number v-model="addSiteForm.orderNum" controls-position="right" :min="0"/>
+
+        <el-form-item label="应用编号：" prop="applyNum">
+          <el-input type="text" v-model="addSiteForm.applyNum" autocomplete="off" clearable
+                    placeholder="应用编号"></el-input>
         </el-form-item>
         <el-form-item label="状态：" prop="status">
           <el-radio v-model="addSiteForm.status" label="0">正常</el-radio>
           <el-radio v-model="addSiteForm.status" label="1">停用</el-radio>
         </el-form-item>
 
+        <el-form-item label="备注：" prop="remark">
+          <el-input type="text" v-model="addSiteForm.remark" autocomplete="off" clearable
+                    placeholder="备注"></el-input>
+        </el-form-item>
         <el-form-item class="alignR">
-          <el-button type="primary" @click="diaState.diaAddUnit = false;" :loading="btnState.btnCancelSite">取消
+          <el-button type="primary" @click="diaState.diaAddApply = false;" :loading="btnState.btnCancelSite">取消
           </el-button>
           <el-button type="primary" @click="FnBtnSaveAddSite('RefAddSiteForm')" :loading="btnState.btnSubmitSite">
             保存
@@ -86,7 +93,7 @@
 </template>
 
 <script>
-import {addUnit, delUnit, listUnit, updateUnit} from '@/assets/js/api'
+import {addApply, delApply, listApply, updateApply} from '@/assets/js/api'
 
 export default {
   name: "ExchangeManage",
@@ -98,7 +105,7 @@ export default {
         pageSize: 10,
       },
       diaState: {
-        diaAddUnit: false,
+        diaAddApply: false,
       },
       btnState: {
         loadTable: true,
@@ -114,9 +121,9 @@ export default {
     }
   },
   methods: {
-    /*单位列表 api*/
-    FnGetUnit() {
-      listUnit().then(res => {
+    /*应用列表 api*/
+    FnGetApply() {
+      listApply().then(res => {
         console.log(res);
         this.tableArr = res.data;
         this.pageArr.total = res.total;
@@ -126,25 +133,24 @@ export default {
     /*添加*/
     FnBtnAdd() {
       this.addSiteForm = {};
-      this.diaState.diaAddUnit = true;
-      this.diaTitle = '添加单位';
+      this.diaState.diaAddApply = true;
+      this.diaTitle = '添加应用';
       this.GLOBAL.btnStateChange(this, 'btnState', 'btnAdd');
     },
 
     /*删除 方法*/
-    FnDelUnit(UnitName, UnitIds) {
+    FnDelApply(ApplyName, ApplyIds) {
       let that = this;
-      this.$confirm('是否确认删除' + UnitName + '?', "警告", {
+      this.$confirm('是否确认删除' + ApplyName + '?', "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(function () {
-        delUnit(UnitIds).then(res => {
+        delApply(ApplyIds).then(res => {
           console.log(res);
           that.$message(res.msg);
         })
       })
-
     },
     /*表格操作*/
     FnCommand(val) {
@@ -153,20 +159,17 @@ export default {
       /*删除*/
       if (val.type == 'delete') {
         console.log( val.data);
-        let Unitname = val.data.unitName;
-        let UnitIds = val.data.unitId;
+        let Applyname = val.data.applyName;
+        let ApplyIds = val.data.applyId;
 
-        console.log(Unitname);
-        console.log(UnitIds);
-        that.FnDelUnit(Unitname, UnitIds);
+        that.FnDelApply(Applyname, ApplyIds);
       }
 
       /*修改*/
       if (val.type == 'update') {
         this.addSiteForm = val.data;
-
-        this.diaState.diaAddUnit = true;
-        this.diaTitle = "修改单位";
+        this.diaState.diaAddApply = true;
+        this.diaTitle = "修改应用";
       }
     },
 
@@ -178,18 +181,18 @@ export default {
 
     /*保存添加、修改*/
     FnBtnSaveAddSite() {
-      let UnitId = this.addSiteForm.UnitId;
-      console.log(UnitId);
+      let ApplyId = this.addSiteForm.applyId;
+      console.log(ApplyId);
       this.GLOBAL.btnStateChange(this, 'btnState', 'btnSubmitSite');
-      if (UnitId) {
-        /*有 UnitId， 则修改*/
-        updateUnit(this.addSiteForm).then(res => {
+      if (ApplyId) {
+        /*有 ApplyId， 则修改*/
+        updateApply(this.addSiteForm).then(res => {
           console.log(res);
           this.$message(res.msg);
         })
       } else {
-        /*没有 UnitId，则添加*/
-        addUnit(this.addSiteForm).then(res => {
+        /*没有 ApplyId，则添加*/
+        addApply(this.addSiteForm).then(res => {
           console.log(res);
           this.$message(res.msg);
         })
@@ -207,7 +210,7 @@ export default {
     },
   },
   created() {
-    this.FnGetUnit();
+    this.FnGetApply();
   },
 }
 </script>

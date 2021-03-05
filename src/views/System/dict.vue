@@ -1,5 +1,5 @@
 <template>
-   <div class="app-container">
+   <div class="public-main">
       <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
          <el-form-item label="字典名称" prop="dictName">
             <el-input
@@ -106,15 +106,19 @@
 <!--         <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>-->
       </el-row>
 
-      <el-table v-loading="loading" :data="typeList" @selection-change="handleSelectionChange">
+      <el-table v-loading="loading" :data="typeList" @selection-change="handleSelectionChange"
+      class="public-table" border>
          <el-table-column type="selection" width="55" align="center" />
          <el-table-column label="字典编号" align="center" prop="dictId" />
          <el-table-column label="字典名称" align="center" prop="dictName" :show-overflow-tooltip="true" />
          <el-table-column label="字典类型" align="center" :show-overflow-tooltip="true">
             <template slot-scope="scope">
-               <router-link :to="'/dict/type/data/' + scope.row.dictId" class="link-type">
+<!--               <router-link :to="'/dictData/' + scope.row.dictId" class="link-type">
                   <span>{{ scope.row.dictType }}</span>
-               </router-link>
+               </router-link>-->
+              <router-link :to="'/system/dictData/' + scope.row.dictId" class="link-type">
+                <span>{{ scope.row.dictType }}</span>
+              </router-link>
             </template>
          </el-table-column>
          <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" />
@@ -142,13 +146,12 @@
          </el-table-column>
       </el-table>
 
-      <pagination
-         v-show="total>0"
-         :total="total"
-         :page.sync="queryParams.pageNum"
-         :limit.sync="queryParams.pageSize"
-         @pagination="getList"
-      />
+     <Pagination
+         :pageNum="pageArr.pageNum"
+         :total="pageArr.total"
+         :pageSize="pageArr.pageSize"
+         @SonSizeChange='FaSizeChange'
+         @SonCurrentChange="FaPageCurrent"></Pagination>
 
       <!-- 添加或修改参数配置对话框 -->
       <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -187,6 +190,12 @@ export default {
    name: "Dict",
    data() {
       return {
+        pageArr: {
+          pageNum: 1,
+          total: 20,
+          pageSize: 10,
+        },
+
          // 遮罩层
          loading: true,
          // 选中数组
@@ -210,6 +219,7 @@ export default {
          statusOptions: [],
          // 日期范围
          dateRange: [],
+
          // 查询参数
          queryParams: {
             pageNum: 1,
@@ -218,6 +228,7 @@ export default {
             dictType: undefined,
             status: undefined
          },
+
          // 表单参数
          form: {},
          // 表单校验
@@ -243,7 +254,7 @@ export default {
          this.loading = true;
          listDict(this.queryParams, this.dateRange).then(res => {
                this.typeList = res.data;
-               this.total = res.total;
+               this.pageArr.total = res.total;
                this.loading = false;
             }
          );
@@ -308,13 +319,13 @@ export default {
             if (valid) {
                if (this.form.dictId != undefined) {
                   updateDict(this.form).then(response => {
-                     this.msgSuccess("修改成功");
+                     this.$message("修改成功");
                      this.open = false;
                      this.getList();
                   });
                } else {
                   addDict(this.form).then(response => {
-                     this.msgSuccess("新增成功");
+                     this.$message("新增成功");
                      this.open = false;
                      this.getList();
                   });
@@ -333,7 +344,7 @@ export default {
             return delDict(dictIds);
          }).catch(() => {
             this.getList();
-            this.msgSuccess("删除成功");
+            this.$message("删除成功");
          })
       },
       /** 导出按钮操作 */
@@ -353,9 +364,19 @@ export default {
       /** 清理缓存按钮操作 */
       handleClearCache() {
          clearCache().then(response => {
-            this.msgSuccess("清理成功");
+            this.$message("清理成功");
          });
-      }
+      },
+
+     /*分页*/
+     FaPageCurrent(page) {
+       console.log(page);
+       // this.staffPage = page;
+       // this.getStaffIndex();
+     },
+     FaSizeChange(size) {
+       console.log(size);
+     },
    }
 };
 </script>

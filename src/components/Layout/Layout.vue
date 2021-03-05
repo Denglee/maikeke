@@ -25,9 +25,9 @@
 
          <div class="main-content">
             <el-scrollbar wrap-class="scrollbar">
-
                <!--中间 主题内容-->
                <transition name="fade" mode="out-in">
+<!--                 <router-view/>-->
                   <keep-alive :include="cachedViews">
                      <router-view :key="key"/>
                   </keep-alive>

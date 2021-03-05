@@ -53,7 +53,7 @@
 
 <script>
 
-import {menuRoleTree, selectMenuTable, saveRole, updateDept} from '@/assets/js/api'
+import {menuRoleTree, selectMenuTable, updateRole, updateDept} from '@/assets/js/api'
 export default {
    name: "RolePermissions",
    props: {
@@ -121,11 +121,11 @@ export default {
                   if(page2.checked == 1){
                      /*页面*/
                      this.PermissForm.PermissPage.push(page2.menuId);
-                     this.dataRoleMenuPage.push({
-                        dataScope:page2.dataScope,
-                        menuId:page2.menuId,
-                     })
                   }
+                  this.dataRoleMenuPage.push({
+                     dataScope:page2.dataScope,
+                     menuId:page2.menuId,
+                  })
                   page2.children.forEach((fun3,index3)=>{
                      if(fun3.checked == 1){
                         /*功能*/
@@ -142,15 +142,16 @@ export default {
 
       /*分配 select 减少*/
       changeLevel(val){
-         console.log(val);
+         // console.log(val);
 
          /*循环修改*/
          this.dataRoleMenuPage.forEach((item,index)=>{
             if(val.menuId == item.menuId){
                item.dataScope = val.dataScope;
+               this.PermissForm.PermissPage.push(val.menuId);
             }
          })
-         // console.log(this.dataRoleMenuPage);
+         console.log(this.dataRoleMenuPage);
       },
 
       /*保存*/
@@ -167,6 +168,8 @@ export default {
             });
          })
 
+         console.log(this.PermissForm.PermissPage);
+         console.log(this.dataRoleMenuPage);
          /*页面 + 数据 id一样添加*/
          this.PermissForm.PermissPage.forEach((item,index)=>{
             this.dataRoleMenuPage.forEach((item2,index2)=>{
@@ -178,7 +181,7 @@ export default {
                }
             })
          })
-         // console.log( this.PermissForm.PermissFunction);
+         // console.log(this.PermissForm.PermissPage);
 
          /*功能 集合*/
          this.PermissForm.PermissFunction.forEach((item,index)=>{
@@ -187,7 +190,6 @@ export default {
                menuId:item,
             });
          })
-
          // console.log(roleMenuVosArr);
 
          let dataParm = {
@@ -200,7 +202,7 @@ export default {
 
          console.log(dataParm);
          /*保存接口*/
-         saveRole(dataParm).then(res=>{
+         updateRole(dataParm).then(res=>{
             console.log(res);
             if(res.code== 200){
                this.$message.success(res.msg);

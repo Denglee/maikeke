@@ -1,47 +1,60 @@
 <template>
-   <div class="header-bar clear-fix">
+  <div class="header-bar clear-fix">
 
-            <FullScreen/>
-            <!--头部用户信息+退出+更换密码 -->
-            <div class="headerTop-userInfo">
-<!--               <i class="el-icon-bell icon-bell"></i>-->
+    <FullScreen/>
+    <!--头部用户信息+退出+更换密码 -->
+    <div class="headerTop-userInfo">
+      <!--               <i class="el-icon-bell icon-bell"></i>-->
 
-               <el-dropdown class="dropdown-header">
-                  <div class="el-dropdown-link">
-                     <!--          <img class="userHeader" :src='localUrl+"/"+UserInfo.logo || "assets/images/logo-daka.png"' alt="">-->
-                     <i class="el-icon-user-solid"></i>
-                     <div class="user-name">
-                        木子
-                        <!--<div>{{ UserInfo.username }}</div>-->
-                     </div>
-                     <div><i class="el-icon-caret-bottom"></i></div>
-                  </div>
-                  <el-dropdown-menu slot="dropdown"
-                                    hide-timeout="30000"
-                                    class="dropdown-HeaderTop">
-                     <el-dropdown-item @click.native="FnCommand(scope.$index, scope.row)">个人中心</el-dropdown-item>
-                     <el-dropdown-item command="b">更改密码</el-dropdown-item>
-                     <el-dropdown-item command="c">企业管理授权</el-dropdown-item>
-                  </el-dropdown-menu>
-               </el-dropdown>
-            </div>
+      <el-dropdown class="dropdown-header">
+        <div class="el-dropdown-link">
+          <el-avatar :src='UserInfo.avatar' :size="40"></el-avatar>
+          <div class="user-name" style="margin-left: 10px;">{{UserInfo.nickName}}</div>
+          <div><i class="el-icon-caret-bottom"></i></div>
+        </div>
+        <el-dropdown-menu slot="dropdown"
+                          hide-timeout="30000"
+                          class="dropdown-HeaderTop">
+          <el-dropdown-item @click.native="FnGoUserInfo()">个人中心</el-dropdown-item>
+          <el-dropdown-item :command="{type:'b'}">更改密码</el-dropdown-item>
+          <el-dropdown-item :command="{type:'c'}">企业管理授权</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
 
-   </div>
+  </div>
 </template>
 
 <script>
 
 import FullScreen from './FullScreen/FullScreen'
+import {userProfile} from '@/assets/js/api'
 
 export default {
-   components: {
-      FullScreen,
-   },
-   methods: {
-      FnCommand() {
+  components: {
+    FullScreen,
+  },
+  data(){
+    return {
+      UserInfo:{},
+    }
+  },
+  methods: {
+    FnGoUserInfo() {
+      this.$router.push({
+        path: '/system/userinfo'
+      })
+    },
 
-      }
-   },
+    FnGetUserProfile(){
+      userProfile().then(res=>{
+        this.UserInfo = res.data;
+      })
+    }
+  },
+  created(){
+    this.FnGetUserProfile()
+  },
 }
 </script>
 

@@ -13,7 +13,7 @@
          </el-form>
          <div class="powerR-subnav">
             <h4>{{ tabName }}</h4>
-            <div>更新时间 2020-10-29</div>
+            <div>更新时间 </div>
          </div>
       </div>
 
@@ -74,7 +74,7 @@
             <el-form-item>
                <el-checkbox v-model="checkedCopy">
                   复制角色信息
-                  <el-select v-model="addForm.copyRole" placeholder="请选择">
+                  <el-select v-model="addForm.roleId" placeholder="请选择">
                     <el-option :label="item.roleName" :value="item.roleId" v-for="(item,index) in copyRoleArr" :key="index"></el-option>
                   </el-select>
                </el-checkbox>
@@ -122,7 +122,6 @@ export default {
             btnSubmit: false,
             btnCreateRole: false,
          },
-         copyRole: '',
          editableTabs: [
             // {
             //    title: '超级管理员',
@@ -160,6 +159,7 @@ export default {
             }
          });
       },
+
       /*获取下拉 角色 option 复制角色Arr*/
       FnGetOptionRole(){
          optionRole().then(res=>{
@@ -186,6 +186,11 @@ export default {
       /*添加 角色 提交*/
       FnBtnAddSub() {
          this.GLOBAL.btnStateChange(this, 'btnState', 'btnSubmit');
+         console.log(this.checkedCopy);
+         if(this.checkedCopy == false){
+            this.addForm.roleId = '';
+         }
+
          addRole(this.addForm).then(res=>{
             console.log(res);
             if(res.code == 200){

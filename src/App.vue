@@ -25,6 +25,7 @@ export default {
     /*key() {
       return this.$route.name !== undefined? this.$route.name + +new Date(): this.$route + +new Date()
     }*/
+
   },
 
   methods:{
@@ -35,11 +36,27 @@ export default {
         this.isRouterAlive = true;
       })
     },
-  },
 
+
+
+  },
+  created(){
+    // const { Producer  } = require("apache-rocketmq");
+    // const producer = new Producer("GROUP_ID", "INSTANCE_NAME", {
+    //   nameServer: "127.0.0.1:9876",
+    // });
+    //
+    // producer.start().then((res) => {
+    //   console.log(res);
+    // }).catch(err => {
+    //   console.log(res);
+    // });
+  },
   /*activated: function() {
     this.getCase();
   }*/
+
+
 }
 
 /*

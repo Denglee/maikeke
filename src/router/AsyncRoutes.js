@@ -24,13 +24,13 @@ export const asyncRoutes = [
          {
             path: "menu",
             name: 'menu',
-            component: () => import(/* webpackChunkName: "menu" */ '../views/PowerManage/MenuManage'),
+            component: () => import(/* webpackChunkName: "menu" */ '../views/System/MenuManage2'),
             meta: {title: '菜单管理'}
          },
          {
             path: "user",
             name: 'user',
-            component: () => import(/* webpackChunkName: "PeopleManage" */ '../views/BasicInfo/PeopleManage'),
+            component: () => import(/* webpackChunkName: "PeopleManage" */ '../views/System/user'),
             // component: () => import(/* webpackChunkName: "user" */ '../views/System/user'),
             meta: {title: '用户管理'}
          },
@@ -39,7 +39,13 @@ export const asyncRoutes = [
             path: "dict",
             name: 'dict',
             component: () => import(/* webpackChunkName: "dict" */ '../views/System/dict'),
-            meta: {title: '字段管理'}
+            meta: {title: '字典管理'}
+         },
+         {
+            path: "dictData/:id",
+            name: 'dictData',
+            component: () => import(/* webpackChunkName: "dictData" */ '../views/System/dictData'),
+            meta: {title: '字典数据'}
          },
          {
             path: "dept",
@@ -47,6 +53,7 @@ export const asyncRoutes = [
             component: () => import(/* webpackChunkName: "dept" */ '../views/System/dept'),
             meta: {title: '部门管理'}
          },
+
          {
             path: "post",
             name: 'post',
@@ -57,43 +64,43 @@ export const asyncRoutes = [
             path: "role",
             name: 'role',
             // component: () => import(/* webpackChunkName: "post" */ '../views/System/role'),
-            component: () => import(/* webpackChunkName: "PowerRole" */ '../views/PowerManage/PowerRole'),
+            component: () => import(/* webpackChunkName: "PowerRole" */ '../views/System/PowerRole'),
             meta: {title: '角色管理'}
          },
          {
             path: "state",
             name: 'state',
-            component: () => import(/* webpackChunkName: "state" */ '../views/Parameter/CountryManage'),
+            component: () => import(/* webpackChunkName: "state" */ '../views/System/state'),
             meta: {title: '国家管理'},
          },
          {
             path: "site",
             name: 'SiteManage',
-            component: () => import(/* webpackChunkName: "SiteManage" */ '../views/Parameter/SiteManage'),
+            component: () => import(/* webpackChunkName: "SiteManage" */ '../views/System/SiteManage'),
             meta: {title: '站点管理'},
          },
          {
             path: "ApplyManage",
             name: 'ApplyManage',
-            component: () => import(/* webpackChunkName: "ApplyManage" */ '../views/Parameter/ApplyManage'),
+            component: () => import(/* webpackChunkName: "ApplyManage" */ '../views/System/ApplyManage'),
             meta: {title: '应用管理'},
          },
          {
             path: "rate",
-            name: 'ExchangeManage',
-            component: () => import(/* webpackChunkName: "ExchangeManage" */ '../views/Parameter/ExchangeManage'),
+            name: 'rate',
+            component: () => import(/* webpackChunkName: "ExchangeManage" */ '../views/System/rate'),
             meta: {title: '汇率管理'},
          },
          {
             path: "area",
             name: 'RegionManage',
-            component: () => import(/* webpackChunkName: "RegionManage" */ '../views/Parameter/RegionManage'),
+            component: () => import(/* webpackChunkName: "RegionManage" */ '../views/System/RegionManage'),
             meta: {title: '区域管理'},
          },
          {
             path: 'enterprise',
             name: 'CompanyInfo',
-            component: () => import(/* webpackChunkName: "CompanyInfo" */ '../views/BasicInfo/CompanyInfo'),
+            component: () => import(/* webpackChunkName: "CompanyInfo" */ '../views/System/CompanyInfo'),
             meta: {title: '企业信息'}
          },
          {
@@ -101,6 +108,18 @@ export const asyncRoutes = [
             name: 'unit',
             component: () => import(/* webpackChunkName: "unit" */ '../views/System/unit'),
             meta: {title: '单位管理'},
+         },
+         {
+            path: "message",
+            name: 'message',
+            component: () => import(/* webpackChunkName: "message" */ '../views/System/message'),
+            meta: {title: '消息通知'},
+         },
+         {
+            path: "userinfo",
+            name: 'userinfo',
+            component: () => import(/* webpackChunkName: "userinfo" */ '../views/AccountCenter/PersonalInfo'),
+            meta: {title: '个人中心'},
          },
       ],
    },
@@ -115,24 +134,24 @@ export const asyncRoutes = [
          icon: 'el-icon-notebook-2', /*此处icon无效， menu js 才有效*/
       },
       children: [
-         {
-            path: 'OrganManage',
-            name: 'OrganManage',
-            component: () => import(/* webpackChunkName: "OrganManage" */ '../views/BasicInfo/OrganManage'),
-            meta: {title: '组织结构管理'}
-         },
-         {
-            path: 'PeopleManage',
-            name: 'PeopleManage',
-            component: () => import(/* webpackChunkName: "PeopleManage" */ '../views/BasicInfo/PeopleManage'),
-            meta: {title: '人员管理'}
-         },
-         {
-            path: 'ApplyAuthorize',
-            name: 'ApplyAuthorize',
-            component: () => import(/* webpackChunkName: "ApplyAuthorize" */ '../views/BasicInfo/ApplyAuthorize'),
-            meta: {title: '应用授权'}
-         }
+         // {
+         //    path: 'OrganManage',
+         //    name: 'OrganManage',
+         //    component: () => import(/* webpackChunkName: "OrganManage" */ '../views/BasicInfo/OrganManage'),
+         //    meta: {title: '组织结构管理'}
+         // },
+         // {
+         //    path: 'PeopleManage',
+         //    name: 'PeopleManage',
+         //    component: () => import(/* webpackChunkName: "PeopleManage" */ '../views/System/PeopleManage'),
+         //    meta: {title: '人员管理'}
+         // },
+         // {
+         //    path: 'ApplyAuthorize',
+         //    name: 'ApplyAuthorize',
+         //    component: () => import(/* webpackChunkName: "ApplyAuthorize" */ '../views/BasicInfo/ApplyAuthorize'),
+         //    meta: {title: '应用授权'}
+         // }
 
       ]
    },
@@ -150,15 +169,15 @@ export const asyncRoutes = [
          {
             path: "PowerRole",
             name: 'PowerRole',
-            component: () => import(/* webpackChunkName: "PowerRole" */ '../views/PowerManage/PowerRole'),
+            component: () => import(/* webpackChunkName: "PowerRole" */ '../views/System/PowerRole'),
             meta: {title: '业务系统角色'}
          },
-         {
-            path: "MenuManage",
-            name: 'MenuManage',
-            component: () => import(/* webpackChunkName: "MenuManage" */ '../views/PowerManage/MenuManage'),
-            meta: {title: '菜单管理'}
-         },
+         // {
+         //    path: "MenuManage",
+         //    name: 'MenuManage',
+         //    component: () => import(/* webpackChunkName: "MenuManage" */ '../views/System/MenuManage'),
+         //    meta: {title: '菜单管理'}
+         // },
 
       ]
    },
@@ -210,12 +229,12 @@ export const asyncRoutes = [
          icon: 'el-icon-s-postcard',
       },
       children: [
-         {
-            path: "CountryManage",
-            name: 'CountryManage',
-            component: () => import(/* webpackChunkName: "CountryManage" */ '../views/Parameter/CountryManage'),
-            meta: {title: '国家管理'},
-         },
+         // {
+         //    path: "CountryManage",
+         //    name: 'CountryManage',
+         //    component: () => import(/* webpackChunkName: "CountryManage" */ '../views/System/CountryManage'),
+         //    meta: {title: '国家管理'},
+         // },
 
          {
             path: "BusinessConfig",

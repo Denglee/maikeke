@@ -1,5 +1,5 @@
 <template>
-   <div class="app-container">
+   <div class="public-main">
       <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch">
          <el-form-item label="菜单名称" prop="menuName">
             <el-input
@@ -92,7 +92,26 @@
          <el-form ref="form" :model="form" :rules="rules" label-width="80px">
             <el-row>
                <el-col :span="24">
-                  <el-form-item label="上级菜单">
+                 <el-form-item label="上级菜单">
+                   <el-cascader
+                       v-model="form.parentId"
+                       :options="menuOptions"
+                       :show-all-levels="false"
+                       :props="{
+                                checkStrictly: true,
+                                value:'id',
+                                label:'label',
+                                emitPath:false
+                             }"
+                       clearable>
+                     <template slot-scope="{ node, data }">
+                       <span>{{ data.label }}</span>
+                       <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+                     </template>
+                   </el-cascader>
+                 </el-form-item>
+
+<!--                  <el-form-item label="上级菜单">
                      <treeselect
                         v-model="form.parentId"
                         :options="menuOptions"
@@ -100,7 +119,8 @@
                         :show-count="true"
                         placeholder="选择上级菜单"
                      />
-                  </el-form-item>
+                  </el-form-item>-->
+
                </el-col>
                <el-col :span="24">
                   <el-form-item label="菜单类型" prop="menuType">
@@ -202,7 +222,7 @@
 
 <script>
 // import { listMenu, getMenu, delMenu, addMenu, updateMenu } from "@/api/system/menu";
-import {addMenu,updateMenu,getMenu,menuDelRouters,listMenu,menuGetRouters} from "@/assets/js/api";
+import {addMenu,updateMenu,getMenu,menuDelRouters,getMenuTable,listMenu,menuGetRouters} from "@/assets/js/api";
 
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -272,6 +292,8 @@ export default {
    },
    created() {
       this.getList();
+
+     this.getTreeselect();
       // this.getDicts("sys_show_hide").then(response => {
       //    this.visibleOptions = response.data;
       // });
@@ -331,11 +353,13 @@ export default {
       },
       /** 查询菜单下拉树结构 */
       getTreeselect() {
-         listMenu().then(response => {
-            this.menuOptions = [];
-            const menu = {menuId: 0, menuName: '主类目', children: []};
-            menu.children = this.handleTree(response.data, "menuId");
-            this.menuOptions.push(menu);
+        getMenuTable().then(res => {
+           this.menuOptions = res.data;
+
+            // this.menuOptions = [];
+            // const menu = {menuId: 0, menuName: '主类目', children: []};
+            // menu.children = this.handleTree(res.data, "menuId");
+            // this.menuOptions.push(menu);
          });
       },
       // 显示状态字典翻译
@@ -389,7 +413,6 @@ export default {
       /** 新增按钮操作 */
       handleAdd(row) {
          this.reset();
-         this.getTreeselect();
          if (row != null && row.menuId) {
             this.form.parentId = row.menuId;
          } else {
@@ -401,7 +424,7 @@ export default {
       /** 修改按钮操作 */
       handleUpdate(row) {
          this.reset();
-         this.getTreeselect();
+
          getMenu(row.menuId).then(response => {
             this.form = response.data;
             this.open = true;

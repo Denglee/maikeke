@@ -27,8 +27,9 @@
                 @row-click="handleRowClick">
 
          <el-table-column type="selection"></el-table-column>
-         <el-table-column prop="userName" label="用户名"></el-table-column>
-         <el-table-column prop="nickName" label="真实姓名"></el-table-column>
+         <el-table-column prop="userName" label="用户账号"></el-table-column>
+         <el-table-column prop="nickName" label="用户昵称"></el-table-column>
+
          <el-table-column prop="phonenumber" label="手机号码"></el-table-column>
          <el-table-column prop="tel" label="手机号"></el-table-column>
          <el-table-column prop="store" label="可查看的店铺">
@@ -66,17 +67,19 @@
                  :close-on-click-modal="false"
                  @close='FnCloseAdd'
                  width="800px">
-         <el-transfer v-model="removeStoreForm.storeVal"
-                      :data="storeArr"
+
+         <el-transfer v-model="removeRoleForm.checkedRoleArr"
+                      :data="shuttleRoleArr"
                       :titles="['添加用户', '已选用户']"
                       :button-texts="['加入左边', '加入右边']"
                       :props="{
-                        key: 'value',
-                        label: 'label',
+                        key: 'userId',
+                        value:'userId',
+                        label: 'userName',
                       }"></el-transfer>
          <div class="formR-main">
             <el-button type="primary" class="public-btn" :loading="btnState.btnSaveStore"
-                       @click="FnBtnSaveRole('removeStoreForm')">保存</el-button>
+                       @click="FnBtnSaveRole('removeRoleForm')">保存</el-button>
          </div>
       </el-dialog>
 
@@ -85,7 +88,7 @@
 
 <script>
 import PersonalInfo from '@/views/AccountCenter/PersonalInfo'
-import {queryUser,getRole} from '@/assets/js/api'
+import {queryUser,getRole,listByRole,listUser,saveRoleRelation} from '@/assets/js/api'
 export default {
    name: "RoleUsers",
    props: {
@@ -109,46 +112,35 @@ export default {
          searchForm: {
             trueName: '',
          },
-         removeStoreForm:{},
-         /*穿梭框*/
-         storeArr:[
-            {
-               label:'店铺1',
-               value:'store1',
-            },
-            {
-               label:'店铺2',
-               value:'store2',
-            },
-            {
-               label:'店铺3',
-               value:'store3',
-            },
-         ],
+         removeRoleForm:{
+            checkedRoleArr:[],
+         },
 
-         tableArr: [
-            // {
-            //    userName: 'MK001',
-            //    trueName: '王小宝',
-            //    tel: '17688829444',
-            //    store: '1',
-            //    product: '1',
-            //    email: '1',
-            // }
-         ],
+         /*穿梭框 配置人员*/
+         shuttleRoleArr:[],
+
+         /*角色信息 table*/
+         tableArr: [ ],
       }
    },
    methods: {
-
+      /*根据角色编号获取所关联人员详情*/
       FnGetUser(checkRoleId){
          queryUser(checkRoleId).then(res=>{
             console.log(res);
-            this.tableArr = res.data;
+            let queryUserArr = res.data;
+            this.tableArr = queryUserArr;
+
+            this.removeRoleForm.checkedRoleArr= [];
+            queryUserArr.forEach((item,index)=>{
+               this.removeRoleForm.checkedRoleArr.push(item.id);
+            });
          });
 
-         getRole(this.checkRoleId).then(res=>{
-            console.log(res);
-         });
+         /*根据角色编号获取详细信息 api*/
+         // getRole(this.checkRoleId).then(res=>{
+         //    console.log(res);
+         // });
       },
 
       /*搜索用户名或者真实姓名 */
@@ -163,14 +155,39 @@ export default {
          // this.$refs['RefAddForm'].resetFields();
       },
 
+      /*获取 角色id 下的用户列表*/
+      FnGetListByRole(checkRoleId){
+         listByRole(checkRoleId).then(res=>{
+            console.log(res);
+            // this.shuttleRoleArr = res.data
+         })
+      },
+
+      /*全部 用户 列表*/
+      FnGetListUser(){
+         listUser().then(res=>{
+            console.log(res);
+            this.shuttleRoleArr = res.data;
+         })
+      },
+
       /*添加用户*/
       FnAddRole() {
          this.diaState.diaAddUser = true;
+         console.log(this.checkRoleId);
+         this.FnGetListByRole(this.checkRoleId);
+
       },
 
       /*添加用户 确定*/
       FnBtnSaveRole(){
-         console.log();
+         console.log(this.removeRoleForm.checkedRoleArr);
+
+         saveRoleRelation( this.checkRoleId,
+            this.removeRoleForm.checkedRoleArr,
+         ).then(res=>{
+            console.log(res);
+         })
       },
 
       /*批量分配店铺*/
@@ -203,6 +220,7 @@ export default {
 
    },
    mounted(){
+      this.FnGetListUser();
       this.FnGetUser(this.checkRoleId);
    },
 }

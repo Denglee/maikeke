@@ -1,5 +1,5 @@
 <template>
-   <div class="app-container">
+   <div class="public-main">
       <el-form :model="queryParams" ref="queryForm" v-show="showSearch" :inline="true">
          <el-form-item label="角色名称" prop="roleName">
             <el-input
@@ -405,7 +405,7 @@ export default {
          }).then(function() {
             return changeRoleStatus(row.roleId, row.status);
          }).then(() => {
-            this.msgSuccess(text + "成功");
+            this.$message(text + "成功");
          }).catch(function() {
             row.status = row.status === "0" ? "1" : "0";
          });
@@ -535,14 +535,14 @@ export default {
                if (this.form.roleId != undefined) {
                   this.form.menuIds = this.getMenuAllCheckedKeys();
                   updateRole(this.form).then(response => {
-                     this.msgSuccess("修改成功");
+                     this.$message("修改成功");
                      this.open = false;
                      this.getList();
                   });
                } else {
                   this.form.menuIds = this.getMenuAllCheckedKeys();
                   addRole(this.form).then(response => {
-                     this.msgSuccess("新增成功");
+                     this.$message("新增成功");
                      this.open = false;
                      this.getList();
                   });
@@ -555,7 +555,7 @@ export default {
          if (this.form.roleId != undefined) {
             this.form.deptIds = this.getDeptAllCheckedKeys();
             dataScope(this.form).then(response => {
-               this.msgSuccess("修改成功");
+               this.$message("修改成功");
                this.openDataScope = false;
                this.getList();
             });
@@ -572,7 +572,7 @@ export default {
             return delRole(roleIds);
          }).then(() => {
             this.getList();
-            this.msgSuccess("删除成功");
+            this.$message("删除成功");
          })
       },
       /** 导出按钮操作 */

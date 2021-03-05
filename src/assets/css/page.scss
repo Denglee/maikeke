@@ -24,3 +24,12 @@
 #SubTabs-power {
    padding: 10px;
 }
+
+/*个人信息*/
+.person-form{
+   padding:0 40px;
+   .el-input,
+   .el-select{
+      width: 320px !important;
+   }
+}
