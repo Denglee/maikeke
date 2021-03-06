@@ -37,21 +37,20 @@
                />
             </el-select>
          </el-form-item>
-         <el-form-item label="创建时间">
-            <el-date-picker
-               v-model="dateRange"
-               size="small"
-               style="width: 240px"
-               value-format="yyyy-MM-dd"
-               type="daterange"
-               range-separator="-"
-               start-placeholder="开始日期"
-               end-placeholder="结束日期"
-            ></el-date-picker>
-         </el-form-item>
+<!--         <el-form-item label="创建时间">-->
+<!--            <el-date-picker-->
+<!--               v-model="dateRange"-->
+<!--               size="small"-->
+<!--               style="width: 240px"-->
+<!--               value-format="yyyy-MM-dd"-->
+<!--               type="daterange"-->
+<!--               range-separator="-"-->
+<!--               start-placeholder="开始日期"-->
+<!--               end-placeholder="结束日期"-->
+<!--            ></el-date-picker>-->
+<!--         </el-form-item>-->
          <el-form-item>
             <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
          </el-form-item>
       </el-form>
 
@@ -65,15 +64,15 @@
                @click="handleAdd"
             >新增</el-button>
          </el-col>
-         <el-col :span="1.5">
-            <el-button
-               type="success"
-               plain
-               icon="el-icon-edit"
-               size="mini"
-               :disabled="single"
-               @click="handleUpdate"
-            >修改</el-button>
+<!--         <el-col :span="1.5">-->
+<!--            <el-button-->
+<!--               type="success"-->
+<!--               plain-->
+<!--               icon="el-icon-edit"-->
+<!--               size="mini"-->
+<!--               :disabled="single"-->
+<!--               @click="handleUpdate"-->
+<!--            >修改</el-button>-->
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -85,24 +84,24 @@
                @click="handleDelete"
             >删除</el-button>
          </el-col>
-         <el-col :span="1.5">
-            <el-button
-               type="warning"
-               plain
-               icon="el-icon-download"
-               size="mini"
-               @click="handleExport"
-            >导出</el-button>
-         </el-col>
-         <el-col :span="1.5">
-            <el-button
-               type="danger"
-               plain
-               icon="el-icon-refresh"
-               size="mini"
-               @click="handleClearCache"
-            >清理缓存</el-button>
-         </el-col>
+<!--         <el-col :span="1.5">-->
+<!--            <el-button-->
+<!--               type="warning"-->
+<!--               plain-->
+<!--               icon="el-icon-download"-->
+<!--               size="mini"-->
+<!--               @click="handleExport"-->
+<!--            >导出</el-button>-->
+<!--         </el-col>-->
+<!--         <el-col :span="1.5">-->
+<!--            <el-button-->
+<!--               type="danger"-->
+<!--               plain-->
+<!--               icon="el-icon-refresh"-->
+<!--               size="mini"-->
+<!--               @click="handleClearCache"-->
+<!--            >清理缓存</el-button>-->
+<!--         </el-col>-->
 <!--         <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>-->
       </el-row>
 
@@ -121,7 +120,7 @@
               </router-link>
             </template>
          </el-table-column>
-         <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" />
+         <el-table-column label="状态" align="center" prop="status"/>
          <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true" />
          <el-table-column label="创建时间" align="center" prop="createTime" width="180">
             <template slot-scope="scope">
@@ -222,8 +221,6 @@ export default {
 
          // 查询参数
          queryParams: {
-            pageNum: 1,
-            pageSize: 10,
             dictName: undefined,
             dictType: undefined,
             status: undefined
@@ -252,7 +249,15 @@ export default {
       /** 查询字典类型列表 */
       getList() {
          this.loading = true;
-         listDict(this.queryParams, this.dateRange).then(res => {
+         console.log(this.pageArr);
+        this.queryParams, this.dateRange,this.pageArr
+         listDict({
+           pageSize: this.pageArr.pageSize,
+           pageNum: this.pageArr.pageNum,
+           dictName:this.queryParams.dictName,
+           dictType:this.queryParams.dictType,
+           status:this.queryParams.status,
+         }).then(res => {
                this.typeList = res.data;
                this.pageArr.total = res.total;
                this.loading = false;
@@ -260,10 +265,6 @@ export default {
          );
       },
 
-      // 字典状态字典翻译
-      statusFormat(row, column) {
-         // return this.selectDictLabel(this.statusOptions, row.status);
-      },
       // 取消按钮
       cancel() {
          this.open = false;
@@ -282,7 +283,7 @@ export default {
       },
       /** 搜索按钮操作 */
       handleQuery() {
-         this.queryParams.pageNum = 1;
+         this.pageArr.pageNum = 1;
          this.getList();
       },
       /** 重置按钮操作 */
@@ -370,12 +371,12 @@ export default {
 
      /*分页*/
      FaPageCurrent(page) {
-       console.log(page);
-       // this.staffPage = page;
-       // this.getStaffIndex();
+       this.pageArr.pageNum = page;
+       this.getList();
      },
      FaSizeChange(size) {
-       console.log(size);
+       this.pageArr.pageSize = size;
+       this.getList();
      },
    }
 };

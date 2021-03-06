@@ -35,7 +35,8 @@
       <el-table class="public-table" border
                 :data="tableArr"
                 ref="refTable"
-                height="600">
+                height="600"
+                v-loading="btnState.loadTable">
         <el-table-column type="selection"></el-table-column>
         <el-table-column prop="siteName" label="国家站点"></el-table-column>
         <el-table-column prop="applyName" label="所属区域站点"></el-table-column>
@@ -80,7 +81,6 @@
                :visible.sync="diaState.diaAddSite"
                custom-class="public-dialog"
                :close-on-click-modal="false"
-               @close='FnCloseAddSite'
                width="800px">
       <el-form :model="addSiteForm" ref="RefAddSiteForm" label-width="136px" class="public-diaForm">
         <el-form-item label="区域站点名称：" prop="siteName"
@@ -118,7 +118,6 @@
                :visible.sync="diaState.diaAddCountry"
                custom-class="public-dialog"
                :close-on-click-modal="false"
-               @close='FnCloseAdd'
                width="800px">
       <el-form :model="addForm" ref="RefAddForm" label-width="160px" class="public-diaForm">
         <el-form-item label="国家站点编号：" prop="siteNum" :rules="{ required: true, message: '请输入国家站点编号', trigger: 'blur' }">
@@ -210,6 +209,7 @@ export default {
     return {
       activeMenu: '0-0',
       btnState: {
+        loadTable: true,
         btnAdd: false,
         btnCancel: false,
 
@@ -261,7 +261,7 @@ export default {
         this.diaState.diaAddSite = true;
         getSite(val.data.id).then(res=>{
           console.log(res);
-          this.addSiteForm = res.data;
+          this.addSiteForm = Object.assign({},res.data);
           this.addSiteForm.applyId = res.data.applyId + '';
         })
       }
@@ -278,13 +278,8 @@ export default {
     },
     /*区域站点 A 弹出*/
     FnBtnAddSite(val) {
-      console.log(val);
-      this.diaState.diaAddSite = true;
-    },
-    /*区域站点 B 关闭*/
-    FnCloseAddSite() {
       this.addSiteForm = {};
-      this.$refs['RefAddSiteForm'].resetFields()
+      this.diaState.diaAddSite = true;
     },
 
     /*区域站点 C 保存 */
@@ -292,6 +287,7 @@ export default {
       this.addSiteForm.type= 0;
       addSite(this.addSiteForm).then(res=>{
         console.log(res);
+        this.$message(res.msg);
       })
     },
 
@@ -299,14 +295,9 @@ export default {
     FnBtnAddCountry() {
       this.diaState.diaAddCountry = true;
       this.diaState.submitType = 'add';
-      // this.$refs['RefAddForm'].resetFields();
+      this.addForm ={};
     },
-    /* 添加国家站点 取消  */
-    FnCloseAdd() {
-      this.GLOBAL.btnStateChange(this, 'btnState', 'btnCancel');
-      console.log(this.addForm);
-      this.$refs['RefAddForm'].resetFields();
-    },
+
     /*提交 国家站点*/
     FnBtnSaveCountry(){
       let ApplyId = this.addForm.siteId;
@@ -331,7 +322,7 @@ export default {
     FnCommandCountry(val){
       console.log(val);
       if(val.type == 'update'){
-        this.addForm = val.data;
+        this.addForm = Object.assign({},val.data);
         this.addForm.state = Number(val.data.state);
         this.diaState.diaAddCountry = true;
       }
@@ -347,6 +338,9 @@ export default {
       listSite().then(res => {
         console.log(res);
         this.tableArr = res.data;
+        this.btnState.loadTable = false;
+      }).catch(res=>{
+        this.btnState.loadTable = false;
       })
     },
 

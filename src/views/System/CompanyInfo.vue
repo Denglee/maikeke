@@ -17,11 +17,12 @@
         <el-input type="textarea" v-model="roleForm.site" autocomplete="off" placeholder="请输入企业地址" clearable></el-input>
       </el-form-item>
        <el-form-item label="企业LOGO" prop="ReportTo">
-         <SingleCropper :autoCropWidth ='220'
+         <SingleCropper :autoCropWidth ='200'
                         :autoCropHeight ='100'
                         :imgWidth="200"
                         :imgHeight="100"
-                        :initUrl="roleForm.logoPath"></SingleCropper>
+                        :initUrl="roleForm.logoPath"
+                        @FnUploadPage="uploadLogo"></SingleCropper>
        </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="postStaffAdd('role')">提交</el-button>
@@ -33,7 +34,7 @@
 
 <script>
 import SingleCropper from "@/components/cropper/SingleCropper";
-import {listDetails} from "@/assets/js/api";
+import {listDetails, upload, uploadUserAvatar} from "@/assets/js/api";
 
 export default {
   name: "PersonalInfo",
@@ -85,6 +86,15 @@ export default {
            this.roleForm = res.data[0];
         })
      },
+
+    /*logo上传*/
+    uploadLogo(data){
+      let formData = new FormData();
+      formData.append("logoPath", data);
+      upload(formData).then(res => {
+        this.$message(res.msg);
+      });
+    }
   },
   created() {
      this.FnGetListDetails();

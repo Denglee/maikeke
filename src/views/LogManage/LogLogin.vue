@@ -6,8 +6,8 @@
         <el-input v-model="searchForm.username" autocomplete="off" class="public-input" placeholder="请输入" clearable></el-input>
       </el-form-item>
 
-      <el-form-item label="IP地址" prop="sex">
-        <el-input v-model="searchForm.sex" autocomplete="off" class="public-input" placeholder="请输入" clearable></el-input>
+      <el-form-item label="IP地址" prop="operIp">
+        <el-input v-model="searchForm.operIp" autocomplete="off" class="public-input" placeholder="请输入" clearable></el-input>
       </el-form-item>
 
       <el-form-item label="登录时间" prop="loginTime">
@@ -47,16 +47,29 @@
       <el-table-column prop="loginTime" label="登录时间"></el-table-column>
     </el-table>
 
+    <Pagination
+        :pageNum="pageArr.pageNum"
+        :total="pageArr.total"
+        :pageSize="pageArr.pageSize"
+        @SonSizeChange='FaSizeChange'
+        @SonCurrentChange="FaPageCurrent"></Pagination>
+
   </div>
 </template>
 
 <script>
+import {operlogList} from '@/assets/js/api'
 export default {
   name: "LogLogin", //文档管理
   data(){
     return{
       searchForm:{
 
+      },
+      pageArr: {
+        pageNum: 1,
+        total: 20,
+        pageSize: 10,
       },
 
       btnState:{
@@ -74,21 +87,24 @@ export default {
           label: '店铺2',
         },
       ],
-      tableArr:[
-        {
-          username:'董小姐',
-          part:'技术部',
-          equipment:'Chrome',
-          system:'Windows 10',
-          IP:'124.126.244.150 / 四川 成都',
-          state:'1',
-          info:'1',
-          loginTime:'2020-01-12',
-        },
-      ],
+      tableArr:[],
     }
   },
   methods:{
+
+    FnGetOperlogList(){
+      operlogList({
+        pageSize: this.pageArr.pageSize,
+        pageNum: this.pageArr.pageNum,
+        operIp:this.searchForm.operIp,
+      }).then(res=>{
+        console.log(res);
+        this.tableArr = res.data;
+        // this.pageArr.total = res.total;
+      })
+    },
+
+
     /* 1、 编辑选中  */
     checkedStore(val) {
       console.log(val);
@@ -118,9 +134,17 @@ export default {
       }
     },
 
+    /*分页*/
+    FaPageCurrent(page) {
+      this.pageArr.pageNum = page ;
+    },
+    FaSizeChange(size) {
+      this.pageArr.pageSize = size ;
+    },
+
   },
   created(){
-
+    this.FnGetOperlogList();
   },
 }
 </script>

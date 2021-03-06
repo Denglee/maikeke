@@ -117,7 +117,6 @@ export const getDictData = params => get('/system/dict/data/'+params);     /* �
 export const getDictType = params => get('/system/dict/data/type/'+params);     /* type下拉  */
 export const delDictData = params => axiosDelete('/system/dict/data/'+params);     /* 删除 */
 
-
 /* 21-02-23 国家 */
 export const addState = params => post('/system/state/', params);     /* 新增   */
 export const updateState = params => put('/system/state/', params);     /* 修改   */
@@ -179,6 +178,10 @@ export const delMessage = params => axiosDelete('/system/message/'+params);     
 
 /*文件上传*/
 export const upload = params => post('/system/upload/',params);     /* 上传 */
+
+
+/*日志管理*/
+export const operlogList = params => get('/system/operlog/list/',+params);     /* 查询操作日志记录  */
 
 
 

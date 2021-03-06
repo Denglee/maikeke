@@ -2,19 +2,26 @@
   <div class="public-main">
     <div class="formR-main">
       <el-button icon="el-icon-folder-add" @click="FnBtnAdd" :loading="btnState.btnAdd" class="public-btn">
-        新增区域
-      </el-button>
+        新增区域</el-button>
     </div>
     <el-table class="public-table" border
               :data="tableArr"
               ref="refTable"
-              height="600">
+              height="600"
+              v-loading="btnState.loadTable"
+    >
       <el-table-column type="index" label="序号"></el-table-column>
       <el-table-column prop="areaNum" label="区域代码"></el-table-column>
       <el-table-column prop="areaName" label="区域名称"></el-table-column>
       <el-table-column prop="areaForShort" label="区域简称"></el-table-column>
       <el-table-column prop="postcode" label="邮编"></el-table-column>
-      <el-table-column prop="state" label="国家"></el-table-column>
+      <el-table-column prop="state" label="国家">
+        <template slot-scope="{row}">
+          <span v-for="item in stateArr" :key="item.id">
+            <span v-if="row.state == item.stateId">{{item.stateName}}</span>
+          </span>
+        </template>
+      </el-table-column>
 <!--      <el-table-column prop="parentArea" label="上级区域"></el-table-column>-->
       <el-table-column prop="orderNum" label="排序"></el-table-column>
       <el-table-column prop="status" label="状态" width="180px">
@@ -25,7 +32,7 @@
               inactive-value="1"
               active-text="正常"
               inactive-text="停用"
-              @change='FnSwitchState(row.state)'>
+              @change='FnSwitchState(row)'>
           </el-switch>
         </template>
       </el-table-column>
@@ -59,7 +66,6 @@
                :visible.sync="diaState.diaAddArea"
                custom-class="public-dialog"
                :close-on-click-modal="false"
-               @close='FnCloseAddSite'
                width="800px">
       <el-form :model="addSiteForm" ref="RefAddSiteForm" label-width="156px" class="public-diaForm">
         <el-form-item label="区域代码：" prop="areaNum">
@@ -88,7 +94,6 @@
         </el-form-item>
 
         <el-form-item label="区域：" prop="parentArea">
-<!--          areaTreeSelectArr-->
           <el-cascader
               v-model="addSiteForm.parentArea"
               :options="areaTreeSelectArr"
@@ -164,10 +169,16 @@ export default {
   methods: {
     /*区域列表 api*/
     FnGetArea() {
-      listArea().then(res => {
+      listArea({
+        pageSize:this.pageArr.pageSize,
+        pageNum:this.pageArr.pageNum,
+      }).then(res => {
         console.log(res);
         this.tableArr = res.data;
         this.pageArr.total = res.total;
+        this.btnState.loadTable = false;
+      }).catch(res=>{
+        this.btnState.loadTable = false;
       })
     },
     /*获取国家列表*/
@@ -223,19 +234,25 @@ export default {
 
       /*修改*/
       if (val.type == 'update') {
-        this.addSiteForm = val.data;
-
+        this.addSiteForm = Object.assign({},val.data);
+        this.addSiteForm.state = Number(val.data.state);
         this.diaState.diaAddArea = true;
         this.diaTitle = "修改区域";
       }
     },
 
-    FnSwitchState(){
-
+    /*状态切换*/
+    FnSwitchState(val){
+      this.addSiteForm = val;
+      console.log( this.addSiteForm);
+      this.FnUpdateApply();
     },
-    /*关闭*/
-    FnCloseAddSite() {},
-
+    FnUpdateApply(){
+      updateArea(this.addSiteForm).then(res => {
+        console.log(res);
+        this.$message(res.msg);
+      })
+    },
     /*保存添加、修改*/
     FnBtnSaveAddSite() {
       let AreaId = this.addSiteForm.areaId;
@@ -243,10 +260,7 @@ export default {
       this.GLOBAL.btnStateChange(this, 'btnState', 'btnSubmitSite');
       if (AreaId) {
         /*有 AreaId， 则修改*/
-        updateArea(this.addSiteForm).then(res => {
-          console.log(res);
-          this.$message(res.msg);
-        })
+        this.FnUpdateApply();
       } else {
         /*没有 AreaId，则添加*/
         addArea(this.addSiteForm).then(res => {
@@ -258,12 +272,12 @@ export default {
 
     /*分页 */
     FaPageCurrent(page) {
-      console.log(page);
-      // this.staffPage = page;
-      // this.getStaffIndex();
+      this.pageArr.pageNum = page;
+      this.FnGetArea();
     },
     FaSizeChange(size) {
-      console.log(size);
+      this.FnGetArea();
+      this.pageArr.pageSize = size;
     },
 
   },

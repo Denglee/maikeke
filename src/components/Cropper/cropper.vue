@@ -80,9 +80,8 @@ export default {
         autoCrop: true, // 是否默认生成截图框  (默认:false)
         autoCropWidth: 220,  // 默认生成截图框宽度  (默认:80%)
         autoCropHeight: 160, // 默认生成截图框高度  (默认:80%)
-        fixedBox: false, // 固定截图框大小 不允许改变  (默认:false)
+        fixedBox: true, // 固定截图框大小 不允许改变  (默认:false)
         enlarge: 1,  // 图片根据截图框输出比例倍数+
-
       },
       isDisabled: false,
       downImg: '#',
@@ -95,7 +94,7 @@ export default {
   mounted() {
     // console.log(this.$attrs.autoCropWidth);
     // console.log(this.$attrs.autoCropHeight);
-    console.log(this.isAvater);
+    // console.log(this.isAvater);
     this.option.autoCropWidth = this.$attrs.autoCropWidth;
     this.option.autoCropHeight = this.$attrs.autoCropHeight;
   },

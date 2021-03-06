@@ -8,7 +8,8 @@
     <el-table class="public-table" border
               :data="tableArr"
               ref="refTable"
-              height="600">
+              height="600"
+    v-loading="btnState.loadTable">
       <el-table-column type="index" label="序号"></el-table-column>
       <el-table-column prop="unitNum" label="单位编号"></el-table-column>
       <el-table-column prop="unitName" label="单位名称"></el-table-column>
@@ -21,7 +22,7 @@
               inactive-value="1"
               active-text="正常"
               inactive-text="停用"
-              @change='FnSwitchState(row.state)'>
+              @change='FnSwitchState(row)'>
           </el-switch>
         </template>
       </el-table-column>
@@ -54,7 +55,6 @@
                :visible.sync="diaState.diaAddUnit"
                custom-class="public-dialog"
                :close-on-click-modal="false"
-               @close='FnCloseAddSite'
                width="800px">
       <el-form :model="addSiteForm" ref="RefAddSiteForm" label-width="156px" class="public-diaForm">
         <el-form-item label="单位名称：" prop="unitName">
@@ -117,9 +117,12 @@ export default {
     /*单位列表 api*/
     FnGetUnit() {
       listUnit().then(res => {
+        this.btnState.loadTable = false;
         console.log(res);
         this.tableArr = res.data;
         this.pageArr.total = res.total;
+      }).catch(res=>{
+        this.btnState.loadTable = false;
       })
     },
 
@@ -163,18 +166,26 @@ export default {
 
       /*修改*/
       if (val.type == 'update') {
-        this.addSiteForm = val.data;
+        this.addSiteForm = Object.assign({},val.data);
 
         this.diaState.diaAddUnit = true;
         this.diaTitle = "修改单位";
       }
     },
 
-    FnSwitchState(){
-
+    /*状态切换*/
+    FnSwitchState(val){
+      this.addSiteForm = Object.assign({},val);
+      this.FnUpdateApply();
     },
-    /*关闭*/
-    FnCloseAddSite() {},
+
+    /*状态 更新api*/
+    FnUpdateApply(){
+      updateUnit(this.addSiteForm).then(res => {
+        console.log(res);
+        this.$message(res.msg);
+      })
+    },
 
     /*保存添加、修改*/
     FnBtnSaveAddSite() {
@@ -183,10 +194,7 @@ export default {
       this.GLOBAL.btnStateChange(this, 'btnState', 'btnSubmitSite');
       if (UnitId) {
         /*有 UnitId， 则修改*/
-        updateUnit(this.addSiteForm).then(res => {
-          console.log(res);
-          this.$message(res.msg);
-        })
+        this.FnUpdateApply();
       } else {
         /*没有 UnitId，则添加*/
         addUnit(this.addSiteForm).then(res => {
@@ -198,13 +206,14 @@ export default {
 
     /*分页 */
     FaPageCurrent(page) {
-      console.log(page);
-      // this.staffPage = page;
-      // this.getStaffIndex();
+      this.pageArr.pageNum = page;
+      this.FnGetUnit();
     },
     FaSizeChange(size) {
-      console.log(size);
+      this.FnGetUnit();
+      this.pageArr.pageSize = size;
     },
+
   },
   created() {
     this.FnGetUnit();

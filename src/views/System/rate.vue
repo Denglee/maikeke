@@ -8,7 +8,8 @@
     <el-table class="public-table" border
               :data="tableArr"
               ref="refTable"
-              height="600">
+              height="600"
+              v-loading="btnState.loadTable">
       <el-table-column type="index" label="序号"></el-table-column>
       <el-table-column prop="rateNum" label="货币代码"></el-table-column>
       <el-table-column prop="symbol" label="符号"></el-table-column>
@@ -67,7 +68,6 @@
                :visible.sync="diaState.diaAddRate"
                custom-class="public-dialog"
                :close-on-click-modal="false"
-               @close='FnCloseAddSite'
                width="800px">
       <el-form :model="addSiteForm" ref="RefAddSiteForm" label-width="156px" class="public-diaForm">
         <el-form-item label="汇率名称：" prop="rateName">
@@ -141,6 +141,9 @@ export default {
         console.log(res);
         this.tableArr = res.data;
         this.pageArr.total = res.total;
+        this.btnState.loadTable = false;
+      }).catch(res=>{
+        this.btnState.loadTable = false;
       })
     },
     /*添加*/
@@ -183,14 +186,11 @@ export default {
 
       /*修改*/
       if (val.type == 'update') {
-        this.addSiteForm = val.data;
+        this.addSiteForm = Object.assign({},val.data);
         this.diaState.diaAddRate = true;
         this.diaTitle = "修改汇率";
       }
     },
-
-    /*关闭*/
-    FnCloseAddSite() {},
 
     /*保存添加、修改*/
     FnBtnSaveAddSite() {
@@ -214,12 +214,12 @@ export default {
 
     /*分页 */
     FaPageCurrent(page) {
-      console.log(page);
-      // this.staffPage = page;
-      // this.getStaffIndex();
+      this.pageArr.pageNum = page;
+      this.FnGetRate();
     },
     FaSizeChange(size) {
-      console.log(size);
+      this.pageArr.pageSize = size;
+      this.FnGetRate();
     },
   },
   created() {

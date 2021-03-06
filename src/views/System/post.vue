@@ -19,7 +19,7 @@
             @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
+<!--      <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="岗位状态" clearable size="small">
           <el-option
               v-for="dict in statusOptions"
@@ -28,10 +28,9 @@
               :value="dict.dictValue"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
 
@@ -46,17 +45,17 @@
         >新增
         </el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-            type="success"
-            plain
-            icon="el-icon-edit"
-            size="mini"
-            :disabled="single"
-            @click="handleUpdate"
-        >修改
-        </el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--            type="success"-->
+<!--            plain-->
+<!--            icon="el-icon-edit"-->
+<!--            size="mini"-->
+<!--            :disabled="single"-->
+<!--            @click="handleUpdate"-->
+<!--        >修改-->
+<!--        </el-button>-->
+<!--      </el-col>-->
       <el-col :span="1.5">
         <el-button
             type="danger"
@@ -68,16 +67,16 @@
         >删除
         </el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-            type="warning"
-            plain
-            icon="el-icon-download"
-            size="mini"
-            @click="handleExport"
-        >导出
-        </el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--            type="warning"-->
+<!--            plain-->
+<!--            icon="el-icon-download"-->
+<!--            size="mini"-->
+<!--            @click="handleExport"-->
+<!--        >导出-->
+<!--        </el-button>-->
+<!--      </el-col>-->
       <!--         <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>-->
     </el-row>
 
@@ -90,12 +89,14 @@
       <el-table-column label="岗位编码" align="center" prop="postCode"/>
       <el-table-column label="岗位名称" align="center" prop="postName"/>
       <el-table-column label="岗位排序" align="center" prop="postSort"/>
-      <el-table-column label="状态" align="center" prop="status"/>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
-        <template slot-scope="scope">
-          <!--               <span>{{ parseTime(scope.row.createTime) }}</span>-->
+      <el-table-column label="状态" align="center" prop="status">
+        <template slot-scope="{row}">
+          <span v-if="row.status == 0">正常</span>
+          <span v-if="row.status == 1">停用</span>
         </template>
       </el-table-column>
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180"></el-table-column>
+      <el-table-column label="备注" align="center" prop="remark"></el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -115,14 +116,6 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <!--      <pagination-->
-    <!--         v-show="total>0"-->
-    <!--         :total="total"-->
-    <!--         :page.sync="queryParams.pageNum"-->
-    <!--         :limit.sync="queryParams.pageSize"-->
-    <!--         @pagination="getList"-->
-    <!--      />-->
 
     <Pagination
         :pageNum="pageArr.pageNum"
@@ -145,12 +138,10 @@
         </el-form-item>
         <el-form-item label="岗位状态" prop="status">
           <el-radio-group v-model="form.status">
-            <el-radio
-                v-for="dict in statusOptions"
-                :key="dict.dictValue"
-                :label="dict.dictValue"
-            >{{ dict.dictLabel }}
-            </el-radio>
+            <el-radio-group v-model="form.status">
+              <el-radio v-model="form.status" label="0">正常</el-radio>
+              <el-radio v-model="form.status" label="1">停用</el-radio>
+            </el-radio-group>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
@@ -202,7 +193,7 @@ export default {
       queryParams: {
         postCode: undefined,
         postName: undefined,
-        status: undefined
+        status: undefined,
       },
       // 表单参数
       form: {},
@@ -217,9 +208,6 @@ export default {
         postSort: [
           {required: true, message: "岗位顺序不能为空", trigger: "blur"}
         ]
-      },
-      searchForm:{
-        status:1
       },
     };
   },
@@ -236,7 +224,9 @@ export default {
       listPost({
         pageSize: this.pageArr.pageSize,
         pageNum: this.pageArr.pageNum,
-        status: this.searchForm.status,
+        postCode:this.queryParams.postCode,
+        postName:this.queryParams.postName,
+        status:this.queryParams.status,
       }).then(res => {
         // console.log(res.data);
         this.postList = res.data;
@@ -245,9 +235,9 @@ export default {
       });
     },
     // 岗位状态字典翻译
-    statusFormat(row, column) {
+/*    statusFormat(row, column) {
       // return this.selectDictLabel(this.statusOptions, row.status);
-    },
+    },*/
     // 取消按钮
     cancel() {
       this.open = false;
@@ -290,12 +280,16 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const postId = row.postId || this.ids
-      getPost(postId).then(res => {
-        this.form = res.data;
-        this.open = true;
-        this.title = "修改岗位";
-      });
+      const postId = row.postId || this.ids;
+      this.form = Object.assign({},row);
+      this.open = true;
+      this.title = "修改岗位";
+
+      // getPost(postId).then(res => {
+      //   this.form = res.data;
+      //   this.open = true;
+      //   this.title = "修改岗位";
+      // });
     },
     /** 提交按钮 */
     submitForm: function () {
@@ -348,12 +342,12 @@ export default {
 
     /*分页*/
     FaPageCurrent(page) {
-      console.log(page);
-      // this.staffPage = page;
-      // this.getStaffIndex();
+      this.pageArr.pageNum = page ;
+      this.getList();
     },
     FaSizeChange(size) {
-      console.log(size);
+      this.pageArr.pageSize = size ;
+      this.getList();
     },
   }
 };

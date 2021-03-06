@@ -46,14 +46,28 @@ export default {
       })
     },
 
+    /*获取用户信息 apii*/
     FnGetUserProfile(){
       userProfile().then(res=>{
-        this.UserInfo = res.data;
+        let UserInfoArr = {
+          avatar:res.data.avatar,
+          nickName:res.data.nickName,
+          userId:res.data.userId,
+        }
+        this.UserInfo = UserInfoArr;
+        sessionStorage.setItem('userProfile',JSON.stringify(UserInfoArr))
       })
     }
   },
   created(){
-    this.FnGetUserProfile()
+    let userProfile = sessionStorage.getItem('userProfile');
+    if(userProfile){
+      let UserInfoArr = JSON.parse(userProfile);
+      this.userInfo = UserInfoArr;
+    }else{
+      this.FnGetUserProfile();
+    }
+
   },
 }
 </script>

@@ -121,6 +121,12 @@ export const asyncRoutes = [
             component: () => import(/* webpackChunkName: "userinfo" */ '../views/AccountCenter/PersonalInfo'),
             meta: {title: '个人中心'},
          },
+         {
+            path: "logininfor",
+            name: 'LogLogin',
+            component: () => import(/* webpackChunkName: "LogLogin" */ '../views/LogManage/LogLogin'),
+            meta: {title: '登录日志'},
+         },
       ],
    },
 

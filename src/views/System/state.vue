@@ -11,7 +11,7 @@
               :data="tableArr"
               ref="refTable"
               height="600">
-      <el-table-column type="selection"></el-table-column>
+      <el-table-column type="index"></el-table-column>
       <el-table-column prop="stateId" label="ID"></el-table-column>
       <el-table-column prop="stateName" label="国家名称"></el-table-column>
       <el-table-column prop="twoForShort" label="二位字母"></el-table-column>
@@ -32,7 +32,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item :command="{ type:'delete', data:scope.row }">删除</el-dropdown-item>
               <el-dropdown-item :command="{ type:'update', data:scope.row }">修改</el-dropdown-item>
-              <el-dropdown-item :command="{ type:'detail', data:scope.row }">查看详情</el-dropdown-item>
+<!--              <el-dropdown-item :command="{ type:'detail', data:scope.row }">查看详情</el-dropdown-item>-->
 
             </el-dropdown-menu>
           </el-dropdown>
@@ -53,7 +53,6 @@
                :visible.sync="diaState.diaAddSite"
                custom-class="public-dialog"
                :close-on-click-modal="false"
-               @close='FnCloseAddSite'
                width="800px">
       <el-form :model="addSiteForm" ref="RefAddSiteForm" label-width="156px" class="public-diaForm">
         <el-form-item label="国家名称：" prop="stateName">
@@ -145,6 +144,8 @@ export default {
         console.log(res);
         this.tableArr = res.data;
         this.pageArr.total = res.total;
+      }).catch(res=>{
+        this.btnState.loadTable = false;
       })
     },
 
@@ -184,15 +185,10 @@ export default {
 
       /*修改*/
       if (val.type == 'update') {
-        this.addSiteForm = val.data;
+        this.addSiteForm = Object.assign({},val.data);
         this.diaState.diaAddSite = true;
         this.diaTitle = "修改国家";
       }
-    },
-
-    /*关闭*/
-    FnCloseAddSite() {
-
     },
 
     /*保存添加、修改*/
@@ -212,17 +208,16 @@ export default {
         })
       }
 
-
     },
 
     /*分页 */
     FaPageCurrent(page) {
-      console.log(page);
-      // this.staffPage = page;
-      // this.getStaffIndex();
+      this.pageArr.pageNum = page;
+      this.FnGetListState();
     },
     FaSizeChange(size) {
-      console.log(size);
+      this.pageArr.pageSize = size;
+      this.FnGetListState();
     },
   },
   created() {

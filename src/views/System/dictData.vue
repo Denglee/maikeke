@@ -9,12 +9,17 @@
               :data="tableArr"
               ref="refTable"
               height="600">
-      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column type="index" width="55" align="center" />
       <el-table-column label="字典编码" align="center" prop="dictCode" />
       <el-table-column label="字典标签" align="center" prop="dictLabel" />
       <el-table-column label="字典键值" align="center" prop="dictValue" />
       <el-table-column label="字典排序" align="center" prop="dictSort" />
-      <el-table-column label="状态" align="center" prop="status"/>
+      <el-table-column label="状态" align="center" prop="status">
+        <template slot-scope="{row}">
+          <span v-if="row.status == 0">正常</span>
+          <span v-if="row.status == 1">停用</span>
+        </template>
+      </el-table-column>
       <el-table-column label="备注" align="center" prop="remark"/>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180"></el-table-column>
 
@@ -33,6 +38,7 @@
         </template>
       </el-table-column>
     </el-table>
+
     <Pagination
         :pageNum="pageArr.pageNum"
         :total="pageArr.total"
@@ -64,11 +70,8 @@
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="addSiteForm.status">
-<!--            <el-radio-->
-<!--                v-for="dict in statusOptions"-->
-<!--                :key="dict.dictValue"-->
-<!--                :label="dict.dictValue"-->
-<!--            >{{dict.dictLabel}}</el-radio>-->
+            <el-radio v-model="addSiteForm.status" label="0">正常</el-radio>
+            <el-radio v-model="addSiteForm.status" label="1">停用</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
@@ -136,6 +139,8 @@ export default {
     FnGetDictList(type) {
       listDictData({
         dictType:type,
+        pageSize: this.pageArr.pageSize,
+        pageNum: this.pageArr.pageNum,
       }).then(res => {
         console.log(res);
         this.tableArr = res.data;
@@ -215,12 +220,12 @@ export default {
 
     /*分页 */
     FaPageCurrent(page) {
-      console.log(page);
-      // this.staffPage = page;
-      // this.getStaffIndex();
+      this.pageArr.pageNum = page;
+      this.FnGetDictList(this.dictType);
     },
     FaSizeChange(size) {
-      console.log(size);
+      this.pageArr.pageSize = size;
+      this.FnGetDictList(this.dictType);
     },
   },
   created() {

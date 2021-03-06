@@ -8,9 +8,10 @@
     <el-table class="public-table" border
               :data="tableArr"
               ref="refTable"
-              height="600">
+              height="600"
+              v-loading="btnState.loadTable">
       <el-table-column type="index" label="序号"></el-table-column>
-      <el-table-column prop="applyNum" label="应用编号"></el-table-column>
+      <el-table-column prop="applyLogo" label="应用LOGO"></el-table-column>
       <el-table-column prop="applyNum" label="应用编号"></el-table-column>
       <el-table-column prop="applyName" label="应用名称"></el-table-column>
       <el-table-column prop="status" label="状态">
@@ -21,13 +22,13 @@
               inactive-value="1"
               active-text="正常"
               inactive-text="停用"
-              @change='FnSwitchState(row.state)'>
+              @change='FnSwitchState(row)'>
           </el-switch>
         </template>
       </el-table-column>
       <el-table-column prop="remark" label="备注"></el-table-column>
 
-      <el-table-column label="操作">
+      <el-table-column label="操作" fixed="right">
         <template slot-scope="scope">
           <el-dropdown @command="FnCommand">
             <el-button type="primary">
@@ -55,12 +56,15 @@
                :visible.sync="diaState.diaAddApply"
                custom-class="public-dialog"
                :close-on-click-modal="false"
-               @close='FnCloseAddSite'
                width="800px">
       <el-form :model="addSiteForm" ref="RefAddSiteForm" label-width="156px" class="public-diaForm">
         <el-form-item label="应用logo：" prop="applyLogo">
-          <el-input type="text" v-model="addSiteForm.applyLogo" autocomplete="off" clearable
-                    placeholder="应用logo"></el-input>
+          <SingleCropper :autoCropWidth ='200'
+                         :autoCropHeight ='100'
+                         :imgWidth="200"
+                         :imgHeight="100"
+                         :initUrl="addSiteForm.applyLogo"
+                         @FnUploadPage="uploadLogo"></SingleCropper>
         </el-form-item>
         <el-form-item label="应用名称：" prop="applyName">
           <el-input type="text" v-model="addSiteForm.applyName" autocomplete="off" clearable
@@ -93,15 +97,17 @@
 </template>
 
 <script>
-import {addApply, delApply, listApply, updateApply} from '@/assets/js/api'
+import {addApply, delApply, listApply, updateApply, upload} from '@/assets/js/api'
 
+import SingleCropper from "@/components/cropper/SingleCropper";
 export default {
   name: "ExchangeManage",
+  components:{SingleCropper},
   data() {
     return {
       pageArr: {
         pageNum: 1,
-        total: 20,
+        total: 2,
         pageSize: 10,
       },
       diaState: {
@@ -123,10 +129,16 @@ export default {
   methods: {
     /*应用列表 api*/
     FnGetApply() {
-      listApply().then(res => {
+      listApply({
+        pageSize:this.pageArr.pageSize,
+        pageNum:this.pageArr.pageNum,
+      }).then(res => {
+        this.btnState.loadTable = false;
         console.log(res);
         this.tableArr = res.data;
         this.pageArr.total = res.total;
+      }).catch(res=>{
+        this.btnState.loadTable = false
       })
     },
 
@@ -167,17 +179,35 @@ export default {
 
       /*修改*/
       if (val.type == 'update') {
-        this.addSiteForm = val.data;
+        this.addSiteForm = Object.assign({},val.data);
         this.diaState.diaAddApply = true;
         this.diaTitle = "修改应用";
       }
     },
 
-    FnSwitchState(){
 
+    /*logo上传*/
+    uploadLogo(data){
+      let formData = new FormData();
+      formData.append("applyLogo", data);
+      upload(formData).then(res => {
+        this.$message(res.msg);
+      });
     },
-    /*关闭*/
-    FnCloseAddSite() {},
+
+    /*修改api*/
+    FnUpdateApply(){
+      updateApply(this.addSiteForm).then(res => {
+        console.log(res);
+        this.$message(res.msg);
+      })
+    },
+
+    /*状态切换*/
+    FnSwitchState(val){
+      this.addSiteForm = val;
+      this.FnUpdateApply();
+    },
 
     /*保存添加、修改*/
     FnBtnSaveAddSite() {
@@ -186,10 +216,7 @@ export default {
       this.GLOBAL.btnStateChange(this, 'btnState', 'btnSubmitSite');
       if (ApplyId) {
         /*有 ApplyId， 则修改*/
-        updateApply(this.addSiteForm).then(res => {
-          console.log(res);
-          this.$message(res.msg);
-        })
+        this.FnUpdateApply();
       } else {
         /*没有 ApplyId，则添加*/
         addApply(this.addSiteForm).then(res => {
@@ -201,12 +228,12 @@ export default {
 
     /*分页 */
     FaPageCurrent(page) {
-      console.log(page);
-      // this.staffPage = page;
-      // this.getStaffIndex();
+      this.pageArr.pageNum = page;
+      this.FnGetApply();
     },
     FaSizeChange(size) {
-      console.log(size);
+      this.pageArr.pageSize = size;
+      this.FnGetApply();
     },
   },
   created() {

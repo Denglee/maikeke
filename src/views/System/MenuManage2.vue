@@ -40,6 +40,7 @@
     </el-row>
 
     <el-table
+        class="public-table" border
         v-loading="loading"
         :data="menuList"
         row-key="menuId"
@@ -54,12 +55,13 @@
       <el-table-column prop="orderNum" label="排序" width="60"></el-table-column>
       <el-table-column prop="perms" label="权限标识" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="component" label="组件路径" :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="status" label="状态" :formatter="statusFormat" width="80"></el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime">
-        <template slot-scope="scope">
-          <!--               <span>{{ parseTime(scope.row.createTime) }}</span>-->
+      <el-table-column prop="status" label="状态" :formatter="statusFormat" width="80">
+        <template slot-scope="{row}">
+          <span v-if="row.status == 0">正常</span>
+          <span v-if="row.status == 1">停用</span>
         </template>
       </el-table-column>
+      <el-table-column label="创建时间" align="center" prop="createTime"></el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini"

@@ -19,7 +19,7 @@
     <el-dialog :append-to-body="true" :visible.sync="cropperModel"
                width="1100px" :before-close="beforeClose">
       <cropper :img-file="file" ref="vueCropper"
-               @upload="upload"
+               @upload="FnSingleUpload"
                :isAvater = 'isAvater'
                v-bind="$attrs"></cropper>
     </el-dialog>
@@ -33,7 +33,7 @@ import {upload,uploadUserAvatar} from '@/assets/js/api'
 
 export default {
   name: 'uploader',
-  inject:['uploadPage'],
+  // inject:['uploadPage'],
   props: {
     isAvater: {
       type: Boolean,
@@ -125,10 +125,8 @@ export default {
       // this.imageUrl = file.url
     },
 
-    upload(data) {
-      let formData = new FormData();
-      formData.append("avatarfile", data);
-      this.uploadPage(formData);
+    FnSingleUpload(data) {
+      this.$emit('FnUploadPage',data);
     },
   },
   components: {

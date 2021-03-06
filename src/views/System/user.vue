@@ -360,12 +360,16 @@ export default {
             addUser(this.addUserForm).then(res => {
               console.log(res);
               this.$message.success(res.msg);
+
+              //sessionStorage.removeItem('userProfile');
             })
           } else {
             /*修改*/
             updateUser(this.addUserForm).then(res => {
               console.log(res);
               this.$message.success(res.msg);
+
+              //sessionStorage.removeItem('userProfile');
             })
           }
         }
