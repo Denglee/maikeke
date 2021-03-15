@@ -1,20 +1,21 @@
 <template>
    <div class="public-main">
       <el-form class="public-form" @submit.native.prevent>
-         <el-input v-model="FormSearch.applyName" placeholder="请输入名称" autocomplete="off" clearable
+         <el-input v-model="FormSearch.areaName" placeholder="请输入名称" autocomplete="off" clearable
                    class="public-input">
          </el-input>
          <el-button icon="el-icon-search" :loading="btnState.btnSearch" @click="FnSearchShop" class="public-btn">搜索</el-button>
 
          <div class="formR-main">
             <el-button icon="el-icon-folder-add" @click="FnBtnAdd" :loading="btnState.btnAdd" class="public-btn">
-               新增应用
+               新增区域
             </el-button>
 <!--            <el-button icon="el-icon-folder-add" @click="FnBtnExport" :loading="btnState.btnExport" class="public-btn">-->
 <!--               导出-->
 <!--            </el-button>-->
          </div>
       </el-form>
+      
 
       <el-table class="public-table" border
                 :data="tableArr"
@@ -22,14 +23,20 @@
                 height="600"
                 v-loading="btnState.loadTable">
          <el-table-column type="index" label="序号"></el-table-column>
-         <el-table-column prop="applyLogo" label="应用LOGO">
+         <el-table-column prop="areaNum" label="区域代码"></el-table-column>
+         <el-table-column prop="areaName" label="区域名称"></el-table-column>
+         <el-table-column prop="areaForShort" label="区域简称"></el-table-column>
+         <el-table-column prop="postcode" label="邮编"></el-table-column>
+         <el-table-column prop="state" label="国家">
             <template slot-scope="{row}">
-               <el-image :src="row.applyLogo"></el-image>
+          <span v-for="item in stateArr" :key="item.id">
+            <span v-if="row.state == item.stateId">{{ item.stateName }}</span>
+          </span>
             </template>
          </el-table-column>
-         <el-table-column prop="applyNum" label="应用编号"></el-table-column>
-         <el-table-column prop="applyName" label="应用名称"></el-table-column>
-         <el-table-column prop="status" label="状态">
+         <!--      <el-table-column prop="parentArea" label="上级区域"></el-table-column>-->
+         <el-table-column prop="orderNum" label="排序"></el-table-column>
+         <el-table-column prop="status" label="状态" width="180px">
             <template slot-scope="{row}">
                <el-switch
                   v-model="row.status"
@@ -43,7 +50,7 @@
          </el-table-column>
          <el-table-column prop="remark" label="备注"></el-table-column>
 
-         <el-table-column label="操作" fixed="right">
+         <el-table-column label="操作">
             <template slot-scope="scope">
                <el-dropdown @command="FnCommand">
                   <el-button type="primary">
@@ -68,39 +75,68 @@
       <!--添加\编辑区域站点 -->
       <el-dialog :append-to-body="true"
                  :title="diaTitle"
-                 :visible.sync="diaState.diaAddApply"
+                 :visible.sync="diaState.diaAddArea"
                  custom-class="public-dialog"
                  :close-on-click-modal="false"
                  width="800px">
          <el-form :model="addSiteForm" ref="RefAddSiteForm" label-width="156px" class="public-diaForm">
-            <el-form-item label="应用logo：" prop="applyLogo">
-               <SingleCropper :autoCropWidth='200'
-                              :autoCropHeight='100'
-                              :imgWidth="200"
-                              :imgHeight="100"
-                              :initUrl="addSiteForm.applyLogo"
-                              @FnUploadPage="uploadLogo"></SingleCropper>
+            <el-form-item label="区域代码：" prop="areaNum">
+               <el-input type="text" v-model="addSiteForm.areaNum" autocomplete="off" clearable
+                         placeholder="区域代码"></el-input>
             </el-form-item>
-            <el-form-item label="应用名称：" prop="applyName">
-               <el-input type="text" v-model="addSiteForm.applyName" autocomplete="off" clearable
-                         placeholder="应用名称"></el-input>
+            <el-form-item label="区域名称：" prop="areaName">
+               <el-input type="text" v-model="addSiteForm.areaName" autocomplete="off" clearable
+                         placeholder="区域名称"></el-input>
+            </el-form-item>
+            <el-form-item label="区域简称：" prop="areaForShort">
+               <el-input type="text" v-model="addSiteForm.areaForShort" autocomplete="off" clearable
+                         placeholder="区域简称"></el-input>
+            </el-form-item>
+            <el-form-item label="邮编：" prop="postcode">
+               <el-input type="text" v-model="addSiteForm.postcode" autocomplete="off" clearable
+                         placeholder="邮编"></el-input>
+            </el-form-item>
+            <el-form-item label="国家：" prop="state">
+               <el-select placeholder="请选择" v-model.number="addSiteForm.state">
+                  <el-option v-for="(item,index) in stateArr" :key="index"
+                             :value="item.stateId"
+                             :label="item.stateName">
+                  </el-option>
+               </el-select>
             </el-form-item>
 
-            <el-form-item label="应用编号：" prop="applyNum">
-               <el-input type="text" v-model="addSiteForm.applyNum" autocomplete="off" clearable
-                         placeholder="应用编号"></el-input>
+            <el-form-item label="区域：" prop="parentArea">
+               <el-cascader
+                  v-model="addSiteForm.parentArea"
+                  :options="areaTreeSelectArr"
+                  :show-all-levels="false"
+                  :props="{
+                  checkStrictly: true,
+                  value:'id',
+                  label:'label',
+                  emitPath:false
+               }"
+                  clearable>
+                  <template slot-scope="{ node, data }">
+                     <span>{{ data.label }}</span>
+                     <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+                  </template>
+               </el-cascader>
+            </el-form-item>
+
+            <el-form-item label="显示排序：" prop="orderNum">
+               <el-input-number v-model="addSiteForm.orderNum" controls-position="right" :min="0"/>
             </el-form-item>
             <el-form-item label="状态：" prop="status">
                <el-radio v-model="addSiteForm.status" label="0">正常</el-radio>
                <el-radio v-model="addSiteForm.status" label="1">停用</el-radio>
             </el-form-item>
-
             <el-form-item label="备注：" prop="remark">
                <el-input type="text" v-model="addSiteForm.remark" autocomplete="off" clearable
                          placeholder="备注"></el-input>
             </el-form-item>
             <el-form-item class="alignR">
-               <el-button type="primary" @click="diaState.diaAddApply = false;" :loading="btnState.btnCancelSite">取消
+               <el-button type="primary" @click="diaState.diaAddArea = false;" :loading="btnState.btnCancelSite">取消
                </el-button>
                <el-button type="primary" @click="FnBtnSaveAddSite('RefAddSiteForm')" :loading="btnState.btnSubmitSite">
                   保存
@@ -112,22 +148,19 @@
 </template>
 
 <script>
-import {addApply, delApply, listApply, updateApply, upload,applyExport} from '@/assets/js/api'
-
-import SingleCropper from "@/components/cropper/SingleCropper";
+import {addArea, delArea, listState, listArea, areaTreeSelect, updateArea} from '@/assets/js/api'
 
 export default {
    name: "ExchangeManage",
-   components: {SingleCropper},
    data() {
       return {
          pageArr: {
             pageNum: 1,
-            total: 2,
+            total: 20,
             pageSize: 10,
          },
          diaState: {
-            diaAddApply: false,
+            diaAddArea: false,
          },
          btnState: {
             loadTable: true,
@@ -135,7 +168,6 @@ export default {
             btnCancelSite: false,
             btnSubmitSite: false,
             btnSearch: false,
-            btnExport: false,
          },
 
          /*添加表单*/
@@ -143,66 +175,69 @@ export default {
          diaTitle: '添加',
          tableArr: [],
          FormSearch:{
-            applyName:'',
-         }
+
+         },
+
+         stateArr: [],   //国家
+         areaTreeSelectArr: [], //区域
       }
    },
    methods: {
-      /*应用列表 api*/
-      FnGetApply() {
-         listApply({
+      /*区域列表 api*/
+      FnGetArea() {
+         listArea({
             pageSize: this.pageArr.pageSize,
             pageNum: this.pageArr.pageNum,
-            applyName: this.FormSearch.applyName,
+            areaName:this.FormSearch.areaName,
          }).then(res => {
-            this.btnState.loadTable = false;
             console.log(res);
             this.tableArr = res.data;
             this.pageArr.total = res.total;
+            this.btnState.loadTable = false;
          }).catch(res => {
-            this.btnState.loadTable = false
+            this.btnState.loadTable = false;
          })
       },
-
-
       /*搜索*/
       FnSearchShop() {
-         console.log(this.FormSearch);
+         console.log(this.searchForm);
          this.GLOBAL.btnStateChange(this,'btnState','btnSearch');
-         this.FnGetApply();
+         this.FnGetArea();
       },
 
-      /*导出*/
-      FnBtnExport(){
-         this.GLOBAL.btnStateChange(this,'btnState','btnExport');
-         applyExport(this.FormSearch).then(res => {
-            let nowDay = this.$moment(new Date()).format('YYYY-MM-DD');
-            let fileName = `Apply_${nowDay}_${new Date().getTime()}.xlsx`;
-            this.GLOBAL.FnDownload(res.data, fileName);
+      /*获取国家列表*/
+      FnGetListState() {
+         listState().then(res => {
+            this.stateArr = res.data;
+         })
+      },
+      /*获取下拉区域列表*/
+      FnAreaTreeSelect() {
+         areaTreeSelect().then(res => {
+            this.areaTreeSelectArr = res.data;
          })
       },
 
       /*添加*/
       FnBtnAdd() {
          this.addSiteForm = {};
-         this.addSiteForm.applyLogo = '1';
-         this.diaState.diaAddApply = true;
-         this.diaTitle = '添加应用';
+         this.diaState.diaAddArea = true;
+         this.diaTitle = '添加区域';
          this.GLOBAL.btnStateChange(this, 'btnState', 'btnAdd');
       },
 
       /*删除 方法*/
-      FnDelApply(ApplyName, ApplyIds) {
+      FnDelArea(AreaName, AreaIds) {
          let that = this;
-         this.$confirm('是否确认删除' + ApplyName + '?', "警告", {
+         this.$confirm('是否确认删除' + AreaName + '?', "警告", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
             type: "warning"
          }).then(function () {
-            delApply(ApplyIds).then(res => {
+            delArea(AreaIds).then(res => {
                console.log(res);
                that.$message.success(res.msg);
-               that.FnGetApply();
+               that.FnGetArea();
             })
          })
       },
@@ -213,67 +248,51 @@ export default {
          /*删除*/
          if (val.type == 'delete') {
             console.log(val.data);
-            let Applyname = val.data.applyName;
-            let ApplyIds = val.data.applyId;
+            let Areaname = val.data.areaName;
+            let AreaIds = val.data.areaId;
 
-            that.FnDelApply(Applyname, ApplyIds);
+            that.FnDelArea(Areaname, AreaIds);
          }
 
          /*修改*/
          if (val.type == 'update') {
             this.addSiteForm = Object.assign({}, val.data);
-            console.log(this.addSiteForm.applyLogo);
-            if(!this.addSiteForm.applyLogo){
-               this.addSiteForm.applyLogo = '1';
-            }
-            this.diaState.diaAddApply = true;
-            this.diaTitle = "修改应用";
+            this.addSiteForm.state = Number(val.data.state);
+            this.diaState.diaAddArea = true;
+            this.diaTitle = "修改区域";
          }
-      },
-
-
-      /*logo上传*/
-      uploadLogo(data) {
-         let formData = new FormData();
-         formData.append('file', data);
-         upload(formData).then(res => {
-            this.$message.success(res.msg || '上传成功');
-            if (res.code == 200) {
-               this.addSiteForm.applyLogo = res.data.url;
-            }
-         });
-      },
-
-      /*修改api*/
-      FnUpdateApply() {
-         updateApply(this.addSiteForm).then(res => {
-            // console.log(res);
-            this.diaState.diaAddApply = false;
-            this.$message.success(res.msg);
-            this.FnGetApply();
-         })
       },
 
       /*状态切换*/
       FnSwitchState(val) {
          this.addSiteForm = val;
+         console.log(this.addSiteForm);
          this.FnUpdateApply();
       },
 
+      FnUpdateApply() {
+         updateArea(this.addSiteForm).then(res => {
+            console.log(res);
+            this.$message.success(res.msg);
+            this.FnGetArea();
+            this.diaState.diaAddArea = false;
+         })
+      },
       /*保存添加、修改*/
       FnBtnSaveAddSite() {
-         let ApplyId = this.addSiteForm.applyId;
-         console.log(ApplyId);
+         let AreaId = this.addSiteForm.areaId;
+         console.log(AreaId);
          this.GLOBAL.btnStateChange(this, 'btnState', 'btnSubmitSite');
-         if (ApplyId) {
-            /*有 ApplyId， 则修改*/
+         if (AreaId) {
+            /*有 AreaId， 则修改*/
             this.FnUpdateApply();
          } else {
-            /*没有 ApplyId，则添加*/
-            addApply(this.addSiteForm).then(res => {
+            /*没有 AreaId，则添加*/
+            addArea(this.addSiteForm).then(res => {
                console.log(res);
                this.$message.success(res.msg);
-               this.FnGetApply();
+               this.FnGetArea();
+               this.diaState.diaAddArea = false;
             })
          }
       },
@@ -281,15 +300,19 @@ export default {
       /*分页 */
       FaPageCurrent(page) {
          this.pageArr.pageNum = page;
-         this.FnGetApply();
+         this.FnGetArea();
       },
       FaSizeChange(size) {
          this.pageArr.pageSize = size;
-         this.FnGetApply();
+         this.FnGetArea();
       },
+
    },
    created() {
-      this.FnGetApply();
+      this.FnGetArea();
+
+      this.FnGetListState();
+      this.FnAreaTreeSelect();
    },
 }
 </script>

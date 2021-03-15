@@ -73,7 +73,7 @@
 <!--               :disabled="single"-->
 <!--               @click="handleUpdate"-->
 <!--            >修改</el-button>-->
-         </el-col>
+<!--         </el-col>-->
          <el-col :span="1.5">
             <el-button
                type="danger"
@@ -175,8 +175,8 @@
             </el-form-item>
          </el-form>
          <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submitForm">确 定</el-button>
             <el-button @click="cancel">取 消</el-button>
+            <el-button type="primary" @click="submitForm" :loading="btnState.btnSaveMenu">确 定</el-button>
          </div>
       </el-dialog>
    </div>
@@ -194,6 +194,9 @@ export default {
           total: 20,
           pageSize: 10,
         },
+         btnState:{
+            btnSaveMenu:false
+         },
 
          // 遮罩层
          loading: true,
@@ -316,17 +319,18 @@ export default {
       },
       /** 提交按钮 */
       submitForm: function() {
+         this.GLOBAL.btnStateChange(this,'btnState','btnSaveMenu');
          this.$refs["form"].validate(valid => {
             if (valid) {
                if (this.form.dictId != undefined) {
                   updateDict(this.form).then(response => {
-                     this.$message("修改成功");
+                     this.$message.success("修改成功");
                      this.open = false;
                      this.getList();
                   });
                } else {
                   addDict(this.form).then(response => {
-                     this.$message("新增成功");
+                     this.$message.success("新增成功");
                      this.open = false;
                      this.getList();
                   });

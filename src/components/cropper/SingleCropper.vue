@@ -1,9 +1,11 @@
 <template>
 
   <div style="display: flex;align-items: center;">
-    <el-avatar :src='imageUrl' :size="70" class='marR10' v-if="isAvater"></el-avatar>
-    <el-image v-else
-              :src="imageUrl" :style="{width:imgWidth +'px',height:imgHeight +'px' }"
+<!--     {{initUrl}}-->
+<!--    <el-avatar :src='imageUrl' :size="70" class='marR10' v-if="isAvater"></el-avatar>-->
+    <el-image :class=" isAvater == true ? 'isBorRadius' : '' "
+              :src="imageUrl"
+              :style="{ width:imgWidth +'px',height:imgHeight +'px' }"
               class='marR10'
               :preview-src-list="imageUrlArr"></el-image>
     <el-upload
@@ -84,10 +86,12 @@ export default {
   watch: {
     initUrl: function (val) {
       // 监听传入初始化图片
-      // console.info('watch');
+      this.imageUrlArr = [];
       if (val) {
+         // console.log(val);
         if (typeof this.initUrl === 'string') {
           this.imageUrl = val;
+          this.imageUrlArr.push(val);
         }
         // else {
         //     this.uploadList = this.formatImgArr(val);
@@ -98,8 +102,9 @@ export default {
   },
   mounted() {
     if (typeof this.initUrl === 'string') {
+       // console.log(this.initUrl);
       this.imageUrl = this.initUrl;
-      this.imageUrlArr.push(this.initUrl);
+      // this.imageUrlArr.push(this.initUrl);
     }
     // else {
     //     this.uploadList = this.formatImgArr(this.initUrl);
@@ -126,6 +131,7 @@ export default {
     },
 
     FnSingleUpload(data) {
+      this.cropperModel = false;
       this.$emit('FnUploadPage',data);
     },
   },
@@ -137,6 +143,10 @@ export default {
 <style>
 .marR10 {
   margin-right: 10px;
+}
+.isBorRadius{
+  margin-right: 10px;
+  border-radius: 50% !important;
 }
 
 .avatar-uploader .el-upload {

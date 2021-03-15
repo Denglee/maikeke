@@ -7,6 +7,7 @@ import './registerServiceWorker'
 import router from './router/RouterIndex'
 import store from './store/StoreIndex'
 
+
 Vue.config.productionTip = false
 
 

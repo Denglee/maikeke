@@ -93,6 +93,7 @@
         <el-row>
           <el-col :span="24" v-if="form.parentId !== 0">
             <el-form-item label="上级部门" prop="parentId">
+<!--              {{form.parentId}}-->
               <!--                     <treeselect v-model="form.parentId" :options="deptOptions" :normalizer="normalizer" placeholder="选择上级部门" />-->
               <el-cascader
                   v-model="form.parentId"
@@ -152,8 +153,8 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+         <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="submitForm" :loading="btnState.btnSaveMenu">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -167,8 +168,13 @@ import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 export default {
   name: "Dept",
   components: {Treeselect},
+  inject:['reLoad'],
   data() {
     return {
+       btnState:{
+          btnSaveMenu:false
+       },
+
       // 遮罩层
       loading: true,
       // 显示搜索条件
@@ -288,6 +294,7 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd(row) {
+
       this.reset();
       if (row != undefined) {
         this.form.parentId = row.parentId +'';
@@ -316,6 +323,7 @@ export default {
 
     /** 提交按钮 */
     submitForm: function () {
+       this.GLOBAL.btnStateChange(this, 'btnState', 'btnSaveMenu');
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.deptId != undefined) {

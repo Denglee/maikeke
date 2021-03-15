@@ -40,12 +40,14 @@ export default {
       FnGetMenuGetRouters(){
          let that = this;
          menuGetRouters().then(res=>{
+            console.log(res);
             if(res.code == 200){
                // console.log(res.data);
                this.routes = res.data;
             }else {
                this.$message.error(res.message);
                setTimeout(() => {
+                  sessionStorage.removeItem('userProfile');
                   that.$router.push({path: '/login'});
                }, 1500);
             }
@@ -56,7 +58,11 @@ export default {
      this.FnGetMenuGetRouters();
    },
    computed: {
-      ...mapGetters('StoreNavSide', ['collapsed']),
+     ...mapGetters({
+       collapsed: "StoreNavSide/collapsed",
+     }),
+      // ...mapGetters('StoreNavSide', ['collapsed']),
+
       // routes() {
       //   console.log(this.$router.options.routes);
       //   console.log(menuNav);

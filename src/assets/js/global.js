@@ -143,6 +143,25 @@ export function  handleTree(data, id, parentId, children, rootId) {
    return treeData != '' ? treeData : data;
 }
 
+
+function FnDownload(content,filename){
+   console.log(content)
+   // const content = res.data
+   const blob = new Blob([content])
+   if ('download' in document.createElement('a')) {
+      const elink = document.createElement('a')
+      elink.download = filename
+      elink.style.display = 'none'
+      elink.href = URL.createObjectURL(blob)
+      document.body.appendChild(elink)
+      elink.click()
+      URL.revokeObjectURL(elink.href)
+      document.body.removeChild(elink)
+   } else {
+      navigator.msSaveBlob(blob, filename)
+   }
+}
+
 export default {
    localUrl,
    getEleBase64: getEleBase64,
@@ -150,4 +169,6 @@ export default {
    axiosSuc: axiosSuc,
    resetForm,
    handleTree,
+
+   FnDownload,
 }

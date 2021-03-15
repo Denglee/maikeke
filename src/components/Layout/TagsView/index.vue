@@ -6,7 +6,8 @@
     <div ref="tagsViews" class="tags-views" @DOMMouseScroll="handlescroll" @mousewheel="handlescroll">
       <div ref="tagsCont" class="tags-cont" :style="{left: tagsContLeft + 'px'}">
         <transition-group>
-          <router-link v-for="item in visitedViews" ref="tagsItem" :key="item.name" :to="{ path: item.path }">
+          <router-link v-for="item in visitedViews" ref="tagsItem" :key="item.name"
+                       :to="{ path: item.path }">
               <TagItem :class="{active: isActive(item)}"
                      :fixed="item.meta.fixed"
                      @on-close="handleSelectedClose(item)">{{ item.title }}</TagItem>
@@ -52,7 +53,6 @@ export default {
       visitedViews: "StoreNavTags/visitedViews",
     }),
     routes() {
-
       return this.$router.options.routes
     }
   },

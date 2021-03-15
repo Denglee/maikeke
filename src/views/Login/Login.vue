@@ -32,7 +32,7 @@
           <img :src="codeUrl" @click="getCode" class="login-code-img"/>
         </div>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
+      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">五天内自动登录</el-checkbox>
       <el-form-item style="width:100%;">
         <el-button
             :loading="loading"
@@ -67,7 +67,9 @@ export default {
         password: "admin123",
         rememberMe: false,
         code: "",
-        uuid: ""
+        uuid: "",
+
+        redirect: undefined,
       },
       loginRules: {
         username: [
@@ -153,7 +155,7 @@ export default {
               });
 
               setTimeout(() => {
-                that.$router.push({path: '/home'});
+                that.$router.push({ path: that.redirect || '/' })
               }, 1500);
             } else {
               this.loading = false;
@@ -176,7 +178,6 @@ export default {
           //       })
           //    })
           // },
-
           // this.$store.dispatch("Login", this.loginForm).then(() => {
           //    this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
           // }).catch(() => {

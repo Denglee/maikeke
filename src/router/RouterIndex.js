@@ -36,7 +36,7 @@ export const constantRoutes = [
       meta: {
         title: '首页',
         icon: 'el-icon-s-home',
-        fixed: true
+        fixed: true,
       }
     }]
   },

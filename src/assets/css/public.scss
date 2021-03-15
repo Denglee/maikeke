@@ -122,6 +122,9 @@ input:-webkit-autofill {
 .el-message{
   z-index: 2100 !important;
 }
+.el-image-viewer__wrapper{
+  z-index: 2100 !important;
+}
 .el-dialog {
   border-radius: 4px;
 }
@@ -444,6 +447,7 @@ input:-webkit-autofill {
   background: none;
   display: flex;
   padding: 0;
+  height: 100%;
   .organizeL-box{
     width: 220px;
     background-color: #fff;

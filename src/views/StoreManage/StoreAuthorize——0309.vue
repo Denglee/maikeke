@@ -1,18 +1,23 @@
 <template>
    <div class="public-main">
       <el-form class="public-form" @submit.native.prevent>
+         <!--      @submit.native.prevent-->
          <el-input v-model="searchForm.storeName" placeholder="请输入店铺名称" autocomplete="off" clearable
-                   class="public-input">
+                   class="public-input"
+                   @keyup.enter.native="FnSearchShop">
+            <i slot="suffix" class="el-input__icon el-icon-search" @click="FnSearchShop"></i>
          </el-input>
-         <el-button icon="el-icon-search"
-                    :loading="btnState.btnSearch" @click="FnSearchShop" class="public-btn">搜索</el-button>
-<!--         <el-button icon="el-icon-search"
-                    :loading="btnState.btnSearch" @click=" FnDelStoreAuthList" class="public-btn">批量删除</el-button>-->
 
          <div class="formR-main">
-            <el-button icon="el-icon-circle-plus-outline" @click="FnBtnAddShow" class="public-btn">添加店铺授权</el-button>
+            <el-button icon="el-icon-circle-plus-outline" @click="FnBtnAddShow" class="public-btn">店铺授权</el-button>
+            <!--            <el-button icon="el-icon-folder-add" @click="FnImport" :loading="btnState.btnImport" class="public-btn">-->
+            <!--               导入店铺-->
+            <!--            </el-button>-->
          </div>
       </el-form>
+
+      <!--    element-loading-text = "加载中，请稍后..."
+          element-loading-spinner = "el-icon-loading"-->
 
       <el-table class="public-table" border
                 v-loading="diaState.loadTable"
@@ -25,12 +30,18 @@
                 @row-click="handleRowClick">
          <el-table-column type="selection"></el-table-column>
          <el-table-column prop="storeName" label="店铺名称"></el-table-column>
-         <el-table-column prop="site" label="站点"></el-table-column>
+         <el-table-column prop="site" label="站点">
+<!--            <template slot-scope="scope">-->
+<!--                <span v-for="(item,index) in siteArr">-->
+<!--                  <span v-if="item.value == scope.row.site">{{ item.label }}</span>-->
+<!--                </span>-->
+<!--            </template>-->
+         </el-table-column>
          <el-table-column prop="country" label="国家"></el-table-column>
          <el-table-column prop="platform" label="平台">
             <template slot-scope="scope">
               <span v-for="(item,index) in platformArr">
-                <span v-if="item.id == scope.row.platformId">{{ item.label }}</span>
+                <span v-if="item.value == scope.row.platformId">{{ item.label }}</span>
               </span>
             </template>
          </el-table-column>
@@ -43,13 +54,7 @@
                <span v-if="row.advertAuth == 2">授权成功</span>
             </template>
          </el-table-column>
-         <el-table-column prop="principalCode" label="负责人">
-            <template slot-scope="{row}">
-                <span v-for="(item,index) in chargeArr">
-                   <span v-if="item.userId == row.principalCode">{{ item.nickName }}</span>
-                 </span>
-            </template>
-         </el-table-column>
+         <el-table-column prop="principalName" label="负责人"></el-table-column>
          <el-table-column prop="principalAuth" label="店铺授权">
             <template slot-scope="scope">
                <div v-if="scope.row.principalAuth == 0 " class="status-connect">未授权</div>
@@ -109,7 +114,6 @@
                <el-input type="text" v-model="addForm.storeName" autocomplete="off" clearable
                          placeholder="用于卖家区分各个账号"></el-input>
             </el-form-item>
-
             <el-form-item label="平台：" prop="platformId">
 
                <el-select v-model="addForm.platformId" value.key="id" filterable clearable placeholder="请选择平台"
@@ -123,14 +127,13 @@
                </el-select>
             </el-form-item>
 
-            <el-form-item label="国家：" prop="siteState">
+            <el-form-item label="站点：" prop="siteState">
                <el-cascader
-                  class="public-selectFull"
                   @change='FnChooseSite'
-                  ref="cascader"
                   v-model="addForm.siteState"
                   :options="siteStateArr"
                   :props="{
+                    checkStrictly: true,
                     value:'id',
                     label:'label',
                  }"
@@ -141,6 +144,27 @@
                   </template>
                </el-cascader>
             </el-form-item>
+            <!--            <el-form-item label="站点：" prop="siteId">
+                           <el-select v-model="addForm.siteId" value.key="id" filterable clearable placeholder="请选择站点"
+                                      class="public-selectFull" @change='FnChooseSite'
+                                      :rules="{ required: true, message: '站点', trigger: 'change' }">
+                              <el-option v-for="(item, index) in siteArr" :key="item.id"
+                                         :value="item.value"
+                                         :label="item.label">
+                              </el-option>
+                           </el-select>
+                        </el-form-item>
+
+                        <el-form-item label="国家：" prop="countryId">
+                           <el-select v-model="addForm.countryId" value.key="id" filterable clearable placeholder="请选择国家"
+                                      class="public-selectFull"
+                                      :rules="{ required: true, message: '国家', trigger: 'change' }">
+                              <el-option v-for="(item, index) in countryArr" :key="item.id"
+                                         :value="item.stateId"
+                                         :label="item.stateName">
+                              </el-option>
+                           </el-select>
+                        </el-form-item>-->
 
             <el-form-item label="店铺负责人：" prop="principalCode">
                <el-select v-model="addForm.principalCode" value.key="id" filterable clearable placeholder="请选择店铺负责人"
@@ -260,7 +284,7 @@
 import {
    addStoreAuth, updateStoreAuth, selectStoreAuth, delStoreAuth, delStoreAuthList,
    authSonAdd, authSonList, authSondelete, authSonUpdate,
-   listApplyTree, listUser, siteTreeSel, delUser,
+   listApplyTree, listUser, siteTreeSel,
 } from "@/assets/js/api";
 
 export default {
@@ -278,7 +302,7 @@ export default {
 
          diaState: {   //弹出框状态
             loadTable: true,
-            diaAdd: false,
+            diaAdd: true,
             submitType: 'add',
             diaAddTitle: '添加店铺授权',
 
@@ -286,7 +310,6 @@ export default {
          },
 
          btnState: {  //按钮状态
-            btnSearch:false,
             btnImport: false,
             btnCancel: false,
             btnSubmit: false,
@@ -298,7 +321,6 @@ export default {
          checkedRows: [],
          tableArr: [],    //table数据
          siteStateArr: [],   /*站点+国家*/
-         siteArr:[],
          platformArr: [],   /*平台*/
          countryArr: [], /*国家*/
          chargeArr: [], /*负责人*/
@@ -307,15 +329,13 @@ export default {
             storeName: '',
 
             platformId: '',
-            siteId: '',  /*站点*/
+            siteId: '1',  /*站点*/
             countryId: '',
             principalCode: '',
 
             remark: '',
             sellerId: '',
             authToken: '',
-
-            siteState:[],
          },
          nowCountyName: '北美',   //当前选中国家名称
          nowCountySite: '',   //当前校对域名
@@ -338,13 +358,22 @@ export default {
    },
    methods: {
 
+      FnGetSel() {
+         /*负责人*/
+         listUser().then(res => {
+            this.chargeArr = res.data;
+         });
+         /*平台*/
+         listApplyTree().then(res => {
+            this.platformArr = res.data;
+         });
+      },
 
       /*站点 国家*/
-      FnSelPlatform(id) {
-         console.log(id);
+      FnSelPlatform(val) {
+         console.log(val);
          siteTreeSel(1, {
-            applyId: id,
-            type:1,
+            applyId: val
          }).then(res => {
             console.log(res);
             if (res.data.length == 0) {
@@ -359,27 +388,48 @@ export default {
       /* 选择站点 + 国家 */
       FnChooseSite(val) {
          console.log(val);
-         if(val || val.length > 0){
-            let stateNameArr  = this.$refs['cascader'].getCheckedNodes();
-            console.log(stateNameArr[0])
+         this.addForm.siteId = val[0];
+         this.addForm.countryId = val[1];
+         // let obj = {};
+         // obj = this.siteArr.find((item) => {
+         //    return item.id == val;//筛选出匹配数据
+         // });
+         // this.nowCountyName = obj.label;
+         // console.log(obj.label);//我这边的name就是对应label的
 
-            this.addForm.siteId = val[0];
-            this.addForm.countryId = val[1];
-
-            this.addForm.site = stateNameArr[0].pathLabels[0];
-            this.addForm.country = stateNameArr[0].pathLabels[1];
-
-            console.log( this.addForm);
-         }
       },
+
+      /* 国家 多选 级联 */
+      // FnChooseCounty(val) {
+      //    console.log(val);
+      //    this.addForm.site = val[0];
+      //    this.addForm.country = val[1];
+      // },
+
+      /*选择负责人*/
+  /*    FnChooseCharge(id) {
+         console.log(id);
+         /!*let obj = {};
+         obj = this.chargeArr.find((item)=>{
+           return item.id == id;//筛选出匹配数据
+         });
+         console.log(obj.name);//我这边的name就是对应label的*!/
+      },*/
 
       /*搜索*/
       FnSearchShop() {
-         console.log(this.searchForm);
-         this.GLOBAL.btnStateChange(this,'btnState','btnSearch');
-         this.FnSelectStoreAuth();
+         console.log(this.searchForm.storeName);
       },
 
+      /*分页*/
+      FaPageCurrent(page) {
+         console.log(page);
+         this.searchForm.pageNum = page;
+         this.FnSelectStoreAuth();
+      },
+      FaSizeChange(size) {
+         console.log(size);
+      },
 
       /* 1、 编辑选中  */
       checkedStore(val) {
@@ -429,11 +479,11 @@ export default {
 
 
       /*导入*/
-      FnImport() {},
+      FnImport() {
+      },
 
       /*添加显示*/
       FnBtnAddShow() {
-         this.addForm = {};
          this.diaState.diaAdd = true;
          this.diaState.submitType = 'add';
          this.diaState.diaAddTitle = '添加店铺授权';
@@ -451,9 +501,8 @@ export default {
 
                if (submitType == 'add') {
                   addStoreAuth(this.addForm).then(res => {
-                     this.$message.success('添加成功');
-                     this.FnSelectStoreAuth();
-                     this.diaState.diaAdd = false;
+                     console.log(res.message);
+                     this.GLOBAL.axiosSuc(that, '添加成功');
                   }).catch(res => {
                      console.log(res);
                   })
@@ -461,14 +510,13 @@ export default {
                   console.log('put');
                   updateStoreAuth(this.addForm).then(res => {
                      console.log(res.message);
-                     this.$message.success('更新成功');
-                     this.FnSelectStoreAuth();
-                     this.diaState.diaAdd = false;
+                     this.GLOBAL.axiosSuc(that, '更新成功');
                   }).catch(res => {
                      console.log(res);
                   })
                }
             }
+            ;
          })
       },
 
@@ -490,6 +538,7 @@ export default {
             authSonList({
                parentId: valData.sellerId,
             }).then(res => {
+               console.log(res);
                // this.diaSubConutArr = res.data;
                this.parentId = valData.sellerId;
                this.diaFormSub.subCount = res.data;
@@ -500,66 +549,23 @@ export default {
 
          /*更新店铺授权*/
          if (val.type == 'put') {
+            this.diaState.diaAdd = true;
             this.diaState.submitType = 'put';
             this.diaState.diaAddTitle = '更新店铺授权';
             this.addForm = Object.assign({}, valData);
-
-            this.addForm.platformId = valData.platformId +'';     //平台
-            this.addForm.principalCode = Number(valData.principalCode);  //店铺负责人
-            this.FnSelPlatform(valData.platformId);  //查询站点
-            this.addForm.siteState =[valData.siteId+'', valData.countryId+''];  //添加国家站点
-            this.diaState.diaAdd = true;
-
+            // let arr = [];
+            // arr.push(valData.site, valData.country);
+            // console.log(arr);
+            // this.addForm.countryData = arr;
+            console.log(this.addForm);
          }
 
          /*删除操作  */
          if (val.type == 'delete') {
-            this.FnDelStoreAuth(valData);
+            // this.FnDelStoreAuthList();
+            this.FnDelStoreAuth(valData.sellerId);
          }
-
       },
-
-      /* id 删除 table */
-      FnDelStoreAuth(val) {
-         console.log(val)
-         let that = this;
-         this.$confirm('是否确认删除店铺：' + val.storeName + '?', "警告", {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning"
-         }).then(function () {
-            delStoreAuth(val.sellerId).then(res => {
-               that.$message.success('删除成功');
-               that.FnSelectStoreAuth();
-            }).catch(res => {
-               console.log(res);
-            })
-         })
-      },
-      /*多个、批量 删除 店铺 */
-      FnDelStoreAuthList() {
-         console.log('sellerId');
-         let sellerId = [];
-         this.checkedRows.forEach((row) => {
-            sellerId.push(row.sellerId);
-         });
-
-         let that = this;
-         this.$confirm('是否确认所选删除店铺?', "警告", {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning"
-         }).then(function () {
-            delStoreAuthList(sellerId).then(res => {
-               console.log(res);
-               that.$message.success(res.msg || '删除成功');
-               that.FnSelectStoreAuth();
-            }).catch(res => {
-               console.log(res)
-            })
-         })
-      },
-
       /*子账号A 删除*/
       removeDomain(item) {
          console.log(item);
@@ -590,7 +596,8 @@ export default {
       },
 
       /*子账号C 关闭  */
-      FnCloseSub() {},
+      FnCloseSub() {
+      },
 
       /*子账号D 保存*/
       FnSubForm(formName, item) {
@@ -617,7 +624,6 @@ export default {
                   } else {
                      this.$message.error('保存失败');
                   }
-
                   // this.GLOBAL.axiosSuc(this,res.mag)
                }).catch(res => {
                   console.log(res);
@@ -664,25 +670,27 @@ export default {
          })
       },
 
-      /*分页*/
-      FaPageCurrent(page) {
-         this.searchForm.pageNum = page;
-         this.FnSelectStoreAuth();
+      /* id 删除 table */
+      FnDelStoreAuth(id) {
+         delStoreAuth(id).then(res => {
+            // console.log(res);
+            this.GLOBAL.axiosSuc(this, res.message);
+         }).catch(res => {
+            console.log(res);
+         })
       },
-      FaSizeChange(size) {
-         this.searchForm.pageSize = size;
-         this.FnSelectStoreAuth();
-      },
-
-      FnGetSel() {
-         /*负责人*/
-         listUser().then(res => {
-            this.chargeArr = res.data;
+      /*多个、批量 删除 店铺 */
+      FnDelStoreAuthList() {
+         console.log('sellerId');
+         let sellerId = [];
+         this.checkedRows.forEach((row) => {
+            sellerId.push(row.sellerId);
          });
-         /*平台*/
-         listApplyTree().then(res => {
-            this.platformArr = res.data;
-         });
+         delStoreAuthList(sellerId).then(res => {
+            console.log(res);
+         }).catch(res => {
+            console.log(res)
+         })
       },
 
    },

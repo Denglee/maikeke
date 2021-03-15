@@ -53,6 +53,7 @@
 
          <el-table-column label="操作">
             <template slot-scope="scope">
+
                <el-button @click="FnBtnDistribute(scope.row)">分配店铺</el-button>
                <el-button @click="FnBtnDistribute(scope.row)">移除</el-button>
             </template>
@@ -87,7 +88,7 @@
 </template>
 
 <script>
-import PersonalInfo from '@/views/AccountCenter/PersonalInfo'
+import PersonalInfo from '@/views/System/AccountCenter/PersonalInfo'
 import {queryUser,getRole,listByRole,listUser,saveRoleRelation} from '@/assets/js/api'
 export default {
    name: "RoleUsers",

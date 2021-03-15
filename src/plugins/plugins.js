@@ -114,3 +114,4 @@ Vue.use(VCharts);
 /* 2、 引用 自定义 全局js*/
 import GLOBAL from  '@/assets/js/global.js'
 Vue.prototype.GLOBAL = GLOBAL;
+

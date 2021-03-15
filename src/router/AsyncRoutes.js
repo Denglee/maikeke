@@ -64,7 +64,7 @@ export const asyncRoutes = [
             path: "role",
             name: 'role',
             // component: () => import(/* webpackChunkName: "post" */ '../views/System/role'),
-            component: () => import(/* webpackChunkName: "PowerRole" */ '../views/System/PowerRole'),
+            component: () => import(/* webpackChunkName: "role" */ '../views/System/role'),
             meta: {title: '角色管理'}
          },
          {
@@ -93,13 +93,13 @@ export const asyncRoutes = [
          },
          {
             path: "area",
-            name: 'RegionManage',
-            component: () => import(/* webpackChunkName: "RegionManage" */ '../views/System/RegionManage'),
+            name: 'area',
+            component: () => import(/* webpackChunkName: "RegionManage" */ '../views/System/area'),
             meta: {title: '区域管理'},
          },
          {
             path: 'enterprise',
-            name: 'CompanyInfo',
+            name: 'enterprise',
             component: () => import(/* webpackChunkName: "CompanyInfo" */ '../views/System/CompanyInfo'),
             meta: {title: '企业信息'}
          },
@@ -116,11 +116,18 @@ export const asyncRoutes = [
             meta: {title: '消息通知'},
          },
          {
+            path: "notice",
+            name: 'notice',
+            component: () => import(/* webpackChunkName: "notice" */ '../views/System/notice'),
+            meta: {title: '公告'},
+         },
+         {
             path: "userinfo",
             name: 'userinfo',
-            component: () => import(/* webpackChunkName: "userinfo" */ '../views/AccountCenter/PersonalInfo'),
+            component: () => import(/* webpackChunkName: "userinfo" */ '../views/System/userinfo'),
             meta: {title: '个人中心'},
          },
+
          {
             path: "logininfor",
             name: 'LogLogin',
@@ -172,12 +179,12 @@ export const asyncRoutes = [
          icon: 'el-icon-s-tools',
       },
       children: [
-         {
-            path: "PowerRole",
-            name: 'PowerRole',
-            component: () => import(/* webpackChunkName: "PowerRole" */ '../views/System/PowerRole'),
-            meta: {title: '业务系统角色'}
-         },
+         // {
+         //    path: "PowerRole",
+         //    name: 'PowerRole',
+         //    component: () => import(/* webpackChunkName: "PowerRole" */ '../views/System/PowerRole'),
+         //    meta: {title: '业务系统角色'}
+         // },
          // {
          //    path: "MenuManage",
          //    name: 'MenuManage',
@@ -202,7 +209,7 @@ export const asyncRoutes = [
             path: "StoreAuthorize",
             name: 'StoreAuthorize',
             component: () => import(/* webpackChunkName: "StoreAuthorize" */ '../views/StoreManage/StoreAuthorize'),
-            meta: {title: '应用授权'},
+            meta: {title: '店铺授权'},
          },
          {
             path: "AdjustEntity",
@@ -242,12 +249,12 @@ export const asyncRoutes = [
          //    meta: {title: '国家管理'},
          // },
 
-         {
-            path: "BusinessConfig",
-            name: 'BusinessConfig',
-            component: () => import(/* webpackChunkName: "BusinessConfig" */ '../views/Parameter/BusinessConfig'),
-            meta: {title: '业务配置'},
-         },
+         // {
+         //    path: "BusinessConfig",
+         //    name: 'BusinessConfig',
+         //    component: () => import(/* webpackChunkName: "BusinessConfig" */ '../views/Parameter/BusinessConfig'),
+         //    meta: {title: '业务配置'},
+         // },
       ]
    },
 
@@ -261,12 +268,12 @@ export const asyncRoutes = [
          icon: 'el-icon-circle-check',
       },
       children: [
-         {
-            path: "BusinessSystem",
-            name: 'BusinessSystem',
-            component: () => import(/* webpackChunkName: "BusinessSystem" */ '../views/PageManage/BusinessSystem'),
-            meta: {title: '业务系统页面'},
-         },
+         // {
+         //    path: "BusinessSystem",
+         //    name: 'BusinessSystem',
+         //    component: () => import(/* webpackChunkName: "BusinessSystem" */ '../views/PageManage/BusinessSystem'),
+         //    meta: {title: '业务系统页面'},
+         // },
       ]
    },
 
@@ -280,12 +287,12 @@ export const asyncRoutes = [
          icon: 'el-icon-folder',
       },
       children: [
-         {
-            path: "File",
-            name: 'File',
-            component: () => import(/* webpackChunkName: "File" */ '../views/PageManage/File'),
-            meta: {title: '文件档案'},
-         },
+         // {
+         //    path: "File",
+         //    name: 'File',
+         //    component: () => import(/* webpackChunkName: "File" */ '../views/PageManage/File'),
+         //    meta: {title: '文件档案'},
+         // },
       ]
    },
 
@@ -299,39 +306,39 @@ export const asyncRoutes = [
          icon: 'el-icon-s-cooperation',
       },
       children: [
-         {
-            path: "LogLogin",
-            name: 'LogLogin',
-            component: () => import(/* webpackChunkName: "LogLogin" */ '../views/LogManage/LogLogin'),
-            meta: {title: '登录日志'},
-         },
+         // {
+         //    path: "LogLogin",
+         //    name: 'LogLogin',
+         //    component: () => import(/* webpackChunkName: "LogLogin" */ '../views/LogManage/LogLogin'),
+         //    meta: {title: '登录日志'},
+         // },
       ]
    },
 
    /*账户中心*/
-   {
-      path: "/AccountCenter",
-      name: "AccountCenter",
-      component: Layout,
-      meta: {
-         title: "账户中心",
-         icon: 'el-icon-set-up',
-      },
-      children: [
-         {
-            path: "PersonalInfo",
-            name: 'PersonalInfo',
-            component: () => import(/* webpackChunkName: "PersonalInfo" */ '../views/AccountCenter/PersonalInfo'),
-            meta: {title: '个人信息'},
-         },
-         {
-            path: "AccountSetup",
-            name: 'AccountSetup',
-            component: () => import(/* webpackChunkName: "AccountSetup" */ '../views/AccountCenter/AccountSetup'),
-            meta: {title: '账户设置'},
-         },
-      ]
-   },
+   // {
+   //    path: "/AccountCenter",
+   //    name: "AccountCenter",
+   //    component: Layout,
+   //    meta: {
+   //       title: "账户中心",
+   //       icon: 'el-icon-set-up',
+   //    },
+   //    children: [
+   //       {
+   //          path: "PersonalInfo",
+   //          name: 'PersonalInfo',
+   //          component: () => import(/* webpackChunkName: "PersonalInfo" */ '../views/System/AccountCenter/PersonalInfo'),
+   //          meta: {title: '个人信息'},
+   //       },
+   //       {
+   //          path: "AccountSetup",
+   //          name: 'AccountSetup',
+   //          component: () => import(/* webpackChunkName: "AccountSetup" */ '../views/System/AccountCenter/AccountSetup'),
+   //          meta: {title: '账户设置'},
+   //       },
+   //    ]
+   // },
 
    /*消息中心*/
    {

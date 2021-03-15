@@ -1,150 +1,149 @@
 <template>
-  <div class="public-main">
-    <el-form :model="searchForm" class="public-form"  ref="refRoleForm"
-             label-width="80px" label-position="left" :inline="true">
-      <el-form-item label="姓名" prop="username">
-        <el-input v-model="searchForm.username" autocomplete="off" class="public-input" placeholder="请输入" clearable></el-input>
-      </el-form-item>
+   <div class="public-main">
+      <el-form :model="FormSearch" class="public-form" ref="refRoleForm"
+               label-width="80px" label-position="left" :inline="true">
+         <el-form-item label="姓名" prop="userName">
+            <el-input v-model="FormSearch.userName" autocomplete="off" class="public-input" placeholder="请输入"
+                      clearable></el-input>
+         </el-form-item>
 
-      <el-form-item label="IP地址" prop="operIp">
-        <el-input v-model="searchForm.operIp" autocomplete="off" class="public-input" placeholder="请输入" clearable></el-input>
-      </el-form-item>
+         <el-form-item label="IP地址" prop="operIp">
+            <el-input v-model="FormSearch.operIp" autocomplete="off" class="public-input" placeholder="请输入"
+                      clearable></el-input>
+         </el-form-item>
 
-      <el-form-item label="登录时间" prop="loginTime">
-        <el-date-picker
-            class="public-datePicker"
-            v-model="searchForm.loginTime"
-            type="daterange"
-            unlink-panels
-            range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            value-format="yyyy-MM-dd">
-        </el-date-picker>
-      </el-form-item>
+<!--         <el-form-item label="登录时间" prop="loginTime">-->
+<!--            <el-date-picker-->
+<!--               class="public-datePicker"-->
+<!--               v-model="FormSearch.loginTime"-->
+<!--               type="daterange"-->
+<!--               unlink-panels-->
+<!--               range-separator="-"-->
+<!--               start-placeholder="开始日期"-->
+<!--               end-placeholder="结束日期"-->
+<!--               value-format="yyyy-MM-dd">-->
+<!--            </el-date-picker>-->
+<!--         </el-form-item>-->
 
-      <el-form-item>
-        <el-button type="primary" class="btn-public" :loading="btnState.btnPost" @click="postStaffAdd('role')">提交</el-button>
-      </el-form-item>
+         <el-form-item>
+            <el-button type="primary" class="btn-public" :loading="btnState.btnPost" @click="postStaffAdd('role')">提交
+            </el-button>
+         </el-form-item>
 
-    </el-form>
+      </el-form>
 
-    <el-table class="public-table" border
-              :data="tableArr"
-              @selection-change="checkedStore"
-              ref="refTable"
-              height="600"
-              @row-click="handleRowClick">
-      <el-table-column type="selection"></el-table-column>
-      <el-table-column type="index" label="序号"></el-table-column>
-      <el-table-column prop="username" label="姓名/用户名"></el-table-column>
-      <el-table-column prop="part" label="主属部门"></el-table-column>
-      <el-table-column prop="equipment" label="登录终端型号"></el-table-column>
-      <el-table-column prop="system" label="操作系统"></el-table-column>
-      <el-table-column prop="IP" label="IP"></el-table-column>
-      <el-table-column prop="state" label="登录状态"></el-table-column>
-      <el-table-column prop="info" label="操作信息"></el-table-column>
-      <el-table-column prop="loginTime" label="登录时间"></el-table-column>
-    </el-table>
+      <el-table class="public-table" border
+                :data="tableArr"
+                @selection-change="checkedStore"
+                ref="refTable"
+                height="600"
+                @row-click="handleRowClick">
+         <el-table-column type="selection" width="55" align="center"/>
+         <el-table-column label="访问编号" align="center" prop="infoId"/>
+         <el-table-column label="用户名称" align="center" prop="userName"/>
+         <el-table-column label="登录地址" align="center" prop="ipaddr" width="130" :show-overflow-tooltip="true"/>
+         <el-table-column label="登录地点" align="center" prop="loginLocation" :show-overflow-tooltip="true"/>
+         <el-table-column label="浏览器" align="center" prop="browser"/>
+         <el-table-column label="操作系统" align="center" prop="os"/>
+         <el-table-column label="登录状态" align="center" prop="status">
+            <template slot-scope="{row}">
+               <span v-if="row.status == 0">正常</span>
+               <span v-if="row.status == 1">异常</span>
+            </template>
+         </el-table-column>
+         <el-table-column label="操作信息" align="center" prop="msg" width="120px"/>
+         <el-table-column label="登录日期" align="center" prop="accessTime" width="180"></el-table-column>
+      </el-table>
 
-    <Pagination
-        :pageNum="pageArr.pageNum"
-        :total="pageArr.total"
-        :pageSize="pageArr.pageSize"
-        @SonSizeChange='FaSizeChange'
-        @SonCurrentChange="FaPageCurrent"></Pagination>
+      <Pagination
+         :pageNum="pageArr.pageNum"
+         :total="pageArr.total"
+         :pageSize="pageArr.pageSize"
+         @SonSizeChange='FaSizeChange'
+         @SonCurrentChange="FaPageCurrent"></Pagination>
 
-  </div>
+   </div>
 </template>
 
 <script>
-import {operlogList} from '@/assets/js/api'
+import {loginInfoList} from '@/assets/js/api'
+
 export default {
-  name: "LogLogin", //文档管理
-  data(){
-    return{
-      searchForm:{
+   name: "LogLogin", //文档管理
+   data() {
+      return {
+         FormSearch: {},
+         pageArr: {
+            pageNum: 1,
+            total: 20,
+            pageSize: 10,
+         },
 
-      },
-      pageArr: {
-        pageNum: 1,
-        total: 20,
-        pageSize: 10,
-      },
+         btnState: {
+            btnImport: false,
+            btnPost: false,
+         },
 
-      btnState:{
-        btnImport:false,
-        btnPost:false,
-      },
-
-      projectArr: [
-        {
-          value: 'shop1',
-          label: '店铺1',
-        },
-        {
-          value: 'shop2',
-          label: '店铺2',
-        },
-      ],
-      tableArr:[],
-    }
-  },
-  methods:{
-
-    FnGetOperlogList(){
-      operlogList({
-        pageSize: this.pageArr.pageSize,
-        pageNum: this.pageArr.pageNum,
-        operIp:this.searchForm.operIp,
-      }).then(res=>{
-        console.log(res);
-        this.tableArr = res.data;
-        // this.pageArr.total = res.total;
-      })
-    },
-
-
-    /* 1、 编辑选中  */
-    checkedStore(val) {
-      console.log(val);
-      this.checkedRows = val;
-    },
-    /*点击行触发，选中或不选中复选框 */
-    handleRowClick(row, column, event) {
-      this.$refs.refTable.toggleRowSelection(row);
-    },
-
-
-    /*切换*/
-    FnSwitch(val){
-      console.log(val);
-    },
-
-    postStaffAdd(){},
-
-    /*表格 tr 操作 */
-    FnCommand(val) {
-      let data = val.data;
-      console.log(data);
-
-      /*更新店铺授权*/
-      if(val.type == 'delete'){
-        console.log('delete');
+         tableArr: [],
       }
-    },
+   },
+   methods: {
 
-    /*分页*/
-    FaPageCurrent(page) {
-      this.pageArr.pageNum = page ;
-    },
-    FaSizeChange(size) {
-      this.pageArr.pageSize = size ;
-    },
+      /*树table */
+      FnGetLoginInfoList() {
+         loginInfoList({
+            pageSize: this.pageArr.pageSize,
+            pageNum: this.pageArr.pageNum,
+            userName: this.FormSearch.userName,
+            operIp: this.FormSearch.operIp,
+         }).then(res => {
+            console.log(res);
+            this.tableArr = res.data;
+            this.pageArr.total = res.total;
+         })
+      },
 
-  },
-  created(){
-    this.FnGetOperlogList();
-  },
+
+      /* 1、 编辑选中  */
+      checkedStore(val) {
+         console.log(val);
+         this.checkedRows = val;
+      },
+      /*点击行触发，选中或不选中复选框 */
+      handleRowClick(row, column, event) {
+         this.$refs.refTable.toggleRowSelection(row);
+      },
+
+      /*搜索*/
+      postStaffAdd() {
+         this.GLOBAL.btnStateChange(this,'btnState','btnPost');
+         this.FnGetLoginInfoList();
+      },
+
+      /*表格 tr 操作 */
+      FnCommand(val) {
+         let data = val.data;
+         console.log(data);
+
+         /*更新店铺授权*/
+         if (val.type == 'delete') {
+            console.log('delete');
+         }
+      },
+
+      /*分页*/
+      FaPageCurrent(page) {
+         this.pageArr.pageNum = page;
+         this.FnGetLoginInfoList();
+      },
+      FaSizeChange(size) {
+         this.pageArr.pageSize = size;
+         this.FnGetLoginInfoList();
+      },
+
+   },
+   created() {
+      this.FnGetLoginInfoList();
+   },
 }
 </script>

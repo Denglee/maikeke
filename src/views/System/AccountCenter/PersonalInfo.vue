@@ -2,8 +2,10 @@
   <div class="public-main">
     <el-form :model="roleForm" class="person-form"  ref="refRoleForm" label-width="120px" label-position="left">
       <el-form-item label="员工头像">
-         <SingleCropper :autoCropWidth ='100'
-                        :autoCropHeight ='100'
+         <SingleCropper :autoCropWidth='100'
+                        :autoCropHeight='100'
+                        :imgWidth="100"
+                        :imgHeight="100"
                         :isAvater="true"
                         :initUrl="roleForm.avatar"
          @FnUploadPage="FnUpload"></SingleCropper>
@@ -17,6 +19,7 @@
         <el-input v-model="roleForm.phonenumber" autocomplete="off" placeholder="请输入手机号码" clearable></el-input>
       </el-form-item>
       <el-form-item label="直属上司" prop="superiorId">
+        {{roleForm.superiorId}}
         <el-select placeholder="请选择" v-model="roleForm.superiorId">
           <el-option v-for="(item,index) in userArr" :key="index"
                      :value="item.deptId"
@@ -86,7 +89,7 @@
 
 <script>
 import SingleCropper from "@/components/cropper/SingleCropper";
-import {userProfile, uploadUserAvatar, treeSelDept,listPost,listRole,listUser} from '@/assets/js/api'
+import {userProfile, uploadUserAvatar, updateUserProfile,treeSelDept,listPost,listRole,listUser} from '@/assets/js/api'
 export default {
   name: "PersonalInfo",
   components:{SingleCropper},
@@ -99,9 +102,16 @@ export default {
     return {
 
       roleForm: {
-        dept:[],
-        roles:[],
-        posts:[],
+        avatar:'',
+        userId:'',  //用户id
+        nickName:'',  //昵称
+        phonenumber:'',  //手机号码
+        superiorId:'',  //上司
+        sex:'',   //性别
+        email:'',  //邮箱
+        deptId:0,   //部门
+        roles:[],  //角色
+        posts:[],  //岗位
       }, /*表单*/
 
       deptArr:[],
@@ -114,23 +124,32 @@ export default {
     FnGetUserProfile(){
       userProfile().then(res=>{
         console.log(res.data);
-        this.roleForm = res.data;
-
         /*岗位添加*/
         let postArr = []
         res.data.posts.forEach((item,index)=>{
           postArr.push(item.postId);
         })
-        this.roleForm.posts = postArr;
 
         /*角色添加*/
         let roleArr = []
         res.data.roles.forEach((item,index)=>{
           roleArr.push(item.roleId);
         })
-        this.roleForm.roles = roleArr;
 
-        this.roleForm.deptId = res.data.deptId +'';
+        this.roleForm =  {
+          avatar:res.data.avatar,
+          userId:res.data.userId,  //用户id
+          nickName:res.data.nickName,  //昵称
+          phonenumber:res.data.phonenumber,  //手机号码
+          superiorId:res.data.superiorId,  //上司
+          sex:res.data.sex,  //性别
+          email:res.data.email,  //邮箱
+
+          deptId : res.data.deptId +'',
+          posts : postArr,
+          roles : roleArr,
+        }
+
       })
 
     },
@@ -140,8 +159,13 @@ export default {
       this.$refs['refRoleForm'].validate((valid) => {
         if (valid) {
           let formArr = this.roleForm;
-          sessionStorage.removeItem('userProfile');
           console.log(formArr);
+          updateUserProfile(this.roleForm).then(res=>{
+            console.log(res);
+            this.$message(res.msg);
+            // sessionStorage.removeItem('userProfile');
+          });
+
         } else {
           console.log('error submit!!');
           return false;
@@ -156,6 +180,7 @@ export default {
       formData.append("avatarfile", data);
       uploadUserAvatar(formData).then(res => {
         this.$message(res.msg);
+        this.roleForm.avatar = res.data.url;
       });
     },
     /*部门 获取树状图*/

@@ -1,5 +1,5 @@
 /*** api接口统一管理 */
-import { get, post, put, axiosDelete } from './axios';
+import { get, post, post2, put, axiosDelete,downPost } from './axios';
 
 /**
  *
@@ -18,42 +18,37 @@ import { get, post, put, axiosDelete } from './axios';
 A、登录 + 侧边栏
 * */
 export const LoginIn = params => post('/auth/login', params); /*登录*/
+export const LoginOut = params => axiosDelete('/auth/logout', params); /*退出*/
 export const getCodeImg = params => get('/code', params); /*获取验证图片*/
 
-export const ApiLayoutNav = params => get('admin/Web/indexMenu', params); /*获取侧边栏 nav*/
+// export const ApiLayoutNav = params => get('admin/Web/indexMenu', params); /*获取侧边栏 nav*/
+
+/*文件上传*/
+export const upload = params => post('/system/upload/',params);     /* 上传 */
 
 /*个人信息*/
 export const userProfile = params => get('system/user/profile', params); /*获取个人信息*/
+export const updateUserProfile = params => put('system/user/profile', params); /*获取个人信息*/
 export const uploadUserAvatar = params => post('system/user/profile/avatar/', params); /* 头像上传 */
-
-
-export const ApiloginOut = params => post('admin/Web/login_out', params); /*退出*/
-export const ApiChangePass = params => post('admin/Web/update_password', params); /*修改密码*/
-export const ApiTopSearch = params => post('admin/Member/getMemberInfo', params); /*HeaderTop 头部搜索*/
-
-
-/* ==-- B、首页 --== */
-
-/* ==-- B22、前台 --== */
-/*1、登记*/
-export const checkFaceApi    = params => post('admin/Web/match', params);         /*收支趋势*/
+export const updatePwd = params => put('/system/user/profile/updatePwd/', params);  /*重置密码*/
 
 
 /*店铺授权*/
-export const addStoreAuth    = params => post('/storeAuth/addStoreAuth', params);     /* 新增店铺授权 */
-export const updateStoreAuth    = params => put('/storeAuth/updateStoreAuth', params);     /* 修改店铺授权 */
-export const selectStoreAuth    = params => get('/storeAuth/selectStoreAuth', params);     /* 查询店铺授权列表 */
-export const delStoreAuth    = params => axiosDelete('/storeAuth/delStoreAuth/'+params);     /* 单个删除店铺 */
-export const delStoreAuthList    = params => axiosDelete('/storeAuth/delStoreAuthList', params);     /* 批量删除店铺授权 */
+export const addStoreAuth        = params => post('/system/storeAuth/addStoreAuth', params);     /* 新增店铺授权 */
+export const updateStoreAuth      = params => put('/system/storeAuth/updateStoreAuth', params);     /* 修改店铺授权 */
+export const delStoreAuth = params => axiosDelete('/system/storeAuth/delStoreAuth/'+params);     /* 单个删除店铺 */
+export const delStoreAuthList = params => axiosDelete('/system/storeAuth/delStoreAuthList', params);     /* 批量删除店铺授权 */
+export const getStoreList         = params => get('/system/storeAuth/getStoreList', params);     /* 查询所有店铺 */
+export const selectStoreAuth      = params => get('/system/storeAuth/selectStoreAuth', params);     /* 查询店铺授权列表 */
+export const selectTreeAuth      = params => get('/system/storeAuth/selectTree/'+params);     /* 查询店铺授权树状结构 */
+export const selectListByUserId      = params => get('/system/storeAuth/selectListByUserId/');     /* 查询店铺授权树状结构 */
 
-export const getStoreList    = params => get('/storeAuth/getStoreList', params);     /* 查询所有店铺 */
 
 /* 店铺授权 子账号*/
-export const authSonAdd    = params => post('/storeAuth/authSon/add', params);     /* 新增子账号 */
-export const authSonList    = params => get('/storeAuth/authSon/list', params);     /* 子账号列表 */
-export const authSondelete    = params => axiosDelete('/storeAuth/authSon/'+params);     /* 删除 子账号列表 */
-export const authSonUpdate    = params => put('/storeAuth/authSon/update', params);     /* 更新子账号列表 */
-
+export const authSonAdd    = params => post('/system/storeAuth/authSon/add', params);     /* 新增子账号 */
+export const authSonList    = params => get('/system/storeAuth/authSon/list', params);     /* 子账号列表 */
+export const authSondelete    = params => axiosDelete('/system/storeAuth/authSon/'+params);     /* 删除 子账号列表 */
+export const authSonUpdate    = params => put('/system/storeAuth/authSon/update', params);     /* 更新子账号列表 */
 
 /* 21-02-23 菜单 */
 export const addMenu = params => post('/system/menu/', params);     /* 新增 菜单  */
@@ -65,7 +60,6 @@ export const menuDelRouters = params => axiosDelete('/system/menu/'+params);    
 export const menuRoleTree = params => get('/system/menu/roleMenuTreeselect/'+params);     /* 获取权限树 */
 export const selectMenuTable = params => get('/system/menu/selectMenuTable/' +params);     /* 加载对应角色菜单列表树*/
 export const getMenuTable = params => get('/system/menu/treeselect/', +params);     /* 加载对应角色菜单列表树*/
-
 
 /* 21-02-23 部门 */
 export const addDept = params => post('/system/dept/', params);     /* 新增   */
@@ -97,10 +91,14 @@ export const queryUser = params => get('/system/role/queryUser/'+params);     /*
 export const addUser = params => post('/system/user/', params);     /* 新增   */
 export const updateUser = params => put('/system/user/', params);     /* 修改   */
 export const getUser = params => get('/system/user/'+params);     /* 获取 id下的 信息  */
-export const saveUser = params => put('/system/user/'+params);     /* 获取 id下的 信息  */
+export const saveUser = params => put('/system/user/'+params);     /* 更新 信息  */
+export const changeUserStatus = params => axiosDelete('/system/user/changeStatus/'+params);     /* 修改状态 */
 export const delUser = params => axiosDelete('/system/user/'+params);     /* 删除 */
+
 export const listUser = params => get('/system/user/list', params);     /* 查询列表   */
-export const listByRole = params => get('/system/user/listByRoleId/'+ params);     /* 根据角色编号获取所关联人员详情   */
+export const listByRole = (params,params2) => get('/system/user/listByRoleId/'+params);     /* 根据角色编号获取所关联人员详情   */
+export const exportUser = params => downPost('/system/user/export/', params);     /* 导出   */
+export const saveUserStore = (params,params2) => post('/system/user/addUserStore/'+params,params2);     /* 新增用户 和店铺关联   */
 
 /* 21-02-23 字典 */
 export const addDict = params => post('/system/dict/type/', params);     /* 新增   */
@@ -130,7 +128,7 @@ export const updateSite = params => put('/system/site/', params);     /* 修改 
 export const listSite = params => get('/system/site/list', params);     /* 查询列表   */
 export const getSite = params => get('/system/site/'+params);     /* 获取 id下的 详细信息  */
 export const delSite = params => axiosDelete('/system/site/'+params);     /* 删除 */
-export const siteTreeSel = params => get('/system/site/treeSelect/'+params);     /* 查询列表 左边传0，店铺授权传1  */
+export const siteTreeSel = (params,params2) => get('/system/site/treeSelect/'+params,params2);     /* 查询列表 左边传0，店铺授权传1  */
 
 
 /* 21-02-25 区域 */
@@ -139,7 +137,7 @@ export const updateArea = params => put('/system/area/', params);     /* 修改 
 export const listArea = params => get('/system/area/list', params);     /* 查询列表   */
 export const getArea = params => get('/system/area/'+params);     /* 获取 id下的 信息  */
 export const delArea = params => axiosDelete('/system/area/'+params);     /* 删除 */
-export const areaTreeSelect = params => get('/system/area/treeSelect',+params);     /* 上区域查找 */
+export const areaTreeSelect = params => get('/system/area/treeSelect',params);     /* 上区域查找 */
 
 /* 21-02-25 应用管理 */
 export const addApply= params => post('/system/apply/', params);     /* 新增   */
@@ -147,6 +145,8 @@ export const updateApply = params => put('/system/apply/', params);     /* 修�
 export const listApply = params => get('/system/apply/list', params);     /* 查询列表   */
 export const getApply = params => get('/system/apply/'+params);     /* 获取 id下的 信息  */
 export const delApply = params => axiosDelete('/system/apply/'+params);     /* 删除 */
+export const listApplyTree = params => get('/system/apply/selectSysApplyTree', params);     /* 平台列表   */
+export const applyExport = params => downPost('/sell/apply/export/',params);     /* 导出  */
 
 /* 21-02-25 汇率管理 */
 export const addRate= params => post('/system/rate/', params);     /* 新增   */
@@ -154,6 +154,13 @@ export const updateRate = params => put('/system/rate/', params);     /* 修改 
 export const listRate = params => get('/system/rate/list', params);     /* 查询列表   */
 export const getRate = params => get('/system/rate/'+params);     /* 获取 id下的 信息  */
 export const delRate = params => axiosDelete('/system/rate/'+params);     /* 删除 */
+
+/* 21-02-25 公告管理 */
+export const addNotice= params => post('/system/notice/', params);     /* 新增   */
+export const updateNotice = params => put('/system/notice/', params);     /* 修改   */
+export const listNotice = params => get('/system/notice/list', params);     /* 查询列表   */
+export const getNotice = params => get('/system/notice/'+params);     /* 获取 id下的 信息  */
+export const delNotice = params => axiosDelete('/system/notice/'+params);     /* 删除 */
 
 /* 21-02-25 企业管理 */
 export const addDetails= params => post('/system/details/', params);     /* 新增   */
@@ -169,33 +176,17 @@ export const listUnit = params => get('/system/unit/list', params);     /* 查�
 export const getUnit = params => get('/system/unit/'+params);     /* 获取 id下的 信息  */
 export const delUnit = params => axiosDelete('/system/unit/'+params);     /* 删除 */
 
-/* 21-02-29 单位管理 */
+/* 21-02-29 消息管理 */
 export const addMessage= params => post('/system/message/', params);     /* 新增   */
 export const updateMessage = params => put('/system/message/', params);     /* 修改   */
 export const listMessage = params => get('/system/message/list', params);     /* 查询列表   */
 export const getMessage = params => get('/system/message/'+params);     /* 获取 id下的 信息  */
 export const delMessage = params => axiosDelete('/system/message/'+params);     /* 删除 */
 
-/*文件上传*/
-export const upload = params => post('/system/upload/',params);     /* 上传 */
-
-
 /*日志管理*/
-export const operlogList = params => get('/system/operlog/list/',+params);     /* 查询操作日志记录  */
+export const loginInfoList = params => get('/system/logininfor/list/',params);     /* 查询操作日志记录  */
 
 
-
-/*
-
-staffAdd({
-    userimage:userimage,
-    information:2,
-    zmtek_ver:2,
-}).then(res => {
-   console.log(res)
-    if(res.status ==1){
-
-    }
-}).catch(res => {
-    console.log(res);
-});*/
+/*配送货单*/
+export const listOrder   = (params,params2) =>       post2('/sell/order/list/',params,params2);     /* 查询列表   */
+export const exportOrder = params => downPost('/sell/order/export/',params);     /* 导出  */

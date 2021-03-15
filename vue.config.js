@@ -5,7 +5,7 @@
 
 
 const Timestamp = new Date().getTime();  //当前时间为了防止打包缓存不刷新，所以给每个js文件都加一个时间戳
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 module.exports = {
    pluginOptions: {
       // i18n: {
@@ -48,7 +48,10 @@ module.exports = {
    productionSourceMap: false,
 
    css: {
+      modules:false,
+
       extract:false,
+      sourceMap:false,
       // extract: {
       //    filename: 'dist/css/[name].1609317655144.css',
       //    chunkFilename: 'dist/css/[name].1609317655144.css'
@@ -56,31 +59,41 @@ module.exports = {
    },
 
    configureWebpack: (config) => {
-      // if (process.env.NODE_ENV === "production") {
-      //     // 为生产环境修改配置...
-      //     config.mode = "production";
-      //     // 这里修改下
-      //     config.optimization.minimizer = [
-      //         new UglifyJsPlugin({
-      //             uglifyOptions: {
-      //                 compress: {
-      //                     // warnings: false,
-      //                     drop_console: true, //console
-      //                     drop_debugger: true,
-      //                     pure_funcs: ['console.log'] //移除console
-      //                 }
-      //             }
-      //         })
-      //     ]
-      //     //打包文件大小配置
-      //     config["performance"] = {
-      //         // "maxEntrypointSize":1000000,
-      //         // "maxAssetSize":3000000
-      //     }
-      // } else {
-      //     // 为开发环境修改配置...
-      //     config.mode = "development";
-      // }
+      if (process.env.NODE_ENV === "production") {
+          // 为生产环境修改配置...
+          // config.mode = "production";
+          // 这里修改下
+         new UglifyJsPlugin({
+            uglifyOptions: {
+               compress: {
+                  // warnings: false,
+                  drop_console: true, //console
+                  drop_debugger: true,
+                  pure_funcs: ['console.log'] //移除console
+               }
+            }
+         })
+          // config.optimization.minimizer = [
+          //     new UglifyJsPlugin({
+          //         uglifyOptions: {
+          //             compress: {
+          //                 // warnings: false,
+          //                 drop_console: true, //console
+          //                 drop_debugger: true,
+          //                 pure_funcs: ['console.log'] //移除console
+          //             }
+          //         }
+          //     })
+          // ]
+          //打包文件大小配置
+          // config["performance"] = {
+              // "maxEntrypointSize":1000000,
+              // "maxAssetSize":3000000
+          // }
+      } else {
+          // 为开发环境修改配置...
+          // config.mode = "development";
+      }
 
       devtool = 'source-map';
 
@@ -109,7 +122,7 @@ module.exports = {
       // host: "localhost",
       // host: "192.168.31.252",
       host: "192.168.6.189",
-      port: 8085, // 端口号
+      port: 8086, // 端口号
       https: false, // https:{type:Boolean}
       open: true, //配置自动启动浏览器
 
